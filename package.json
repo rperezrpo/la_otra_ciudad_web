@@ -1,0 +1,29 @@
+{
+  "name": "la-otra-ciudad",
+  "type": "module",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "import": "node --env-file=.env scripts/import.mjs"
+  },
+  "dependencies": {
+    "@astrojs/react": "^4.4.2",
+    "@astrojs/tailwind": "^5.1.0",
+    "@sanity/astro": "^3.4.0",
+    "@sanity/client": "^7.22.1",
+    "@sanity/image-url": "^1.2.0",
+    "@sanity/vision": "^5.28.0",
+    "astro": "^4.16.0",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "sanity": "^5.28.0",
+    "styled-components": "^6.4.2",
+    "tailwindcss": "^3.4.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.15",
+    "@types/react-dom": "^19.2.3"
+  }
+}

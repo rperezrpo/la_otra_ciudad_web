@@ -1,0 +1,42 @@
+---
+const pathname = Astro.url.pathname;
+
+// To add or rename nav links, edit this array.
+const links = [
+  { href: '/quienes-somos', label: 'Quiénes Somos', color: 'orange', activeClass: 'active-orange' },
+  { href: '/proyectos',     label: 'Proyectos',      color: 'pink',   activeClass: 'active-pink'   },
+  { href: '/metodologia',   label: 'Metodología',    color: 'cobalt', activeClass: 'active-cobalt' },
+  { href: '/contacto',      label: 'Contacto',       color: 'teal',   activeClass: 'active-teal'   },
+];
+
+function isActive(href: string) {
+  if (href === '/') return pathname === '/';
+  return pathname.startsWith(href);
+}
+---
+
+<nav class="site-nav">
+  <a href="/" class="nav-brand">
+    <img
+      src="/images/logo/logo-banner.svg"
+      alt="La Otra Ciudad"
+      style="height: 28px; width: auto;"
+      onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';"
+    />
+    <span style="display:none;">La Otra Ciudad</span>
+  </a>
+
+  <div class="nav-links">
+    {links.map((link) => (
+      <a
+        href={link.href}
+        class:list={['nav-link', { active: isActive(link.href), [link.activeClass]: isActive(link.href) }]}
+        data-color={link.color}
+      >
+        {link.label}
+      </a>
+    ))}
+  </div>
+
+  <a href="/donar" class="nav-cta">Donar ↗</a>
+</nav>

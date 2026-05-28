@@ -1,0 +1,142 @@
+---
+import BaseLayout from '../components/layout/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getFeaturedProjects } from '../lib/sanity';
+
+const featured = await getFeaturedProjects(3);
+---
+
+<BaseLayout title="Inicio">
+
+  <!-- ─── HERO ──────────────────────────────────────────────────────── -->
+  <section class="hero">
+    <span class="hero-eyebrow">Corporación La Otra Ciudad · Medellín</span>
+    <h1 class="hero-title">Construimos la ciudad que todas merecemos</h1>
+    <p class="hero-sub">Transformamos territorios desde adentro — con las comunidades, para las comunidades.</p>
+    <div class="hero-actions">
+      <a href="/proyectos" class="btn-hero-primary">Ver proyectos</a>
+      <a href="/quienes-somos" class="btn-hero-secondary">Quiénes somos</a>
+    </div>
+  </section>
+
+  <!-- ─── STATS ─────────────────────────────────────────────────────── -->
+  <!-- EDIT: update numbers as the organization grows -->
+  <div class="stats-strip">
+    {[
+      ['12+', 'Años de trabajo'],
+      ['45',  'Comunidades'],
+      ['200+','Familias impactadas anualmente'],
+      ['18',  'Proyectos activos'],
+    ].map(([num, label]) => (
+      <div class="stat-item">
+        <div class="stat-num">{num}</div>
+        <div class="stat-label">{label}</div>
+      </div>
+    ))}
+  </div>
+
+  <!-- ─── MISSION INTRO ─────────────────────────────────────────────── -->
+  <div class="section">
+    <div class="two-col">
+      <div>
+        <span class="eyebrow">Nuestra misión</span>
+        <h2 class="section-title">Diseñando espacios para transformar experiencias y comunidades</h2>
+        <p class="section-body">
+          Somos una organización sin ánimo de lucro que trabaja por la construcción de ciudades más
+          justas, habitables y democráticas. Acompañamos procesos comunitarios desde la planeación
+          participativa, la cultura y el territorio.
+        </p>
+        <div style="margin-top: 28px; display: flex; gap: 12px; flex-wrap: wrap;">
+          <a href="/quienes-somos" class="btn-orange">Conocernos</a>
+          <a href="/metodologia" class="btn-outline">Nuestra metodología</a>
+        </div>
+      </div>
+      <div>
+        <!-- SANITY: replace this placeholder with a real community photo -->
+        <div class="img-placeholder" style="height: 380px;">
+          <span>Comunidad</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── FEATURED PROJECTS ─────────────────────────────────────────── -->
+  <div class="section-full section-warm" style="padding: 80px 48px;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <span class="eyebrow">Nuestro trabajo</span>
+          <h2 class="section-title">Proyectos que transforman</h2>
+        </div>
+        <a href="/proyectos" class="btn-outline">Ver todos →</a>
+      </div>
+
+      <div class="card-grid-3">
+        {featured.map((project) => (
+          <ProjectCard
+            title={project.title}
+            slug={project.slug}
+            category={project.category}
+            summary={project.summary}
+            heroImage={project.heroImage}
+            status={project.status}
+            year={project.year}
+          />
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── QUOTE BANNER ──────────────────────────────────────────────── -->
+  <div style="background: var(--c-grad-hero); padding: 96px 48px;">
+    <div style="max-width: 900px; margin: 0 auto; text-align: center;">
+      <span class="eyebrow-light">Nuestra visión</span>
+      <p style="font-family: var(--font-display); font-variation-settings: 'opsz' 144, 'SOFT' 30, 'WONK' 0; font-size: clamp(32px, 4vw, 52px); font-weight: 400; line-height: 1.15; letter-spacing: -1px; color: #fff; margin: 0 0 40px;">
+        "Una ciudad justa empieza por escuchar a quienes la habitan desde los márgenes."
+      </p>
+      <a href="/donar" class="btn-hero-primary" style="font-size: 16px;">Apoya nuestro trabajo ↗</a>
+    </div>
+  </div>
+
+  <!-- ─── METHODOLOGY PREVIEW ───────────────────────────────────────── -->
+  <div class="section">
+    <span class="eyebrow">Cómo trabajamos</span>
+    <div class="two-col" style="gap: 64px; margin-top: 8px; align-items: start;">
+      <h2 class="section-title">Un proceso centrado en la comunidad</h2>
+      <div>
+        <p class="section-body" style="margin-top: 0;">
+          Nuestra metodología parte del reconocimiento del saber popular como base para la
+          transformación social. Combinamos investigación-acción participativa, planeación
+          territorial y formación ciudadana.
+        </p>
+        <div class="feature-band">
+          {[
+            ['01', 'Escuchar',   'Procesos de diagnóstico participativo con la comunidad'],
+            ['02', 'Co-diseñar', 'Talleres de planeación colectiva para identificar soluciones'],
+            ['03', 'Actuar',     'Implementación con acompañamiento técnico y comunitario'],
+          ].map(([n, t, d]) => (
+            <div class="feature-item">
+              <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.6px; color: var(--c-orange); margin-bottom: 6px;">{n}</div>
+              <div class="feature-title">{t}</div>
+              <div class="feature-desc">{d}</div>
+            </div>
+          ))}
+        </div>
+        <a href="/metodologia" class="btn-outline" style="margin-top: 28px;">Ver metodología completa →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── DONATE CTA ────────────────────────────────────────────────── -->
+  <div class="section-full section-gradient" style="padding: 96px 48px; text-align: center;">
+    <span class="eyebrow-light">Sé parte del cambio</span>
+    <h2 style="font-family: var(--font-display); font-variation-settings: 'opsz' 144, 'SOFT' 30, 'WONK' 0; font-size: clamp(36px, 5vw, 60px); font-weight: 400; line-height: 1.1; letter-spacing: -1.2px; color: #fff; max-width: 640px; margin: 0 auto 20px;">
+      Tu donación construye ciudad
+    </h2>
+    <p style="font-size: 18px; font-weight: 300; color: rgba(255,255,255,0.8); max-width: 480px; margin: 0 auto 36px; line-height: 1.5;">
+      Cada aporte, por pequeño que sea, llega directamente a nuestros programas comunitarios.
+    </p>
+    <a href="/donar" class="btn-hero-primary" style="font-size: 16px;">Quiero donar</a>
+  </div>
+
+</BaseLayout>

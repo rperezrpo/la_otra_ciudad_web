@@ -1,0 +1,88 @@
+---
+const columns = [
+  {
+    heading: 'Organización',
+    links: [
+      { label: 'Quiénes Somos', href: '/quienes-somos' },
+      { label: 'Proyectos',     href: '/proyectos' },
+      { label: 'Metodología',   href: '/metodologia' },
+    ],
+  },
+  {
+    heading: 'Involúcrate',
+    links: [
+      { label: 'Contacto',     href: '/contacto' },
+      { label: 'Donar',        href: '/donar' },
+      { label: 'Voluntariado', href: '/contacto' },
+    ],
+  },
+];
+---
+
+<footer style="background: #1a1410; color: #fff; padding: 64px 48px 40px; font-family: var(--font-sans);">
+  <div style="max-width: 1100px; margin: 0 auto;">
+
+    <!-- Top row: brand + columns -->
+    <div style="display: flex; gap: 64px; margin-bottom: 64px; flex-wrap: wrap;">
+
+      <!-- Brand column -->
+      <div style="flex: 1.5; min-width: 240px;">
+        <img
+          src="/images/logo/logo-white.svg"
+          alt="La Otra Ciudad"
+          style="height: 36px; width: auto; margin-bottom: 16px;"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+        />
+        <div style="display:none; font-size: 17px; font-weight: 600; letter-spacing: -0.3px; margin-bottom: 16px;">La Otra Ciudad</div>
+        <p style="font-size: 15px; font-weight: 300; line-height: 1.6; color: rgba(255,255,255,0.5); max-width: 280px;">
+          Co-creando ciudades más justas, sostenibles y saludables en Colombia.
+        </p>
+
+        <!-- Social links -->
+        <div style="margin-top: 28px; display: flex; gap: 10px;">
+          <a href="https://www.instagram.com/laotraciudadmed/" title="Instagram" target="_blank" rel="noopener" style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.5);transition:background 150ms,color 150ms;" onmouseover="this.style.background='rgba(255,255,255,0.18)';this.style.color='#fff'" onmouseout="this.style.background='rgba(255,255,255,0.08)';this.style.color='rgba(255,255,255,0.5)'">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/company/laotraciudad" title="LinkedIn" target="_blank" rel="noopener" style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.5);transition:background 150ms,color 150ms;" onmouseover="this.style.background='rgba(255,255,255,0.18)';this.style.color='#fff'" onmouseout="this.style.background='rgba(255,255,255,0.08)';this.style.color='rgba(255,255,255,0.5)'">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Nav columns -->
+      {columns.map((col) => (
+        <div style="flex: 1; min-width: 160px;">
+          <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.54px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 16px;">
+            {col.heading}
+          </div>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px;">
+            {col.links.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  style="font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.65); letter-spacing: -0.1px; text-decoration: none; transition: color 150ms;"
+                  onmouseover="this.style.color='#fff'"
+                  onmouseout="this.style.color='rgba(255,255,255,0.65)'"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <!-- Bottom row: copyright -->
+    <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+      <span style="font-size: 13px; color: rgba(255,255,255,0.3);">
+        © 2026 Corporación La Otra Ciudad · Medellín, Colombia
+      </span>
+      <!-- EDIT: replace NIT with actual tax ID -->
+      <span style="font-family: var(--font-mono); font-size: 11px; color: rgba(255,255,255,0.25); letter-spacing: 0.4px;">
+        NIT 900.XXX.XXX-X
+      </span>
+    </div>
+
+  </div>
+</footer>

@@ -1,0 +1,229 @@
+---
+import BaseLayout from '../components/layout/BaseLayout.astro';
+import PageHero from '../components/layout/PageHero.astro';
+
+// EDIT: update contact info as needed
+const info = [
+  { label: 'Ubicación', value: 'Medellín, Antioquia\nColombia' },
+  { label: 'Correo',    value: 'contacto@laotreciudad.org' },
+  { label: 'Teléfono',  value: '+57 (604) 123 4567' },
+  { label: 'Horario',   value: 'Lunes a viernes\n8:00 am – 5:00 pm' },
+];
+
+// EDIT: add, remove or reorder FAQ entries here
+const faqs = [
+  {
+    question: '¿Qué tan relevante es La Otra Ciudad para Medellín?',
+    answer: [
+      'Medellín tiene una narrativa internacional fuerte asociada al urbanismo social. La experiencia de algunos actores (organizaciones y personas) ha limitado el círculo de quiénes "representan" al urbanismo en Medellín. En ese contexto, La Otra Ciudad cumple una función estructural importante:',
+      '• Diversifica el discurso y los actores incluidos dentro del debate urbano.\n• Introduce crítica basada en datos y tecnologías innovadoras.\n• Visibiliza efectos no deseados desde la voz de comunidades (desplazamientos, presión inmobiliaria).\n• Amplía la conversación más allá de la celebración institucional, gracias a su independencia de financiamiento nacional.',
+    ],
+  },
+  {
+    question: '¿Puedo emplearme en La Otra Ciudad?',
+    answer: [
+      'Actualmente no tenemos vacantes abiertas para empleos pagos.',
+      'En la mayoría de casos, cuando tenemos un proyecto en el que necesitamos emplear a alguien, la convocatoria se realiza únicamente para los asociados de la corporación y nuestros voluntarios. Si quieres saber más sobre cómo hacer parte de LOC, lee la pregunta siguiente.',
+    ],
+  },
+  {
+    question: '¿Qué puedo hacer si quiero trabajar en urbanismo en Medellín?',
+    answer: [
+      'Si eres un estudiante o joven interesado en desarrollo urbano, ecología o cambio climático; y estás buscando participar de una organización con propósito social y ambiental, entonces La Otra Ciudad tiene un lugar para ti.',
+      'Escríbenos a nuestro correo info@laotraciudad.org con tus datos personales y un pequeño párrafo hablándonos sobre ti y tu interés.',
+    ],
+  },
+  {
+    question: '¿Qué organizaciones en Medellín trabajan en urbanismo?',
+    answer: [
+      'Medellín es una ciudad que cuenta con un ecosistema diverso de organizaciones y profesionales trabajando en urbanismo.',
+      'La Otra Ciudad es una de las primeras organizaciones con enfoque participativo y juvenil que tiene la ciudad. A pesar de haberse fundado recientemente, ya ha obtenido reconocimiento nacional e internacional. Su experticia en diversos temas (diseño urbano, ecología, gestión territorial, análisis de políticas públicas, entre otras) consolida a La Otra Ciudad como una organización líder en este tema en la región.',
+      'Otras organizaciones con amplia trayectoria y reconocimiento son urbam EAFIT, Corporación Región, la Fundación Oasis Urbano, ArquiUrbano, etc.',
+    ],
+  },
+  {
+    question: '¿Por qué es reconocido el urbanismo social?',
+    answer: [
+      'El urbanismo social es reconocido porque logró demostrar que la planificación urbana puede ser una herramienta directa de reducción de desigualdad, inclusión territorial y transformación simbólica de la ciudad, y no solo un ejercicio técnico de ordenamiento físico.',
+      'El enfoque en comunidades vulnerables y la metodología participativa, que involucra a los interesados en todas las fases del proceso, es el elemento más distintivo de este tipo de urbanismo.',
+      'Este es el tipo de urbanismo que La Otra Ciudad desarrolla. Nuestros proyectos siempre buscan tener un impacto social positivo en su contexto. El involucramiento activo de comunidades, empresas e instituciones también caracteriza el trabajo de la corporación.',
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="Contacto"
+  description="Escríbenos para alianzas, voluntariado, medios o cualquier inquietud sobre nuestro trabajo."
+>
+
+  <!-- ─── PAGE HERO ─────────────────────────────────────────────────── -->
+  <!-- EDIT: drop a photo into /public/images/banners/contacto.jpg to activate the image background -->
+  <PageHero eyebrow="Contacto" image="/images/banners/contacto.jpg">
+    <h1 class="page-hero-title">Hablemos</h1>
+    <p class="page-hero-sub">Escríbenos para alianzas, voluntariado, medios o cualquier inquietud sobre nuestro trabajo.</p>
+  </PageHero>
+
+  <div class="section">
+    <div class="two-col" style="gap: 96px; align-items: start;">
+
+      <!-- ─── CONTACT FORM ───────────────────────────────────────────── -->
+      <!-- FORMSPREE: add action="https://formspree.io/f/YOUR_FORM_ID" and method="POST" -->
+      <!-- FORMSPREE: also add <input type="hidden" name="_next" value="https://yourdomain.com/gracias"> -->
+      <div>
+        <span class="eyebrow">Escríbenos</span>
+        <h2 class="section-title" style="font-size: clamp(24px, 2.5vw, 36px); margin-top: 16px;">Formulario de contacto</h2>
+
+        <form
+          style="margin-top: 32px;"
+          action="#"
+          method="POST"
+        >
+          <div class="form-group">
+            <label class="form-label" for="nombre">Nombre completo</label>
+            <input
+              class="form-input"
+              type="text"
+              id="nombre"
+              name="nombre"
+              placeholder="Tu nombre"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="email">Correo electrónico</label>
+            <input
+              class="form-input"
+              type="email"
+              id="email"
+              name="email"
+              placeholder="tu@correo.com"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="asunto">Asunto</label>
+            <select class="form-select" id="asunto" name="asunto" required>
+              <option value="">Selecciona un asunto</option>
+              <option value="alianza">Alianza institucional</option>
+              <option value="voluntariado">Voluntariado</option>
+              <option value="medios">Medios y prensa</option>
+              <option value="consulta">Consulta general</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="mensaje">Mensaje</label>
+            <textarea
+              class="form-textarea"
+              id="mensaje"
+              name="mensaje"
+              placeholder="Cuéntanos sobre tu iniciativa o pregunta..."
+              required
+            ></textarea>
+          </div>
+
+          <button
+            type="submit"
+            class="btn-orange"
+            style="width: 100%; justify-content: center; padding: 14px;"
+          >
+            Enviar mensaje
+          </button>
+        </form>
+      </div>
+
+      <!-- ─── CONTACT INFO ───────────────────────────────────────────── -->
+      <div>
+        <span class="eyebrow">Información de contacto</span>
+        <div style="margin-top: 24px; display: flex; flex-direction: column; gap: 0;">
+          {info.map(({ label, value }) => (
+            <div style="padding: 20px 0; border-bottom: 1px solid rgba(26,20,16,0.08);">
+              <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--fg3); margin-bottom: 6px;">{label}</div>
+              <div style="font-size: 16px; font-weight: 400; line-height: 1.5; white-space: pre-line;">{value}</div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Map placeholder — replace with an embed or static map image -->
+        <div style="margin-top: 36px;">
+          <div class="img-placeholder" style="height: 220px;">
+            <span>Mapa</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ─── FAQ ──────────────────────────────────────────────────────── -->
+  <div class="section-full section-warm" style="padding: 80px 48px;">
+    <div style="max-width: 800px; margin: 0 auto;">
+      <span class="eyebrow">Preguntas frecuentes</span>
+      <h2 class="section-title" style="margin-bottom: 48px;">Lo que nos preguntan</h2>
+
+      <div id="faq-list">
+        {faqs.map((faq, i) => (
+          <div
+            class="faq-item"
+            style="border-top: 1px solid rgba(26,20,16,0.1);"
+          >
+            <button
+              class="faq-trigger"
+              aria-expanded="false"
+              aria-controls={`faq-answer-${i}`}
+              style="width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 28px 0; background: none; border: none; cursor: pointer; text-align: left; font-family: var(--font-sans);"
+            >
+              <span style="font-size: 18px; font-weight: 600; letter-spacing: -0.2px; color: var(--c-black); line-height: 1.3;">
+                {faq.question}
+              </span>
+              <span class="faq-icon" style="flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid rgba(26,20,16,0.2); display: flex; align-items: center; justify-content: center; color: var(--c-black); transition: transform 200ms, background 150ms;">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <line x1="6" y1="1" x2="6" y2="11"/>
+                  <line x1="1" y1="6" x2="11" y2="6" class="faq-hline"/>
+                </svg>
+              </span>
+            </button>
+
+            <div
+              id={`faq-answer-${i}`}
+              class="faq-answer"
+              style="display: none; padding-bottom: 28px;"
+            >
+              {faq.answer.map((paragraph) => (
+                <p style="font-size: 16px; font-weight: 300; line-height: 1.7; color: var(--fg2); margin-bottom: 14px; white-space: pre-line;">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          </div>
+        ))}
+
+        <!-- closing border -->
+        <div style="border-top: 1px solid rgba(26,20,16,0.1);"></div>
+      </div>
+    </div>
+  </div>
+
+</BaseLayout>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.faq-trigger').forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      const expanded = trigger.getAttribute('aria-expanded') === 'true';
+      const answerId = trigger.getAttribute('aria-controls')!;
+      const answer = document.getElementById(answerId)!;
+      const icon = trigger.querySelector<SVGLineElement>('.faq-hline')!;
+
+      trigger.setAttribute('aria-expanded', String(!expanded));
+      answer.style.display = expanded ? 'none' : 'block';
+
+      // Rotate the + into a −
+      icon.style.opacity = expanded ? '1' : '0';
+    });
+  });
+</script>

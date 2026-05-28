@@ -1,0 +1,112 @@
+---
+// ProjectDetail — full project page layout
+// SANITY: when Sanity is connected, pass the full Sanity document as props
+
+interface Props {
+  title: string;
+  category: string;
+  heroImage: string;
+  description: string;
+  neighborhood: string;
+  partners: string[];
+  year: number;
+  status: string;
+  gallery: string[];
+}
+
+const { title, category, heroImage, description, neighborhood, partners, year, status, gallery } = Astro.props;
+
+const isActive = status === 'activo';
+---
+
+<!-- Page hero -->
+<div class="page-hero">
+  <span class="eyebrow-light">{category}</span>
+  <h1 class="page-hero-title">{title}</h1>
+  <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 4px;">
+    <span class:list={['status-badge', { 'status-activo': isActive, 'status-completado': !isActive }]}>
+      {status}
+    </span>
+    <span style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; color: rgba(255,255,255,0.4);">
+      {year}
+    </span>
+  </div>
+</div>
+
+<div class="section">
+  <div class="two-col" style="align-items: start; gap: 64px;">
+
+    <!-- Main content -->
+    <div>
+      <!-- Hero image -->
+      {heroImage ? (
+        <img
+          src={heroImage}
+          alt={title}
+          style="width: 100%; border-radius: 8px; aspect-ratio: 16/9; object-fit: cover; margin-bottom: 40px;"
+        />
+      ) : (
+        <!-- SANITY: replace with heroImage from Sanity -->
+        <div class="img-placeholder" style="aspect-ratio: 16/9; margin-bottom: 40px; height: auto;">
+          <span>{category}</span>
+        </div>
+      )}
+
+      <!-- Description -->
+      <!-- SANITY: replace this with rich text from Sanity (use @portabletext/astro) -->
+      <p style="font-size: 17px; font-weight: 300; line-height: 1.7; color: var(--fg1); letter-spacing: -0.1px;">
+        {description}
+      </p>
+
+      <!-- Gallery -->
+      {gallery.length > 0 && (
+        <div style="margin-top: 48px;">
+          <span class="eyebrow">Galería</span>
+          <div class="card-grid-2" style="margin-top: 16px;">
+            {gallery.map((img) => (
+              <img
+                src={img}
+                alt=""
+                style="width: 100%; border-radius: 8px; aspect-ratio: 4/3; object-fit: cover;"
+              />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+
+    <!-- Sidebar metadata -->
+    <div style="position: sticky; top: 80px;">
+      <div style="background: var(--c-white-pure); border-radius: 8px; padding: 28px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 24px;">
+
+        <div>
+          <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--fg3); margin-bottom: 6px;">Territorio</div>
+          <div style="font-size: 15px; font-weight: 400; color: var(--c-black);">{neighborhood}</div>
+        </div>
+
+        <div>
+          <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--fg3); margin-bottom: 6px;">Año</div>
+          <div style="font-size: 15px; font-weight: 400; color: var(--c-black);">{year}</div>
+        </div>
+
+        {partners.length > 0 && (
+          <div>
+            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--fg3); margin-bottom: 10px;">Aliados</div>
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 6px;">
+              {partners.map((p) => (
+                <li style="font-size: 14px; font-weight: 300; color: var(--fg2);">{p}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div style="padding-top: 8px; border-top: 1px solid rgba(26,20,16,0.08);">
+          <a href="/proyectos" class="btn-outline" style="width: 100%; justify-content: center; font-size: 14px;">
+            ← Todos los proyectos
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

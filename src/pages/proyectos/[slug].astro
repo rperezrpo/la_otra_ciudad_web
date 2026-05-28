@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../../components/layout/BaseLayout.astro';
+import ProjectDetail from '../../components/ProjectDetail.astro';
+import { getProjectSlugs, getProject } from '../../lib/sanity';
+
+export async function getStaticPaths() {
+  const slugs = await getProjectSlugs();
+  const projects = await Promise.all(slugs.map((slug) => getProject(slug)));
+  return projects
+    .filter((project) => project !== null)
+    .map((project) => ({
+      params: { slug: project!.slug },
+      props: { project },
+    }));
+}
+
+const { project } = Astro.props;
+---
+
+<BaseLayout
+  title={project.title}
+  description={project.summary}
+>
+  <ProjectDetail
+    title={project.title}
+    category={project.category}
+    heroImage={project.heroImage}
+    description={project.description}
+    neighborhood={project.neighborhood}
+    partners={project.partners}
+    year={project.year}
+    status={project.status}
+    gallery={project.gallery}
+  />
+</BaseLayout>

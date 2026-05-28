@@ -1,0 +1,107 @@
+---
+import BaseLayout from '../../components/layout/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import PageHero from '../../components/layout/PageHero.astro';
+import { getProjects } from '../../lib/sanity';
+
+const projectsData = await getProjects();
+
+// Derive unique categories for filter tabs
+const categories = ['Todos', ...new Set(projectsData.map((p) => p.category))];
+---
+
+<BaseLayout
+  title="Proyectos"
+  description="Un recorrido por los proyectos de La Otra Ciudad en el territorio."
+>
+
+  <!-- ─── PAGE HERO ─────────────────────────────────────────────────── -->
+  <!-- EDIT: drop a photo into /public/images/banners/proyectos.jpg to activate the image background -->
+  <PageHero eyebrow="Proyectos" image="/images/banners/proyectos.jpg">
+    <h1 class="page-hero-title">Un recorrido por nuestro trabajo en el territorio</h1>
+    <p class="page-hero-sub">Desde el hábitat hasta la cultura, nuestros proyectos son procesos de larga duración construidos con y para las comunidades.</p>
+  </PageHero>
+
+  <div class="section">
+
+    <!-- Stats row -->
+    <!-- EDIT: update numbers as projects grow -->
+    <div style="display: flex; gap: 48px; margin-bottom: 64px; padding-bottom: 40px; border-bottom: 1px solid rgba(26,20,16,0.08); flex-wrap: wrap;">
+      {[
+        ['18', 'Proyectos activos'],
+        ['45', 'Comunidades'],
+        ['6',  'Comunas'],
+        ['12', 'Años'],
+      ].map(([n, l]) => (
+        <div>
+          <div style="font-family: var(--font-display); font-variation-settings: 'opsz' 72, 'SOFT' 20, 'WONK' 0; font-size: 40px; font-weight: 400; letter-spacing: -0.8px; color: var(--c-orange);">{n}</div>
+          <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: var(--fg2); margin-top: 4px;">{l}</div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Filter tabs — JS filters the grid client-side -->
+    <div class="filter-tabs" id="filter-tabs">
+      {categories.map((cat) => (
+        <button
+          class="filter-tab"
+          data-active={cat === 'Todos' ? 'true' : 'false'}
+          data-filter={cat}
+        >
+          {cat}
+        </button>
+      ))}
+    </div>
+
+    <!-- Projects grid -->
+    <div class="card-grid-3" id="projects-grid">
+      {projectsData.map((project) => (
+        <div data-category={project.category}>
+          <ProjectCard
+            title={project.title}
+            slug={project.slug}
+            category={project.category}
+            summary={project.summary}
+            heroImage={project.heroImage}
+            status={project.status}
+            year={project.year}
+          />
+        </div>
+      ))}
+    </div>
+
+  </div>
+
+  <!-- ─── DONATE CTA ────────────────────────────────────────────────── -->
+  <div class="section-full section-warm" style="padding: 80px 48px; text-align: center;">
+    <span class="eyebrow">Apoya el trabajo</span>
+    <h2 class="section-title" style="margin: 0 auto; text-align: center;">¿Quieres ser parte de nuestros proyectos?</h2>
+    <p style="font-size: 17px; font-weight: 300; color: var(--fg2); max-width: 440px; margin: 16px auto 32px; line-height: 1.6;">
+      Tu donación financia directamente proyectos como estos en comunidades de Medellín.
+    </p>
+    <a href="/donar" class="btn-orange">Quiero donar</a>
+  </div>
+
+</BaseLayout>
+
+<!-- Client-side filter — no framework needed -->
+<script>
+  const tabs = document.querySelectorAll<HTMLButtonElement>('.filter-tab');
+  const cards = document.querySelectorAll<HTMLElement>('#projects-grid [data-category]');
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const filter = tab.dataset.filter;
+
+      // Update active state
+      tabs.forEach((t) => t.dataset.active = 'false');
+      tab.dataset.active = 'true';
+
+      // Show/hide cards
+      cards.forEach((card) => {
+        const matches = filter === 'Todos' || card.dataset.category === filter;
+        (card as HTMLElement).style.display = matches ? 'block' : 'none';
+      });
+    });
+  });
+</script>

@@ -1,0 +1,128 @@
+---
+import BaseLayout from '../components/layout/BaseLayout.astro';
+import PageHero from '../components/layout/PageHero.astro';
+
+// EDIT: update the steps if the methodology evolves
+const pasos = [
+  {
+    n: '01',
+    title: 'Entrada al territorio',
+    desc: 'Iniciamos con un proceso de reconocimiento del contexto comunitario: sus liderazgos, conflictos, necesidades y potencias. No entramos con soluciones predefinidas, sino con preguntas abiertas.',
+  },
+  {
+    n: '02',
+    title: 'Diagnóstico participativo',
+    desc: 'Junto con la comunidad, mapeamos el territorio físico y simbólico. Usamos herramientas como cartografía social, entrevistas colectivas y recorridos barriales.',
+  },
+  {
+    n: '03',
+    title: 'Co-diseño de soluciones',
+    desc: 'Los talleres de diseño participativo permiten que las soluciones emerjan del saber comunitario, con apoyo técnico. El resultado no es nuestro — es de las personas que lo van a habitar.',
+  },
+  {
+    n: '04',
+    title: 'Implementación acompañada',
+    desc: 'Ejecutamos con la comunidad, no para ella. Acompañamos cada etapa del proceso con formación, soporte técnico y resolución colectiva de los obstáculos.',
+  },
+  {
+    n: '05',
+    title: 'Evaluación y aprendizaje',
+    desc: 'Al cierre de cada ciclo hacemos una evaluación participativa. Los aprendizajes se documentan y retroalimentan el siguiente proceso, construyendo conocimiento colectivo acumulado.',
+  },
+];
+
+const enfoques = [
+  {
+    title: 'Enfoque de género',
+    desc: 'Reconocemos que el territorio tiene marcas de género — y trabajamos para hacer visible y transformar esas desigualdades.',
+  },
+  {
+    title: 'Enfoque étnico',
+    desc: 'La ciudad es diversa. Nuestros procesos reconocen y respetan las identidades culturales de las comunidades afro, indígenas y campesinas urbanas.',
+  },
+  {
+    title: 'Enfoque ambiental',
+    desc: 'El territorio es también ecológico. Integramos la relación con el ambiente en la planeación y el diseño comunitario.',
+  },
+];
+---
+
+<BaseLayout
+  title="Metodología"
+  description="Nuestra práctica combina investigación-acción participativa, planeación territorial y pedagogía crítica."
+>
+
+  <!-- ─── PAGE HERO ─────────────────────────────────────────────────── -->
+  <!-- EDIT: drop a photo into /public/images/banners/metodologia.jpg to activate the image background -->
+  <PageHero eyebrow="Metodología" image="/images/banners/metodologia.jpg">
+    <h1 class="page-hero-title">Cómo construimos con las comunidades</h1>
+    <p class="page-hero-sub">Nuestra práctica combina investigación-acción participativa, planeación territorial y pedagogía crítica.</p>
+  </PageHero>
+
+  <div class="section">
+
+    <!-- ─── INTRO WITH QUOTE ────────────────────────────────────────── -->
+    <div class="two-col" style="margin-bottom: 72px; align-items: start;">
+      <div>
+        <blockquote class="quote-block">
+          "La comunidad no es el objeto de la intervención — es el sujeto de su propia transformación."
+        </blockquote>
+      </div>
+      <div>
+        <p class="section-body" style="margin-top: 0;">
+          Partimos de la convicción de que el conocimiento necesario para transformar un territorio
+          ya existe en quienes lo habitan. Nuestro rol es facilitarlo, articularlo y acompañarlo con
+          capacidades técnicas que potencien lo que ya está ahí.
+        </p>
+        <p class="section-body" style="margin-top: 14px;">
+          Trabajamos siempre en procesos de mediano y largo plazo — no en intervenciones puntuales.
+          Esto nos permite construir confianza y garantizar sostenibilidad.
+        </p>
+      </div>
+    </div>
+
+    <!-- ─── FIVE STEPS ───────────────────────────────────────────────── -->
+    <span class="eyebrow">El proceso</span>
+    <h2 class="section-title" style="margin-top: 16px;">Cinco pasos, un solo camino</h2>
+
+    <div style="margin-top: 40px;">
+      {pasos.map((paso) => (
+        <div class="step-row">
+          <div class="step-num">{paso.n}</div>
+          <div class="step-content">
+            <div class="step-title">{paso.title}</div>
+            <div class="step-desc">{paso.desc}</div>
+          </div>
+        </div>
+      ))}
+      <div style="border-top: 1px solid rgba(26,20,16,0.1);"></div>
+    </div>
+
+  </div>
+
+  <!-- ─── TRANSVERSAL APPROACHES ────────────────────────────────────── -->
+  <div class="section-full section-dark" style="padding: 80px 48px;">
+    <div style="max-width: 1100px; margin: 0 auto;">
+      <span class="eyebrow-light">Enfoques transversales</span>
+      <h2 class="section-title-light" style="margin-top: 16px;">Lo que atraviesa todo lo que hacemos</h2>
+      <div class="card-grid-3" style="margin-top: 40px;">
+        {enfoques.map((e) => (
+          <div style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 28px 24px; border: 1px solid rgba(255,255,255,0.08);">
+            <div style="font-size: 17px; font-weight: 600; letter-spacing: -0.2px; color: #fff; margin-bottom: 10px;">{e.title}</div>
+            <div style="font-size: 14px; font-weight: 300; line-height: 1.6; color: rgba(255,255,255,0.55);">{e.desc}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── CONTACT CTA ───────────────────────────────────────────────── -->
+  <div class="section" style="text-align: center;">
+    <h2 class="section-title" style="margin: 0 auto;">¿Quieres aplicar esta metodología en tu comunidad?</h2>
+    <p style="font-size: 17px; font-weight: 300; color: var(--fg2); max-width: 440px; margin: 16px auto 28px; line-height: 1.6;">
+      Contáctanos para explorar cómo podemos trabajar juntos.
+    </p>
+    <a href="/contacto" class="btn-orange">Contactarnos</a>
+  </div>
+
+</BaseLayout>

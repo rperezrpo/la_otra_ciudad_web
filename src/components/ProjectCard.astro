@@ -1,0 +1,54 @@
+---
+// ProjectCard — used on the home page and /proyectos listing
+// SANITY: when Sanity is connected, this component receives the same props
+//         from a Sanity document instead of from projects.json
+
+interface Props {
+  title: string;
+  slug: string;
+  category: string;
+  summary: string;
+  heroImage: string;
+  status: string;
+  year: number;
+}
+
+const { title, slug, category, summary, heroImage, status, year } = Astro.props;
+
+const isActive = status === 'activo';
+---
+
+<a href={`/proyectos/${slug}`} class="card" style="display: block; text-decoration: none; cursor: pointer;">
+  <!-- Hero image -->
+  {heroImage ? (
+    <img
+      src={heroImage}
+      alt={title}
+      style="width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block;"
+    />
+  ) : (
+    <!-- SANITY: replace this placeholder with heroImage from Sanity -->
+    <div class="img-placeholder" style="aspect-ratio: 4/3;">
+      <span>{category}</span>
+    </div>
+  )}
+
+  <div class="card-body">
+    <!-- Tag + status row -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+      <div class="card-tag">{category}</div>
+      <span
+        class:list={['status-badge', { 'status-activo': isActive, 'status-completado': !isActive }]}
+      >
+        {status}
+      </span>
+    </div>
+
+    <div class="card-title">{title}</div>
+    <div class="card-desc">{summary}</div>
+
+    <div style="margin-top: 14px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.5px; color: var(--fg3);">
+      {year}
+    </div>
+  </div>
+</a>

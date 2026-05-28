@@ -1,0 +1,199 @@
+---
+import BaseLayout from '../components/layout/BaseLayout.astro';
+import PageHero from '../components/layout/PageHero.astro';
+
+// EDIT: update donation amounts and impact labels
+const presets = [
+  { amount: 20000,  label: 'Cubre materiales para un taller comunitario' },
+  { amount: 50000,  label: 'Financia una sesión de cartografía social' },
+  { amount: 100000, label: 'Apoya un mes de formación a un líder comunitario' },
+  { amount: 200000, label: 'Costea el diseño participativo de un espacio público' },
+];
+
+const whyDonate = [
+  { stat: '100%',     desc: 'A programas directos — ningún porcentaje en publicidad' },
+  { stat: '12+',      desc: 'Años de trayectoria y rendición de cuentas pública' },
+  { stat: 'Deducible', desc: 'Donaciones deducibles de renta (Régimen Tributario Especial)' },
+  { stat: 'Informes', desc: 'Recibes reportes trimestrales del impacto de tu aporte' },
+];
+---
+
+<BaseLayout
+  title="Donar"
+  description="Tu aporte transforma territorios. El 100% de las donaciones va directamente a nuestros programas."
+>
+
+  <!-- ─── HERO ──────────────────────────────────────────────────────── -->
+  <!-- EDIT: drop a photo into /public/images/banners/donar.jpg to activate the image background -->
+  <!-- Note: donar uses its own orange hero, not PageHero — keeping it distinct intentionally -->
+  <div style="background: var(--c-orange); padding: 80px 48px; text-align: center;">
+    <span style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: rgba(255,255,255,0.7); display: block; margin-bottom: 24px;">Donar</span>
+    <h1 style="font-family: var(--font-display); font-variation-settings: 'opsz' 144, 'SOFT' 40, 'WONK' 0; font-size: clamp(40px, 6vw, 72px); font-weight: 400; line-height: 1.0; letter-spacing: -1.5px; color: #fff; max-width: 640px; margin: 0 auto 20px;">
+      Tu aporte transforma territorios
+    </h1>
+    <p style="font-size: 18px; font-weight: 300; color: rgba(255,255,255,0.82); max-width: 480px; margin: 0 auto; line-height: 1.5;">
+      El 100% de las donaciones va directamente a nuestros programas. Somos transparentes — cada peso tiene destino.
+    </p>
+  </div>
+
+  <div class="section">
+    <div class="two-col" style="gap: 80px; align-items: start;">
+
+      <!-- ─── DONATION SELECTOR ──────────────────────────────────────── -->
+      <div id="donation-form">
+
+        <!-- Frequency toggle -->
+        <span class="eyebrow">Frecuencia</span>
+        <div style="display: flex; gap: 8px; margin-top: 12px; margin-bottom: 32px;">
+          <button
+            class="freq-btn"
+            data-freq="mensual"
+            style="flex: 1; padding: 12px; border-radius: 8px; border: 2px solid var(--c-orange); background: #fdf2ec; color: var(--c-orange); font-family: var(--font-sans); font-size: 15px; font-weight: 600; cursor: pointer;"
+          >
+            Mensual ★
+          </button>
+          <button
+            class="freq-btn"
+            data-freq="una-vez"
+            style="flex: 1; padding: 12px; border-radius: 8px; border: 2px solid rgba(26,20,16,0.15); background: var(--c-white-pure); color: var(--c-black); font-family: var(--font-sans); font-size: 15px; font-weight: 400; cursor: pointer;"
+          >
+            Una vez
+          </button>
+        </div>
+
+        <!-- Amount presets -->
+        <span class="eyebrow">Elige un monto</span>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px;" id="amount-grid">
+          {presets.map(({ amount }) => (
+            <button
+              class="amount-btn"
+              data-amount={amount}
+              data-selected={amount === 50000 ? 'true' : 'false'}
+              style={`border: 2px solid ${amount === 50000 ? 'var(--c-orange)' : 'rgba(26,20,16,0.12)'}; border-radius: 8px; padding: 16px 24px; cursor: pointer; text-align: center; font-size: 20px; font-weight: 400; font-family: var(--font-display); transition: all 150ms; background: ${amount === 50000 ? '#fdf2ec' : 'var(--c-white-pure)'}; color: ${amount === 50000 ? 'var(--c-orange)' : 'var(--c-black)'};`}
+            >
+              {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(amount)}
+            </button>
+          ))}
+        </div>
+
+        <div style="margin-top: 10px;">
+          <input
+            class="form-input"
+            type="number"
+            id="custom-amount"
+            placeholder="Otro monto (COP)"
+            style="text-align: center; font-size: 18px; font-weight: 400;"
+            min="1000"
+          />
+        </div>
+
+        <!-- Impact indicator -->
+        <div id="impact-box" style="margin-top: 20px; background: rgba(96,157,146,0.1); border: 1px solid rgba(96,157,146,0.25); border-radius: 8px; padding: 16px 20px;">
+          <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--c-teal); margin-bottom: 6px;">Tu impacto</div>
+          <div id="impact-text" style="font-size: 15px; font-weight: 400; line-height: 1.5; color: var(--c-black);">
+            Financia una sesión de cartografía social
+          </div>
+        </div>
+
+        <!-- ─── STRIPE / PAYU PLACEHOLDER ─────────────────────────────── -->
+        <!--
+          PAYMENT INTEGRATION:
+          Replace the button below with the actual payment widget.
+          Options:
+            • Stripe: embed <stripe-buy-button> or redirect to Stripe Checkout
+            • PayU: use the PayU payment button or redirect URL
+            • Wompi (Colombia): embed Wompi button widget
+          Keep the amount and frequency values — pass them to the payment provider.
+        -->
+        <button
+          id="continue-btn"
+          class="btn-orange"
+          style="width: 100%; justify-content: center; margin-top: 24px; padding: 16px; font-size: 16px;"
+        >
+          Continuar con el pago →
+        </button>
+        <!-- END PAYMENT PLACEHOLDER -->
+
+        <p style="font-size: 11px; color: var(--fg3); text-align: center; margin-top: 14px; font-family: var(--font-mono); letter-spacing: 0.5px;">
+          PAGO SEGURO · RECIBO DEDUCIBLE DE IMPUESTOS
+        </p>
+      </div>
+
+      <!-- ─── WHY DONATE ─────────────────────────────────────────────── -->
+      <div>
+        <span class="eyebrow">Por qué donar</span>
+        <h2 class="section-title" style="font-size: clamp(24px, 2.5vw, 36px); margin-top: 16px;">Tu dinero hace ciudad</h2>
+        <div style="display: flex; flex-direction: column; gap: 0; margin-top: 32px;">
+          {whyDonate.map(({ stat, desc }) => (
+            <div style="display: flex; gap: 20px; padding: 20px 0; border-bottom: 1px solid rgba(26,20,16,0.08); align-items: flex-start;">
+              <div style="font-family: var(--font-display); font-variation-settings: 'opsz' 72, 'SOFT' 20, 'WONK' 0; font-size: 28px; font-weight: 400; color: var(--c-orange); min-width: 100; line-height: 1;">{stat}</div>
+              <div style="font-size: 15px; font-weight: 300; line-height: 1.5; color: var(--fg2); padding-top: 4px;">{desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</BaseLayout>
+
+<!-- Client-side donation selector -->
+<script>
+  const impacts: Record<number, string> = {
+    20000:  'Cubre materiales para un taller comunitario',
+    50000:  'Financia una sesión de cartografía social',
+    100000: 'Apoya un mes de formación a un líder comunitario',
+    200000: 'Costea el diseño participativo de un espacio público',
+  };
+
+  let selectedAmount = 50000;
+  let selectedFreq = 'mensual';
+
+  const amountBtns = document.querySelectorAll<HTMLButtonElement>('.amount-btn');
+  const customInput = document.getElementById('custom-amount') as HTMLInputElement;
+  const impactText = document.getElementById('impact-text') as HTMLElement;
+  const freqBtns = document.querySelectorAll<HTMLButtonElement>('.freq-btn');
+
+  function selectAmount(amount: number) {
+    selectedAmount = amount;
+    amountBtns.forEach((btn) => {
+      const isSelected = Number(btn.dataset.amount) === amount;
+      btn.style.borderColor = isSelected ? 'var(--c-orange)' : 'rgba(26,20,16,0.12)';
+      btn.style.background = isSelected ? '#fdf2ec' : 'var(--c-white-pure)';
+      btn.style.color = isSelected ? 'var(--c-orange)' : 'var(--c-black)';
+    });
+    impactText.textContent = impacts[amount] ?? 'Apoya nuestros programas comunitarios';
+  }
+
+  amountBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      customInput.value = '';
+      selectAmount(Number(btn.dataset.amount));
+    });
+  });
+
+  customInput.addEventListener('input', () => {
+    amountBtns.forEach((btn) => {
+      btn.style.borderColor = 'rgba(26,20,16,0.12)';
+      btn.style.background = 'var(--c-white-pure)';
+      btn.style.color = 'var(--c-black)';
+    });
+    const val = Number(customInput.value);
+    selectedAmount = val;
+    impactText.textContent = impacts[val] ?? 'Apoya nuestros programas comunitarios';
+  });
+
+  freqBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      selectedFreq = btn.dataset.freq ?? 'mensual';
+      freqBtns.forEach((b) => {
+        const isActive = b.dataset.freq === selectedFreq;
+        b.style.borderColor = isActive ? 'var(--c-orange)' : 'rgba(26,20,16,0.15)';
+        b.style.background = isActive ? '#fdf2ec' : 'var(--c-white-pure)';
+        b.style.color = isActive ? 'var(--c-orange)' : 'var(--c-black)';
+        b.style.fontWeight = isActive ? '600' : '400';
+      });
+    });
+  });
+</script>

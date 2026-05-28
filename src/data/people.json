@@ -1,0 +1,222 @@
+[
+  {
+    "name": "Ricardo Pérez",
+    "slug": "ricardo-perez",
+    "role": "Presidente",
+    "bio": "Urbanista e investigador. Su trabajo se enfoca en la construcción sostenible, el diseño regenerativo, las soluciones basadas en la naturaleza y el mejoramiento de barrios informales. Investiga en temas de resiliencia climática y justicia ambiental.",
+    "photo": "/images/people/ricardo.jpg",
+    "linkedin": "http://www.linkedin.com/in/rperezrpo",
+    "state": "active",
+    "projects": []
+  },
+  {
+    "name": "Sebastián Balthazar",
+    "slug": "sebastian-balthazar",
+    "role": "Director Ejecutivo",
+    "bio": "Estudiante de Diseño Urbano. Interesado en temas de ecología, biodiversidad y sostenibilidad, acompañados de procesos de planificación territorial. Sueña con Re imaginar las dinámicas de coexistencia entre los humanos y la naturaleza, incluyendo los no-humanos.",
+    "photo": "/images/people/sebastian.jpg",
+    "linkedin": "https://www.linkedin.com/in/sebasti%C3%A1n-ram%C3%ADrez-balthazar-5ba560238/",
+    "state": "active",
+    "projects": []
+  },
+  {
+    "name": "Eloísa Henríquez",
+    "slug": "eloisa-henriquez",
+    "role": "Coordinadora de Estrategia",
+    "bio": "Estudiante de Arquitectura enfocada en la transformación social y territorial, comprometida con el diseño participativo y el fortalecimiento de comunidades vulnerables. Cree en el poder de la arquitectura para reparar, conectar y dignificar la vida cotidiana.",
+    "photo": "/images/people/eloisa.jpg",
+    "linkedin": "",
+    "state": "active",
+    "projects": []
+  },
+  {
+    "name": "Felipe Carmona",
+    "slug": "felipe-carmona",
+    "role": "Coordinador Administrativo",
+    "bio": "Politólogo en formación con gran interés en temas de espacio público y movilidad sostenible, así como de los procesos ciudadanos que hacen de nuestros territorios espacios más habitables y dignos para todas las personas.",
+    "photo": "/images/people/felipe.jpg",
+    "linkedin": "https://www.linkedin.com/in/felipe-carmona-saldarriaga-933a46326/",
+    "state": "active",
+    "projects": []
+  },
+  {
+    "name": "Santiago Jaramillo",
+    "slug": "santiago-jaramillo",
+    "role": "Coordinador de Proyectos",
+    "bio": "Me motiva promover hábitats más justos, sostenibles y conectados con la naturaleza. Soy Ing. Civil, con maestría en Cambio Climático y Desarrollo. Trabajé en el equipo de SIATA y como asesor sobre políticas urbanas y ambientales.",
+    "photo": "",
+    "linkedin": "https://www.linkedin.com/in/santiago-jaramillo-gil-410a8620b/",
+    "state": "inactive",
+    "projects": []
+  },
+  {
+    "name": "José Alejandro Guerra",
+    "slug": "jose-alejandro-guerra",
+    "role": "Coordinador de Proyectos",
+    "bio": "Estudiante de Diseño Urbano y Gestión del Hábitat, apasionado por el trabajo social y los procesos comunitarios. Sueña con transformar desde el diseño, la construcción y la gestión una ciudad más equitativa para todas las formas de vida.",
+    "photo": "/images/people/jose_alejandro.jpg",
+    "linkedin": "",
+    "state": "active",
+    "projects": []
+  },
+  {
+    "name": "Samuel Peláez",
+    "slug": "samuel-pelaez",
+    "role": "Revitalizador",
+    "bio": "Biólogo con experiencia en botánica, conservación y horticultura. Me interesa conocer cómo puede la horticultura de plantas nativas y las soluciones basadas en la naturaleza contribuir a la resiliencia climática de las ciudades y a combatir la pérdida de biodiversidad.",
+    "photo": "/images/people/samuel.jpg",
+    "linkedin": "https://www.linkedin.com/in/samuel-pel%C3%A1ez-v%C3%A9lez-061686290/",
+    "state": "active",
+    "projects": []
+  },
+  {
+    "name": "Juana Valentina Carmona",
+    "slug": "juana-valentina-carmona",
+    "role": "Revitalizadora",
+    "bio": "Estudiante de Ciencias Políticas e Historia. Apasionada por estudiar la política desde la calle. Movilizada por la construcción colectiva y los procesos sociales Usa perspectivas críticas para promover justicia social y la dignificación de todas las formas de vida.",
+    "photo": "",
+    "linkedin": "",
+    "state": "inactive",
+    "projects": []
+  },
+  {
+    "name": "Mateo Ramírez",
+    "slug": "mateo-ramirez",
+    "role": "Revitalizador",
+    "bio": "Comunicador Social y Periodista interesado en el urbanismo, los procesos comunitarios y las redes sociales. Me gusta entender las ciudades como organismos vivos y conocerlas desde todos los puntos de vista para poder descubrir su verdadera escencia.",
+    "photo": "/images/people/mateo.jpg",
+    "linkedin": "https://www.linkedin.com/in/mateo-ram%C3%ADrez-vargas/",
+    "state": "active",
+    "projects": []
+  },
+  {
+    "name": "Carolina Londoño",
+    "slug": "carolina-londono",
+    "role": "Revitalizadora",
+    "bio": "Abogada e investigadora, dedicada desde la academia a estudiar e impulsar procesos comunitarios. Tiene especial interés en el mejoramiento del espacio público, la planificación territorial y el diseño de experiencias de aprendizaje para las comunidades.",
+    "photo": "",
+    "linkedin": "https://www.linkedin.com/in/carolina-londo%C3%B1o-henao-5aa4841b5/",
+    "state": "inactive",
+    "projects": []
+  },
+  {
+    "name": "Natalia Hernández",
+    "slug": "natalia-hernandez",
+    "role": "Revitalizadora",
+    "bio": "Estudiante de arquitectura apasionada por el urbanismo, reimagina espacios desde una perspectiva social. Enfocada en la escala humana, en el tejido social y el fortalecimiento del apoyo comunitario en sus proyectos.",
+    "photo": "/images/people/natalia.jpg",
+    "linkedin": "",
+    "state": "active",
+    "projects": []
+  },
+  {
+    "name": "Tatiana Pantoja",
+    "slug": "tatiana-pantoja",
+    "role": "Revitalizadora",
+    "bio": "Estudiante de Artes Plásticas e investigadora de los procesos de transformación social y comunitarios como practicas artísticas. Usa estas herramientas para poner en duda las estructuras socioculturales y territoriales.",
+    "photo": "",
+    "linkedin": "",
+    "state": "inactive",
+    "projects": []
+  },
+  {
+    "name": "Laura Betancourt",
+    "slug": "laura-betancourt",
+    "role": "Voluntaria",
+    "bio": "",
+    "photo": "",
+    "linkedin": "",
+    "state": "inactive",
+    "projects": []
+  },
+  {
+    "name": "Daniela Morelo",
+    "slug": "daniela-morelo",
+    "role": "Revitalizadora",
+    "bio": "Estudiante de Diseño y Gestión de Espacios. Me motiva re-construir y re-significar el territorio desde intervenciones de urbanismo táctico, entornos accesibles y humanos, para convertir el diseño en una herramienta de cohesión social y derecho a la ciudad",
+    "photo": "",
+    "linkedin": "",
+    "state": "inactive",
+    "projects": []
+  },
+  {
+    "name": "Laura Patiño",
+    "slug": "laura-patino",
+    "role": "Revitalizadora",
+    "bio": "Abogada interesada en procesos de justicia social en equilibrio con la naturaleza. Movilizada por la creación de espacios que se transformen a través de expresiones artísticas y el respeto por la vida.",
+    "photo": "/images/people/laura.jpg",
+    "linkedin": "https://www.linkedin.com/in/laura-elena-pati%C3%B1o-g%C3%B3mez-05a0b023b/",
+    "state": "active",
+    "projects": []
+  },
+  {
+    "name": "Daniel Álvarez",
+    "slug": "daniel-alvarez",
+    "role": "Revitalizador",
+    "bio": "Estudiante de Ciencias Políticas y Diseño Urbano, aprendiz, amante de los procesos sociales y urbanos de mi ciudad. Interesado en el activismo y aportar en espacios que permitan la transformación en la calidad de vida de su contexto.",
+    "photo": "",
+    "linkedin": "https://www.linkedin.com/in/danielesteb/",
+    "state": "inactive",
+    "projects": []
+  },
+  {
+    "name": "Miguel Angel Ocampo",
+    "slug": "miguel-angel-ocampo",
+    "role": "Revitalizador",
+    "bio": "Estudiante de Diseño Urbano y Gestión del Hábitat apasionado por la ciudad, trabajar en conjunto con el medio ambiente, promover ideas de sostenibilidad y entender las dinámicas sociales, urbanas y ambientales.",
+    "photo": "/images/people/miguel.jpg",
+    "linkedin": "https://www.linkedin.com/in/miguelocampodu/",
+    "state": "active",
+    "projects": []
+  },
+  {
+    "name": "José Baena",
+    "slug": "jose-baena",
+    "role": "Revitalizador",
+    "bio": "",
+    "photo": "",
+    "linkedin": "",
+    "state": "active",
+    "projects": []
+  },
+  {
+    "name": "Isabela Arbeláez",
+    "slug": "isabela-arbelaez",
+    "role": "Revitalizadora",
+    "bio": "Soy una persona muy empática, pero introvertida. Me apasionan las cosas estéticas, por ende me interesa el diseño, la ilustración y los audiovisuales.",
+    "photo": "/images/people/isabela.jpg",
+    "linkedin": "https://www.linkedin.com/in/isabela-arbel%C3%A1ez-cosme-122009204/",
+    "state": "inactive",
+    "projects": []
+  },
+  {
+    "name": "Sebastián de Jesús Campo",
+    "slug": "sebastian-de-jesus-campo",
+    "role": "Revitalizador",
+    "bio": "",
+    "photo": "",
+    "linkedin": "",
+    "state": "inactive",
+    "projects": []
+  },
+  {
+    "name": "Tomás Hernández",
+    "slug": "tomas-hernandez",
+    "role": "Voluntario",
+    "bio": "",
+    "photo": "",
+    "linkedin": "",
+    "state": "active",
+    "projects": []
+  },
+  {
+    "name": "Manuela",
+    "slug": "manuela",
+    "role": "",
+    "bio": "",
+    "photo": "",
+    "linkedin": "",
+    "state": "active",
+    "projects": []
+  }
+]

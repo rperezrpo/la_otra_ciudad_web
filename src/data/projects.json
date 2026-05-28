@@ -1,0 +1,44 @@
+[
+  {
+    "title": "Barrios en Movimiento",
+    "slug": "barrios-en-movimiento",
+    "category": "Hábitat",
+    "heroImage": "/images/projects/barrios-en-movimiento.jpg",
+    "summary": "Transformación del espacio público en tres comunas de ladera mediante diseño participativo.",
+    "description": "Barrios en Movimiento es un proceso de largo plazo que acompaña a comunidades de las comunas 1, 2 y 3 de Medellín en la transformación colectiva de sus espacios públicos. Partimos de un diagnóstico participativo donde los propios habitantes identificaron sus necesidades y potencias territoriales. A través de talleres de diseño colaborativo, cartografías sociales y mingas comunitarias, construimos propuestas de intervención en parques, escaleras y corredores peatonales. El proyecto ha involucrado a más de 400 familias y ha logrado concretar 7 intervenciones físicas con materiales donados por aliados institucionales.",
+    "neighborhood": "Comunas 1, 2 y 3 — Nororiental",
+    "partners": ["Universidad de Antioquia", "Alcaldía de Medellín", "ONU-Habitat"],
+    "year": 2024,
+    "status": "activo",
+    "gallery": [],
+    "people": ["ana-giraldo", "carlos-restrepo"]
+  },
+  {
+    "title": "Escuelas de Ciudadanía",
+    "slug": "escuelas-de-ciudadania",
+    "category": "Educación",
+    "heroImage": "/images/projects/escuelas-de-ciudadania.jpg",
+    "summary": "Formación política y cívica para jóvenes líderes en territorios históricamente excluidos.",
+    "description": "Las Escuelas de Ciudadanía son espacios de formación política para jóvenes entre 15 y 28 años en barrios populares de Medellín. El programa combina pedagogía crítica, historia local del territorio y herramientas de incidencia comunitaria. Cada cohorte trabaja durante 6 meses con encuentros semanales, salidas de campo y un proyecto de incidencia final. Más de 120 jóvenes han pasado por el programa desde 2022, varios de los cuales se han vinculado a Juntas de Acción Comunal y procesos de planeación local.",
+    "neighborhood": "Comunas 8 y 9 — Centro-Oriental",
+    "partners": ["Fundación Bancolombia", "Ashoka", "Secretaría de Educación de Medellín"],
+    "year": 2024,
+    "status": "activo",
+    "gallery": [],
+    "people": ["diana-ospina", "felipe-mora"]
+  },
+  {
+    "title": "Memorias del Territorio",
+    "slug": "memorias-del-territorio",
+    "category": "Cultura",
+    "heroImage": "/images/projects/memorias-del-territorio.jpg",
+    "summary": "Mapeo y rescate de narrativas culturales barriales a través de metodologías audiovisuales.",
+    "description": "Memorias del Territorio fue un proyecto de investigación-creación que documentó las narrativas orales, sonoras y visuales de barrios populares del nororiente de Medellín. Trabajamos con habitantes mayores como archivistas vivos del territorio, combinando entrevistas en profundidad, recorridos patrimoniales y talleres de creación audiovisual con jóvenes. El resultado fue una serie de microfilms comunitarios y un archivo digital de más de 300 piezas que quedó en manos de las comunidades participantes.",
+    "neighborhood": "Comunas 3 y 4 — Nororiental",
+    "partners": ["Ministerio de Cultura", "Universidad Nacional sede Medellín"],
+    "year": 2023,
+    "status": "completado",
+    "gallery": [],
+    "people": ["ana-giraldo", "felipe-mora"]
+  }
+]

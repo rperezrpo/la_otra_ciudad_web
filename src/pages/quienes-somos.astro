@@ -1,0 +1,198 @@
+---
+import BaseLayout from '../components/layout/BaseLayout.astro';
+import PersonCard from '../components/PersonCard.astro';
+import PageHero from '../components/layout/PageHero.astro';
+import { getPeople } from '../lib/sanity';
+
+const peopleData = await getPeople();
+
+// Only show people who have a photo — those without one are silently skipped
+const activePeople = peopleData.filter((p) => p.photo && p.state === 'active');
+const pastPeople = peopleData.filter((p) => p.photo && p.state !== 'active');
+
+// EDIT: update the allies list as partnerships change
+const aliados = [
+  'Universidad de Antioquia',
+  'ONU-Habitat',
+  'Alcaldía de Medellín',
+  'Fundación Bancolombia',
+  'Ashoka',
+];
+---
+
+<BaseLayout
+  title="Quiénes Somos"
+  description="La Corporación La Otra Ciudad trabaja desde 2013 por ciudades más justas y democráticas en Medellín."
+>
+
+  <!-- ─── PAGE HERO ─────────────────────────────────────────────────── -->
+  <!-- EDIT: drop a photo into /public/images/banners/quienes-somos.jpg to activate the image background -->
+  <PageHero eyebrow="Quiénes Somos" image="/images/banners/quienes-somos.jpg">
+    <h1 class="page-hero-title">Una organización que cree en el poder de lo colectivo</h1>
+    <p class="page-hero-sub">Desde 2013 trabajamos para que las comunidades sean protagonistas de la transformación de sus territorios.</p>
+  </PageHero>
+
+  <!-- ─── HISTORY ───────────────────────────────────────────────────── -->
+  <div class="section">
+    <div class="two-col">
+      <div>
+        <span class="eyebrow">Nuestra historia</span>
+        <h2 class="section-title" style="font-size: clamp(28px, 3vw, 42px);">Nacimos de las comunidades, para las comunidades</h2>
+        <p class="section-body">
+          La Corporación La Otra Ciudad nació en 2013 en Medellín como respuesta a los vacíos en la
+          participación comunitaria en los procesos de planeación urbana. Fundada por un grupo de
+          arquitectos, sociólogos y líderes barriales, desde el inicio apostamos por una práctica
+          que pusiera en el centro los saberes y necesidades de los habitantes.
+        </p>
+        <p class="section-body" style="margin-top: 16px;">
+          Hoy somos un equipo de 20 personas con presencia en 6 comunas de Medellín, trabajando de
+          la mano con comunidades de ladera, asentamientos informales y barrios populares.
+        </p>
+      </div>
+      <div>
+        <!-- SANITY: replace this placeholder with a real team photo -->
+        <div class="img-placeholder" style="height: 420px;">
+          <span>Equipo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── VALUES ────────────────────────────────────────────────────── -->
+  <div class="section-full section-warm" style="padding: 80px 48px;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <span class="eyebrow">Lo que nos mueve</span>
+      <h2 class="section-title">Principios que guían nuestro trabajo</h2>
+      <div class="card-grid-3" style="margin-top: 40px;">
+        {[
+          {
+            title: 'Participación real',
+            desc: 'Las comunidades no son beneficiarias pasivas — son expertas de su propio territorio y protagonistas de cualquier proceso.',
+            color: 'var(--c-orange)',
+          },
+          {
+            title: 'Equidad territorial',
+            desc: 'Trabajamos donde el Estado ha llegado tarde o incompleto, priorizando las zonas más vulneradas de la ciudad.',
+            color: 'var(--c-teal)',
+          },
+          {
+            title: 'Sostenibilidad',
+            desc: 'Buscamos que los procesos que acompañamos dejen capacidades instaladas en las comunidades para continuar solos.',
+            color: 'var(--c-pink)',
+          },
+        ].map((v) => (
+          <div style={`background: ${v.color}; border-radius: 8px; padding: 36px 32px;`}>
+            <h3 style="font-family: var(--font-sans); font-size: 22px; font-weight: 600; letter-spacing: -0.3px; color: #fff; margin-bottom: 12px;">{v.title}</h3>
+            <p style="font-size: 15px; font-weight: 300; line-height: 1.6; color: rgba(255,255,255,0.82);">{v.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── TEAM ──────────────────────────────────────────────────────── -->
+  <div class="section">
+    <span class="eyebrow">El equipo</span>
+    <h2 class="section-title">Personas comprometidas con la ciudad</h2>
+
+    <div class="team-grid" style="margin-top: 40px;">
+      {activePeople.map((person) => (
+        <PersonCard
+          name={person.name}
+          role={person.role}
+          photo={person.photo}
+          bio={person.bio}
+          linkedin={person.linkedin}
+        />
+      ))}
+    </div>
+
+    {pastPeople.length > 0 && (
+      <details class="past-team">
+        <summary class="btn-outline past-team-toggle">
+          Personas que nos han acompañado antes
+        </summary>
+        <div class="past-team-panel">
+          <ul class="past-team-list">
+            {pastPeople.map((person) => (
+              <li>{person.name}</li>
+            ))}
+          </ul>
+        </div>
+      </details>
+    )}
+  </div>
+
+  <!-- ─── ALLIES ────────────────────────────────────────────────────── -->
+  <div class="section-full" style="background: linear-gradient(135deg, #609d92 0%, #3b6bdc 100%); padding: 64px 48px;">
+    <div style="max-width: 1100px; margin: 0 auto;">
+      <span class="eyebrow-light">Aliados y financiadores</span>
+      <!-- EDIT: update this list as alliances change -->
+      <div style="display: flex; flex-wrap: wrap; margin-top: 32px; border-top: 1px solid rgba(255,255,255,0.08);">
+        {aliados.map((aliado) => (
+          <div style="flex: 1 0 180px; padding: 28px 24px; border-right: 1px solid rgba(255,255,255,0.08); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; color: rgba(255,255,255,0.4); text-align: center;">
+            {aliado}
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+</BaseLayout>
+
+<style>
+  .past-team {
+    margin-top: 40px;
+  }
+
+  .past-team-toggle {
+    list-style: none;
+    user-select: none;
+  }
+
+  .past-team-toggle::-webkit-details-marker {
+    display: none;
+  }
+
+  .past-team-toggle::after {
+    content: '+';
+    font-size: 18px;
+    line-height: 1;
+    transition: transform 150ms;
+  }
+
+  .past-team[open] .past-team-toggle::after {
+    content: '–';
+  }
+
+  .past-team-panel {
+    margin-top: 20px;
+    background: var(--c-white-pure);
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+    padding: 28px 32px;
+  }
+
+  .past-team-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px 24px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .past-team-list li {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--fg1);
+  }
+
+  @media (max-width: 768px) {
+    .past-team-list { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 560px) {
+    .past-team-list { grid-template-columns: 1fr; }
+  }
+</style>
