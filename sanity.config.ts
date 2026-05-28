@@ -6,8 +6,8 @@ import { schemaTypes } from './sanity/schemaTypes'
 export default defineConfig({
   name: 'la-otra-ciudad',
   title: 'La Otra Ciudad',
-  projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID,
-  dataset: import.meta.env.PUBLIC_SANITY_DATASET || 'production',
+  projectId: 'nkzuaihq',
+  dataset: 'production',
   plugins: [structureTool(), visionTool()],
   schema: {
     types: schemaTypes,
