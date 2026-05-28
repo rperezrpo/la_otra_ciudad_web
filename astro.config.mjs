@@ -4,11 +4,14 @@ import tailwind from '@astrojs/tailwind';
 import sanity from '@sanity/astro';
 import react from '@astrojs/react';
 
-const { PUBLIC_SANITY_PROJECT_ID, PUBLIC_SANITY_DATASET } = loadEnv(
+const { PUBLIC_SANITY_PROJECT_ID: _loadEnvProjectId, PUBLIC_SANITY_DATASET: _loadEnvDataset } = loadEnv(
   process.env.NODE_ENV ?? 'development',
   process.cwd(),
   ''
 );
+// loadEnv reads .env files; fall back to process.env for Vercel's injected vars.
+const PUBLIC_SANITY_PROJECT_ID = _loadEnvProjectId || process.env.PUBLIC_SANITY_PROJECT_ID;
+const PUBLIC_SANITY_DATASET = _loadEnvDataset || process.env.PUBLIC_SANITY_DATASET;
 
 export default defineConfig({
   integrations: [
