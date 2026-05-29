@@ -55,7 +55,7 @@ const categories = ['Todos', ...new Set(projectsData.map((p) => p.category))];
     <!-- Projects grid -->
     <div class="card-grid-3" id="projects-grid">
       {projectsData.map((project) => (
-        <div data-category={project.category}>
+        <div data-category={project.category} style="height: 100%;">
           <ProjectCard
             title={project.title}
             slug={project.slug}
