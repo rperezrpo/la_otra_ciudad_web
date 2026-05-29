@@ -4,17 +4,17 @@ import PageHero from '../components/layout/PageHero.astro';
 
 // EDIT: update donation amounts and impact labels
 const presets = [
-  { amount: 20000,  label: 'Cubre materiales para un taller comunitario' },
-  { amount: 50000,  label: 'Financia una sesión de cartografía social' },
-  { amount: 100000, label: 'Apoya un mes de formación a un líder comunitario' },
-  { amount: 200000, label: 'Costea el diseño participativo de un espacio público' },
+  { amount: 20000,  label: 'Cubre los materiales de un taller con la comunidad' },
+  { amount: 50000,  label: 'Financia una jornada de diagnóstico participativo' },
+  { amount: 100000, label: 'Costea la siembra de plantas nativas en espacio público' },
+  { amount: 200000, label: 'Apoya la readecuación de 1 m² de espacio comunitario' },
 ];
 
 const whyDonate = [
-  { stat: '100%',     desc: 'A programas directos — ningún porcentaje en publicidad' },
-  { stat: '12+',      desc: 'Años de trayectoria y rendición de cuentas pública' },
-  { stat: 'Deducible', desc: 'Donaciones deducibles de renta (Régimen Tributario Especial)' },
-  { stat: 'Informes', desc: 'Recibes reportes trimestrales del impacto de tu aporte' },
+  { stat: '100%',          desc: 'A programas directos — cero en publicidad comercial' },
+  { stat: 'Desde 2021',    desc: 'Construyendo ciudad con comunidades de Medellín y Envigado' },
+  { stat: 'Transparente',  desc: 'Publicamos un Informe de Gestión anual con el detalle de cada peso' },
+  { stat: 'Internacional', desc: 'Reconocidos en España, Colombia y el Reino Unido por nuestro trabajo' },
 ];
 ---
 
@@ -26,7 +26,7 @@ const whyDonate = [
   <!-- ─── HERO ──────────────────────────────────────────────────────── -->
   <!-- EDIT: drop a photo into /public/images/banners/donar.jpg to activate the image background -->
   <!-- Note: donar uses its own orange hero, not PageHero — keeping it distinct intentionally -->
-  <div style="background: var(--c-orange); padding: 80px 48px; text-align: center;">
+  <div style="background: var(--c-teal); padding: 80px 48px; text-align: center;">
     <span style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: rgba(255,255,255,0.7); display: block; margin-bottom: 24px;">Donar</span>
     <h1 style="font-family: var(--font-display); font-variation-settings: 'opsz' 144, 'SOFT' 40, 'WONK' 0; font-size: clamp(40px, 6vw, 72px); font-weight: 400; line-height: 1.0; letter-spacing: -1.5px; color: #fff; max-width: 640px; margin: 0 auto 20px;">
       Tu aporte transforma territorios
@@ -48,7 +48,7 @@ const whyDonate = [
           <button
             class="freq-btn"
             data-freq="mensual"
-            style="flex: 1; padding: 12px; border-radius: 8px; border: 2px solid var(--c-orange); background: #fdf2ec; color: var(--c-orange); font-family: var(--font-sans); font-size: 15px; font-weight: 600; cursor: pointer;"
+            style="flex: 1; padding: 12px; border-radius: 8px; border: 2px solid var(--c-teal); background: rgba(96,157,146,0.1); color: var(--c-teal); font-family: var(--font-sans); font-size: 15px; font-weight: 600; cursor: pointer;"
           >
             Mensual ★
           </button>
@@ -69,7 +69,7 @@ const whyDonate = [
               class="amount-btn"
               data-amount={amount}
               data-selected={amount === 50000 ? 'true' : 'false'}
-              style={`border: 2px solid ${amount === 50000 ? 'var(--c-orange)' : 'rgba(26,20,16,0.12)'}; border-radius: 8px; padding: 16px 24px; cursor: pointer; text-align: center; font-size: 20px; font-weight: 400; font-family: var(--font-display); transition: all 150ms; background: ${amount === 50000 ? '#fdf2ec' : 'var(--c-white-pure)'}; color: ${amount === 50000 ? 'var(--c-orange)' : 'var(--c-black)'};`}
+              style={`border: 2px solid ${amount === 50000 ? 'var(--c-teal)' : 'rgba(26,20,16,0.12)'}; border-radius: 8px; padding: 16px 24px; cursor: pointer; text-align: center; font-size: 20px; font-weight: 400; font-family: var(--font-display); transition: all 150ms; background: ${amount === 50000 ? 'rgba(96,157,146,0.1)' : 'var(--c-white-pure)'}; color: ${amount === 50000 ? 'var(--c-teal)' : 'var(--c-black)'};`}
             >
               {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(amount)}
             </button>
@@ -88,8 +88,8 @@ const whyDonate = [
         </div>
 
         <!-- Impact indicator -->
-        <div id="impact-box" style="margin-top: 20px; background: rgba(96,157,146,0.1); border: 1px solid rgba(96,157,146,0.25); border-radius: 8px; padding: 16px 20px;">
-          <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--c-teal); margin-bottom: 6px;">Tu impacto</div>
+        <div id="impact-box" style="margin-top: 20px; background: rgba(226,97,29,0.08); border: 1px solid rgba(226,97,29,0.2); border-radius: 8px; padding: 16px 20px;">
+          <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--c-orange); margin-bottom: 6px;">Tu impacto</div>
           <div id="impact-text" style="font-size: 15px; font-weight: 400; line-height: 1.5; color: var(--c-black);">
             Financia una sesión de cartografía social
           </div>
@@ -115,7 +115,7 @@ const whyDonate = [
         <!-- END PAYMENT PLACEHOLDER -->
 
         <p style="font-size: 11px; color: var(--fg3); text-align: center; margin-top: 14px; font-family: var(--font-mono); letter-spacing: 0.5px;">
-          PAGO SEGURO · RECIBO DEDUCIBLE DE IMPUESTOS
+          PAGO SEGURO · EL 100% VA A PROGRAMAS COMUNITARIOS
         </p>
       </div>
 
@@ -126,7 +126,7 @@ const whyDonate = [
         <div style="display: flex; flex-direction: column; gap: 0; margin-top: 32px;">
           {whyDonate.map(({ stat, desc }) => (
             <div style="display: flex; gap: 20px; padding: 20px 0; border-bottom: 1px solid rgba(26,20,16,0.08); align-items: flex-start;">
-              <div style="font-family: var(--font-display); font-variation-settings: 'opsz' 72, 'SOFT' 20, 'WONK' 0; font-size: 28px; font-weight: 400; color: var(--c-orange); min-width: 100; line-height: 1;">{stat}</div>
+              <div style="font-family: var(--font-display); font-variation-settings: 'opsz' 72, 'SOFT' 20, 'WONK' 0; font-size: 28px; font-weight: 400; color: var(--c-teal); min-width: 100; line-height: 1;">{stat}</div>
               <div style="font-size: 15px; font-weight: 300; line-height: 1.5; color: var(--fg2); padding-top: 4px;">{desc}</div>
             </div>
           ))}
@@ -141,10 +141,10 @@ const whyDonate = [
 <!-- Client-side donation selector -->
 <script>
   const impacts: Record<number, string> = {
-    20000:  'Cubre materiales para un taller comunitario',
-    50000:  'Financia una sesión de cartografía social',
-    100000: 'Apoya un mes de formación a un líder comunitario',
-    200000: 'Costea el diseño participativo de un espacio público',
+    20000:  'Cubre los materiales de un taller con la comunidad',
+    50000:  'Financia una jornada de diagnóstico participativo',
+    100000: 'Costea la siembra de plantas nativas en espacio público',
+    200000: 'Apoya la readecuación de 1 m² de espacio comunitario',
   };
 
   let selectedAmount = 50000;
@@ -159,9 +159,9 @@ const whyDonate = [
     selectedAmount = amount;
     amountBtns.forEach((btn) => {
       const isSelected = Number(btn.dataset.amount) === amount;
-      btn.style.borderColor = isSelected ? 'var(--c-orange)' : 'rgba(26,20,16,0.12)';
-      btn.style.background = isSelected ? '#fdf2ec' : 'var(--c-white-pure)';
-      btn.style.color = isSelected ? 'var(--c-orange)' : 'var(--c-black)';
+      btn.style.borderColor = isSelected ? 'var(--c-teal)' : 'rgba(26,20,16,0.12)';
+      btn.style.background = isSelected ? 'rgba(96,157,146,0.1)' : 'var(--c-white-pure)';
+      btn.style.color = isSelected ? 'var(--c-teal)' : 'var(--c-black)';
     });
     impactText.textContent = impacts[amount] ?? 'Apoya nuestros programas comunitarios';
   }
@@ -189,9 +189,9 @@ const whyDonate = [
       selectedFreq = btn.dataset.freq ?? 'mensual';
       freqBtns.forEach((b) => {
         const isActive = b.dataset.freq === selectedFreq;
-        b.style.borderColor = isActive ? 'var(--c-orange)' : 'rgba(26,20,16,0.15)';
-        b.style.background = isActive ? '#fdf2ec' : 'var(--c-white-pure)';
-        b.style.color = isActive ? 'var(--c-orange)' : 'var(--c-black)';
+        b.style.borderColor = isActive ? 'var(--c-teal)' : 'rgba(26,20,16,0.15)';
+        b.style.background = isActive ? 'rgba(96,157,146,0.1)' : 'var(--c-white-pure)';
+        b.style.color = isActive ? 'var(--c-teal)' : 'var(--c-black)';
         b.style.fontWeight = isActive ? '600' : '400';
       });
     });

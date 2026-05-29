@@ -12,24 +12,31 @@ const pastPeople = peopleData.filter((p) => p.photo && p.state !== 'active');
 
 // EDIT: update the allies list as partnerships change
 const aliados = [
-  'Universidad de Antioquia',
-  'ONU-Habitat',
-  'Alcaldía de Medellín',
-  'Fundación Bancolombia',
-  'Ashoka',
+  'Fundación Mi Sangre',
+  'S2Cities',
+  'Everyday Homeless',
+  'UCL Bartlett (DPU)',
+  'Urbam–EAFIT',
+  'Somos x Naturaleza',
+  'UMI Fund',
+  'Social Change Nest',
+  'Parque Explora',
+  'Low Carbon City',
+  'ETH Zurich',
+  'Proyecto NN',
 ];
 ---
 
 <BaseLayout
   title="Quiénes Somos"
-  description="La Corporación La Otra Ciudad trabaja desde 2013 por ciudades más justas y democráticas en Medellín."
+  description="La Corporación La Otra Ciudad trabaja desde 2021 por ciudades más biodiversas, justas y saludables en Medellín."
 >
 
   <!-- ─── PAGE HERO ─────────────────────────────────────────────────── -->
   <!-- EDIT: drop a photo into /public/images/banners/quienes-somos.jpg to activate the image background -->
   <PageHero eyebrow="Quiénes Somos" image="/images/banners/quienes-somos.jpg">
     <h1 class="page-hero-title">Una organización que cree en el poder de lo colectivo</h1>
-    <p class="page-hero-sub">Desde 2013 trabajamos para que las comunidades sean protagonistas de la transformación de sus territorios.</p>
+    <p class="page-hero-sub">Desde 2021 trabajamos para que las comunidades sean protagonistas de la transformación de sus territorios.</p>
   </PageHero>
 
   <!-- ─── HISTORY ───────────────────────────────────────────────────── -->
@@ -39,14 +46,15 @@ const aliados = [
         <span class="eyebrow">Nuestra historia</span>
         <h2 class="section-title" style="font-size: clamp(28px, 3vw, 42px);">Nacimos de las comunidades, para las comunidades</h2>
         <p class="section-body">
-          La Corporación La Otra Ciudad nació en 2013 en Medellín como respuesta a los vacíos en la
-          participación comunitaria en los procesos de planeación urbana. Fundada por un grupo de
-          arquitectos, sociólogos y líderes barriales, desde el inicio apostamos por una práctica
-          que pusiera en el centro los saberes y necesidades de los habitantes.
+          La Corporación La Otra Ciudad nació en 2021 en Medellín, impulsada por un grupo de jóvenes
+          urbanistas, arquitectos y activistas surgido del capítulo de Medio Ambiente y Movilidad del
+          Centro de Pensamiento Programático. Desde el inicio apostamos por una práctica que pusiera
+          en el centro los saberes y necesidades de los habitantes.
         </p>
         <p class="section-body" style="margin-top: 16px;">
-          Hoy somos un equipo de 20 personas con presencia en 6 comunas de Medellín, trabajando de
-          la mano con comunidades de ladera, asentamientos informales y barrios populares.
+          En octubre de 2024 nos constituimos formalmente como Entidad Sin Ánimo de Lucro. Hoy somos
+          un equipo de ~20 personas trabajando en barrios de La Candelaria, Laureles, Manrique y el
+          municipio de Envigado, junto a comunidades de ladera, asentamientos informales y barrios populares.
         </p>
       </div>
       <div>
@@ -68,12 +76,12 @@ const aliados = [
           {
             title: 'Participación real',
             desc: 'Las comunidades no son beneficiarias pasivas — son expertas de su propio territorio y protagonistas de cualquier proceso.',
-            color: 'var(--c-orange)',
+            color: 'var(--c-teal)',
           },
           {
             title: 'Equidad territorial',
             desc: 'Trabajamos donde el Estado ha llegado tarde o incompleto, priorizando las zonas más vulneradas de la ciudad.',
-            color: 'var(--c-teal)',
+            color: 'var(--c-orange)',
           },
           {
             title: 'Sostenibilidad',
@@ -124,7 +132,7 @@ const aliados = [
   </div>
 
   <!-- ─── ALLIES ────────────────────────────────────────────────────── -->
-  <div class="section-full" style="background: linear-gradient(135deg, #609d92 0%, #3b6bdc 100%); padding: 64px 48px;">
+  <div class="section-full" style="background: linear-gradient(135deg, #e2611d 0%, #3b6bdc 100%); padding: 64px 48px;">
     <div style="max-width: 1100px; margin: 0 auto;">
       <span class="eyebrow-light">Aliados y financiadores</span>
       <!-- EDIT: update this list as alliances change -->

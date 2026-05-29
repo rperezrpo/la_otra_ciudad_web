@@ -7,7 +7,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "import": "node --env-file=.env scripts/import.mjs",
-    "import:projects": "node --env-file=.env scripts/import-wix-projects.mjs"
+    "import:projects": "node --env-file=.env scripts/import-wix-projects.mjs",
+    "patch:descriptions": "node --env-file=.env scripts/patch-project-descriptions.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^4.4.2",

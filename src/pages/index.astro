@@ -11,7 +11,7 @@ const featured = await getFeaturedProjects(3);
   <!-- ─── HERO ──────────────────────────────────────────────────────── -->
   <section class="hero">
     <span class="hero-eyebrow">Corporación La Otra Ciudad · Medellín</span>
-    <h1 class="hero-title">Construimos la ciudad que todas merecemos</h1>
+    <h1 class="hero-title">Construimos ciudades más biodiversas, justas y saludables</h1>
     <p class="hero-sub">Transformamos territorios desde adentro — con las comunidades, para las comunidades.</p>
     <div class="hero-actions">
       <a href="/proyectos" class="btn-hero-primary">Ver proyectos</a>
@@ -23,10 +23,10 @@ const featured = await getFeaturedProjects(3);
   <!-- EDIT: update numbers as the organization grows -->
   <div class="stats-strip">
     {[
-      ['12+', 'Años de trabajo'],
-      ['45',  'Comunidades'],
-      ['200+','Familias impactadas anualmente'],
-      ['18',  'Proyectos activos'],
+      ['1.035+', 'm² de espacio público transformado'],
+      ['393',    'Plantas nativas sembradas'],
+      ['21',     'Talleres con comunidades'],
+      ['2021',   'Año de fundación'],
     ].map(([num, label]) => (
       <div class="stat-item">
         <div class="stat-num">{num}</div>
@@ -40,11 +40,11 @@ const featured = await getFeaturedProjects(3);
     <div class="two-col">
       <div>
         <span class="eyebrow">Nuestra misión</span>
-        <h2 class="section-title">Diseñando espacios para transformar experiencias y comunidades</h2>
+        <h2 class="section-title">Mejoramos la calidad de vida de comunidades urbanas y dignificamos los territorios que habitan</h2>
         <p class="section-body">
-          Somos una organización sin ánimo de lucro que trabaja por la construcción de ciudades más
-          justas, habitables y democráticas. Acompañamos procesos comunitarios desde la planeación
-          participativa, la cultura y el territorio.
+          Somos una corporación sin ánimo de lucro fundada en Medellín en 2021. Trabajamos mediante
+          soluciones basadas en la naturaleza, diseño participativo de espacio público, intervenciones
+          artísticas y fortalecimiento del tejido social — siempre junto a las comunidades.
         </p>
         <div style="margin-top: 28px; display: flex; gap: 12px; flex-wrap: wrap;">
           <a href="/quienes-somos" class="btn-orange">Conocernos</a>
@@ -90,9 +90,9 @@ const featured = await getFeaturedProjects(3);
   <!-- ─── QUOTE BANNER ──────────────────────────────────────────────── -->
   <div style="background: var(--c-grad-hero); padding: 96px 48px;">
     <div style="max-width: 900px; margin: 0 auto; text-align: center;">
-      <span class="eyebrow-light">Nuestra visión</span>
+      <span class="eyebrow-light">Nuestra misión</span>
       <p style="font-family: var(--font-display); font-variation-settings: 'opsz' 144, 'SOFT' 30, 'WONK' 0; font-size: clamp(32px, 4vw, 52px); font-weight: 400; line-height: 1.15; letter-spacing: -1px; color: #fff; margin: 0 0 40px;">
-        "Una ciudad justa empieza por escuchar a quienes la habitan desde los márgenes."
+        Promovemos ciudades biodiversas, justas y saludables junto a comunidades históricamente marginadas.
       </p>
       <a href="/donar" class="btn-hero-primary" style="font-size: 16px;">Apoya nuestro trabajo ↗</a>
     </div>
@@ -116,7 +116,7 @@ const featured = await getFeaturedProjects(3);
             ['03', 'Actuar',     'Implementación con acompañamiento técnico y comunitario'],
           ].map(([n, t, d]) => (
             <div class="feature-item">
-              <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.6px; color: var(--c-orange); margin-bottom: 6px;">{n}</div>
+              <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.6px; color: var(--c-teal); margin-bottom: 6px;">{n}</div>
               <div class="feature-title">{t}</div>
               <div class="feature-desc">{d}</div>
             </div>
