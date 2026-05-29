@@ -88,8 +88,9 @@
   --c-glass-light: rgba(255, 255, 255, 0.20);
 
   /* Gradients */
-  --c-grad-hero: linear-gradient(135deg, #e2611d 0%, #e6224f 45%, #609d92 100%);
-  --c-grad-soft: linear-gradient(135deg, #609d92 0%, #a4a97d 100%);
+  --c-grad-hero: linear-gradient(135deg, #609d92 0%, #e6224f 45%, #e2611d 100%);
+  --c-grad-soft: linear-gradient(135deg, #e2611d 0%, #a4a97d 100%);
+  --c-grad-dark: linear-gradient(135deg, #e6224f 0%, #1a1410 38%, #1a1410 62%, #e2611d 100%);
 
   /* Semantic foreground */
   --fg1: #1a1410;
@@ -246,7 +247,7 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background: var(--c-orange);
+    background: var(--c-teal);
     color: #fff;
     border: none;
     border-radius: 50px;
@@ -263,7 +264,7 @@
   .btn-orange:hover { opacity: 0.88; }
 
   .btn-orange:focus-visible {
-    outline: 2px dashed var(--c-orange);
+    outline: 2px dashed var(--c-teal);
     outline-offset: 3px;
   }
 
@@ -339,6 +340,11 @@
 
   .section-gradient {
     background: var(--c-grad-hero);
+    color: #fff;
+  }
+
+  .section-dark-warm {
+    background: var(--c-grad-dark);
     color: #fff;
   }
 
@@ -453,7 +459,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    border-bottom: 3px solid var(--c-orange);
+    border-bottom: 3px solid var(--c-teal);
   }
 
   .page-hero-title {
@@ -630,7 +636,7 @@
   /* Fraunces for editorial moments — not for long body copy                  */
 
   .quote-block {
-    border-left: 3px solid var(--c-orange);
+    border-left: 3px solid var(--c-teal);
     padding: 12px 24px;
     font-family: var(--font-display);
     font-variation-settings: 'opsz' 72, 'SOFT' 20, 'WONK' 0;
@@ -658,8 +664,8 @@
   }
 
   .status-completado {
-    color: var(--fg3);
-    background: rgba(26, 20, 16, 0.05);
+    color: var(--c-pink);
+    background: rgba(230, 34, 79, 0.10);
   }
 
   /* ─── TEAM GRID ────────────────────────────────────────────────────────── */
@@ -706,12 +712,13 @@
   }
 
   .step-num {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: 0.6px;
-    color: var(--fg3);
-    min-width: 40px;
-    padding-top: 4px;
+    font-family: var(--font-sans);
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    color: var(--c-cobalt);
+    min-width: 56px;
+    padding-top: 0;
   }
 
   .step-content { flex: 1; }
@@ -756,9 +763,9 @@
   .filter-tab:hover { border-color: var(--c-black); }
 
   .filter-tab[data-active="true"] {
-    background: var(--c-orange);
+    background: var(--c-teal);
     color: #fff;
-    border-color: var(--c-orange);
+    border-color: var(--c-teal);
   }
 
   /* ─── FORMS ────────────────────────────────────────────────────────────── */
@@ -796,7 +803,7 @@
 
   .form-input:focus,
   .form-textarea:focus,
-  .form-select:focus { border-color: var(--c-orange); }
+  .form-select:focus { border-color: var(--c-teal); }
 
   .form-textarea { resize: vertical; min-height: 120px; }
 
@@ -850,23 +857,23 @@
 
   .nav-link:hover { background: var(--c-glass-dark); }
 
-  .nav-link[data-color="orange"]:hover { background: rgba(226, 97, 29, 0.12); color: var(--c-orange); }
+  .nav-link[data-color="orange"]:hover { background: rgba(96, 157, 146, 0.12); color: var(--c-teal); }
   .nav-link[data-color="pink"]:hover   { background: rgba(230, 34, 79, 0.12);  color: var(--c-pink); }
   .nav-link[data-color="cobalt"]:hover { background: rgba(59, 107, 220, 0.12); color: var(--c-cobalt); }
-  .nav-link[data-color="teal"]:hover   { background: rgba(96, 157, 146, 0.12); color: var(--c-teal); }
+  .nav-link[data-color="teal"]:hover   { background: rgba(226, 97, 29, 0.12);  color: var(--c-orange); }
 
   .nav-link.active { color: #fff; }
-  .nav-link.active-orange { background: var(--c-orange); }
+  .nav-link.active-orange { background: var(--c-teal); }
   .nav-link.active-pink   { background: var(--c-pink); }
   .nav-link.active-cobalt { background: var(--c-cobalt); }
-  .nav-link.active-teal   { background: var(--c-teal); }
+  .nav-link.active-teal   { background: var(--c-orange); }
 
   .nav-cta {
     margin-left: 16px;
     font-size: 14px;
     font-weight: 500;
     padding: 9px 20px;
-    background: var(--c-orange);
+    background: var(--c-teal);
     color: #fff;
     border: none;
     border-radius: 50px;
