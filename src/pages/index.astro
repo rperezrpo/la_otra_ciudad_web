@@ -23,13 +23,13 @@ const featured = await getFeaturedProjects(3);
   <!-- EDIT: update numbers as the organization grows -->
   <div class="stats-strip">
     {[
-      ['1.035+', 'm² de espacio público transformado'],
-      ['393',    'Plantas nativas sembradas'],
-      ['21',     'Talleres con comunidades'],
-      ['2021',   'Año de fundación'],
-    ].map(([num, label]) => (
+      ['1.035+', 'm² de espacio público transformado', 'var(--c-orange)'],
+      ['393',    'Plantas nativas sembradas',           'var(--c-teal)'],
+      ['21',     'Talleres con comunidades',            'var(--c-cobalt)'],
+      ['2021',   'Año de fundación',                   'var(--c-pink)'],
+    ].map(([num, label, color]) => (
       <div class="stat-item">
-        <div class="stat-num">{num}</div>
+        <div class="stat-num" style={`color: ${color};`}>{num}</div>
         <div class="stat-label">{label}</div>
       </div>
     ))}
