@@ -26,7 +26,7 @@ const featured = await getFeaturedProjects(3);
       ['1.035+', 'm² de espacio público transformado', 'var(--c-orange)'],
       ['393',    'Plantas nativas sembradas',           'var(--c-teal)'],
       ['21',     'Talleres con comunidades',            'var(--c-cobalt)'],
-      ['2021',   'Año de fundación',                   'var(--c-pink)'],
+      ['2',   'Premios internacionales',                   'var(--c-pink)'],
     ].map(([num, label, color]) => (
       <div class="stat-item">
         <div class="stat-num" style={`color: ${color};`}>{num}</div>
@@ -105,15 +105,15 @@ const featured = await getFeaturedProjects(3);
       <h2 class="section-title">Un proceso centrado en la comunidad</h2>
       <div>
         <p class="section-body" style="margin-top: 0;">
-          Nuestra metodología parte del reconocimiento del saber popular como base para la
-          transformación social. Combinamos investigación-acción participativa, planeación
-          territorial y formación ciudadana.
+          Nuestra metodología parte del reconocimiento de los saberes populares como base para la
+          transformación social. Combinamos aprendizaje basado en proyectos, investigación de impacto
+           y formación ciudadana.
         </p>
         <div class="feature-band">
           {[
             ['01', 'Escuchar',   'Procesos de diagnóstico participativo con la comunidad'],
-            ['02', 'Co-diseñar', 'Talleres de planeación colectiva para identificar soluciones'],
-            ['03', 'Actuar',     'Implementación con acompañamiento técnico y comunitario'],
+            ['02', 'Co-diseñar', 'Talleres de co-diseño y co-creación de soluciones'],
+            ['03', 'Actuar',     'Implementación participativa con acompañamiento técnico'],
           ].map(([n, t, d]) => (
             <div class="feature-item">
               <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.6px; color: var(--c-teal); margin-bottom: 6px;">{n}</div>

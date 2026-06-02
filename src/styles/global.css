@@ -122,7 +122,7 @@
     font-family: var(--font-sans);
     font-size: 16px;
     color: var(--fg1);
-    background: var(--bg1);
+    background: var(--c-black);   /* matches footer — fixes bottom overscroll colour */
     -webkit-font-smoothing: antialiased;
     font-feature-settings: "kern", "liga", "calt";
     text-rendering: optimizeLegibility;

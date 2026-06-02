@@ -68,15 +68,15 @@ const faqs = [
     <div class="two-col" style="gap: 96px; align-items: start;">
 
       <!-- ─── CONTACT FORM ───────────────────────────────────────────── -->
-      <!-- FORMSPREE: add action="https://formspree.io/f/YOUR_FORM_ID" and method="POST" -->
-      <!-- FORMSPREE: also add <input type="hidden" name="_next" value="https://yourdomain.com/gracias"> -->
+      <!-- Submits to the serverless endpoint at /api/contact (sends email via Resend). -->
       <div>
         <span class="eyebrow">Escríbenos</span>
         <h2 class="section-title" style="font-size: clamp(24px, 2.5vw, 36px); margin-top: 16px;">Formulario de contacto</h2>
 
         <form
+          id="contact-form"
           style="margin-top: 32px;"
-          action="#"
+          action="/api/contact"
           method="POST"
         >
           <div class="form-group">
@@ -129,10 +129,18 @@ const faqs = [
           <button
             type="submit"
             class="btn-orange"
+            id="contact-submit"
             style="width: 100%; justify-content: center; padding: 14px;"
           >
             Enviar mensaje
           </button>
+
+          <p
+            id="contact-status"
+            role="status"
+            aria-live="polite"
+            style="display: none; margin-top: 16px; font-size: 15px; line-height: 1.5;"
+          ></p>
         </form>
       </div>
 
@@ -212,6 +220,48 @@ const faqs = [
 </BaseLayout>
 
 <script>
+  // ─── Contact form submit ─────────────────────────────────────────
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const status = document.getElementById('contact-status') as HTMLParagraphElement | null;
+  const submitBtn = document.getElementById('contact-submit') as HTMLButtonElement | null;
+
+  if (form && status && submitBtn) {
+    const showStatus = (message: string, ok: boolean) => {
+      status.textContent = message;
+      status.style.display = 'block';
+      status.style.color = ok ? 'var(--fg2)' : '#b3261e';
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      submitBtn.disabled = true;
+      const originalLabel = submitBtn.textContent;
+      submitBtn.textContent = 'Enviando…';
+      status.style.display = 'none';
+
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(Object.fromEntries(new FormData(form) as any)),
+        });
+        const data = await res.json().catch(() => ({}));
+
+        if (res.ok) {
+          form.reset();
+          showStatus('¡Gracias! Tu mensaje fue enviado. Te responderemos pronto.', true);
+        } else {
+          showStatus(data.error ?? 'No pudimos enviar tu mensaje. Intenta de nuevo.', false);
+        }
+      } catch {
+        showStatus('Hubo un problema de conexión. Intenta de nuevo.', false);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalLabel;
+      }
+    });
+  }
+
   document.querySelectorAll<HTMLButtonElement>('.faq-trigger').forEach((trigger) => {
     trigger.addEventListener('click', () => {
       const expanded = trigger.getAttribute('aria-expanded') === 'true';

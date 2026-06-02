@@ -11,19 +11,23 @@ const activePeople = peopleData.filter((p) => p.photo && p.state === 'active');
 const pastPeople = peopleData.filter((p) => p.photo && p.state !== 'active');
 
 // EDIT: update the allies list as partnerships change
+// logo: path relative to /public — null = text-only tile
 const aliados = [
-  'Fundación Mi Sangre',
-  'S2Cities',
-  'Everyday Homeless',
-  'UCL Bartlett (DPU)',
-  'Urbam–EAFIT',
-  'Somos x Naturaleza',
-  'UMI Fund',
-  'Social Change Nest',
-  'Parque Explora',
-  'Low Carbon City',
-  'ETH Zurich',
-  'Proyecto NN',
+  { name: 'Fundación Mi Sangre',  logo: '/images/allies/mi-sangre.png'          },
+  { name: 'S2Cities',             logo: '/images/allies/s2cities.png'            },
+  { name: 'Everyday Homeless',    logo: '/images/allies/everyday-homeless.png'   },
+  { name: 'UCL Bartlett (DPU)',   logo: '/images/allies/dpu.jpg'                 },
+  { name: 'Urbam–EAFIT',          logo: '/images/allies/urbam.jpg'               },
+  { name: 'Somos x Naturaleza',   logo: '/images/allies/somos-x-naturaleza.png'  },
+  { name: 'ETH Zurich',           logo: '/images/allies/eth-zurich.jpg'          },
+  { name: 'Proyecto NN',          logo: '/images/allies/proyecto-nn.jpg'         },
+  { name: 'intuyLab',             logo: '/images/allies/intuylab.jpg'            },
+  { name: 'Alcaldía de Medellín', logo: '/images/allies/alcaldia-medellin.jpg'   },
+  { name: 'Alcaldía de Envigado', logo: '/images/allies/alcaldia-envigado.png'   },
+  { name: 'UMI Fund',             logo: null                                      },
+  { name: 'Social Change Nest',   logo: null                                      },
+  { name: 'Parque Explora',       logo: null                                      },
+  { name: 'Low Carbon City',      logo: null                                      },
 ];
 ---
 
@@ -133,13 +137,22 @@ const aliados = [
 
   <!-- ─── ALLIES ────────────────────────────────────────────────────── -->
   <div class="section-full" style="background: linear-gradient(135deg, #e2611d 0%, #3b6bdc 100%); padding: 64px 48px;">
-    <div style="max-width: 1100px; margin: 0 auto;">
+    <div style="max-width: 1200px; margin: 0 auto;">
       <span class="eyebrow-light">Aliados y financiadores</span>
-      <!-- EDIT: update this list as alliances change -->
-      <div style="display: flex; flex-wrap: wrap; margin-top: 32px; border-top: 1px solid rgba(255,255,255,0.08);">
-        {aliados.map((aliado) => (
-          <div style="flex: 1 0 180px; padding: 28px 24px; border-right: 1px solid rgba(255,255,255,0.08); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; color: rgba(255,255,255,0.4); text-align: center;">
-            {aliado}
+      <!-- EDIT: update aliados array above as alliances change -->
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px;">
+        {aliados.map(({ name, logo }) => (
+          <div style="background: #fff; border-radius: 8px; padding: 16px 24px; display: flex; align-items: center; justify-content: center; height: 80px; flex: 0 0 auto; min-width: 140px; max-width: 200px;">
+            {logo ? (
+              <img
+                src={logo}
+                alt={name}
+                title={name}
+                style="max-height: 46px; max-width: 160px; width: auto; object-fit: contain; display: block;"
+              />
+            ) : (
+              <span style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: var(--fg2); text-align: center; line-height: 1.4;">{name}</span>
+            )}
           </div>
         ))}
       </div>
