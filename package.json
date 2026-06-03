@@ -11,23 +11,23 @@
     "patch:descriptions": "node --env-file=.env scripts/patch-project-descriptions.mjs"
   },
   "dependencies": {
-    "@astrojs/react": "^4.4.2",
-    "@astrojs/tailwind": "^5.1.0",
-    "@astrojs/vercel": "^7.8.2",
+    "@astrojs/react": "^5.0.7",
+    "@astrojs/vercel": "^10.0.8",
     "@sanity/astro": "^3.4.0",
     "@sanity/client": "^7.22.1",
     "@sanity/image-url": "^1.2.0",
     "@sanity/vision": "^5.28.0",
-    "astro": "^4.16.0",
+    "@tailwindcss/vite": "^4.3.0",
+    "astro": "^6.4.3",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "resend": "^6.12.4",
     "sanity": "^5.28.0",
     "styled-components": "^6.4.2",
-    "tailwindcss": "^3.4.0"
+    "tailwindcss": "^4.3.0"
   },
   "engines": {
-    "node": "20.x"
+    "node": "24.x"
   },
   "devDependencies": {
     "@types/react": "^19.2.15",

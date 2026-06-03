@@ -1,6 +1,55 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* ─── TAILWIND THEME ─────────────────────────────────────────────────────── */
+/* Tailwind v4 reads design tokens from CSS. These reproduce the tokens that  */
+/* used to live in tailwind.config.mjs so utility classes (bg-loc-teal,       */
+/* font-display, tracking-h1, rounded-pill, max-w-content, …) keep working.   */
+
+@theme {
+  /* Brand palette → bg-loc-*, text-loc-*, border-loc-* */
+  --color-loc-orange:  #e2611d;
+  --color-loc-teal:    #609d92;
+  --color-loc-cobalt:  #3b6bdc;
+  --color-loc-pink:    #e6224f;
+  --color-loc-black:   #1a1410;
+  --color-loc-white:   #f7f3ee;
+  --color-loc-bg2:     #f5f4f0;
+  --color-loc-bg-dark: #1a1208;
+
+  /* Font families → font-display, font-sans, font-mono */
+  --font-display: "Fraunces", Georgia, serif;
+  --font-sans:    "Inter", system-ui, helvetica, sans-serif;
+  --font-mono:    "Space Mono", "SF Mono", Menlo, monospace;
+
+  /* Custom font weights → font-hairline, font-thin, font-extralight */
+  --font-weight-hairline:   200;
+  --font-weight-thin:       250;
+  --font-weight-extralight: 300;
+
+  /* Letter spacing → tracking-display, tracking-h1, … */
+  --tracking-display: -1.72px;
+  --tracking-h1:      -0.96px;
+  --tracking-h2:      -0.26px;
+  --tracking-body:    -0.14px;
+  --tracking-mono:    0.54px;
+  --tracking-mono-sm: 0.60px;
+
+  /* Radius → rounded-pill */
+  --radius-pill: 50px;
+
+  /* Max width / containers → max-w-content, max-w-reading */
+  --container-content: 1200px;
+  --container-reading: 680px;
+
+  /* Breakpoints (mirrors old `screens`; not used in markup today but kept
+     so any future xs:/lg: prefixes match the previous design). */
+  --breakpoint-xs:  560px;
+  --breakpoint-sm:  640px;
+  --breakpoint-md:  768px;
+  --breakpoint-lg:  960px;
+  --breakpoint-xl:  1280px;
+  --breakpoint-2xl: 1440px;
+}
 
 /* ─── @FONT-FACE ─────────────────────────────────────────────────────────── */
 /* Self-hosted fonts live in /public/fonts/ — swap for CDN URLs if needed    */
