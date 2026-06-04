@@ -358,10 +358,15 @@ const enfoques = [
 <script>
   const nodes = document.querySelectorAll<HTMLElement>('.step-node');
   nodes.forEach(node => {
-    node.addEventListener('click', () => {
+    node.addEventListener('click', (e) => {
+      e.stopPropagation();
       const wasActive = node.classList.contains('active');
       nodes.forEach(n => n.classList.remove('active'));
       if (!wasActive) node.classList.add('active');
     });
+  });
+
+  document.addEventListener('click', () => {
+    nodes.forEach(n => n.classList.remove('active'));
   });
 </script>
