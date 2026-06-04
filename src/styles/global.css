@@ -140,6 +140,7 @@
   --c-grad-hero: linear-gradient(135deg, #609d92 0%, #e6224f 45%, #e2611d 100%);
   --c-grad-soft: linear-gradient(135deg, #e2611d 0%, #a4a97d 100%);
   --c-grad-dark: linear-gradient(135deg, #e6224f 0%, #1a1410 38%, #1a1410 62%, #e2611d 100%);
+  --c-grad-enfoques: linear-gradient(135deg, #0e5c4a 0%, #6a0e38 52%, #7a3408 100%);
 
   /* Semantic foreground */
   --fg1: #1a1410;
@@ -393,7 +394,7 @@
   }
 
   .section-dark-warm {
-    background: var(--c-grad-dark);
+    background: var(--c-grad-enfoques);
     color: #fff;
   }
 

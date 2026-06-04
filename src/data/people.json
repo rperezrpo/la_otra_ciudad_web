@@ -210,12 +210,12 @@
     "projects": []
   },
   {
-    "name": "Manuela",
-    "slug": "manuela",
-    "role": "",
-    "bio": "",
-    "photo": "",
-    "linkedin": "",
+    "name": "Manuela Vásquez",
+    "slug": "manuela-vasquez",
+    "role": "Revitalizadora",
+    "bio": "Bióloga magister con experiencia en ecología urbana, paisajismo y adaptación al cambio climático. Cree en que las ciudades son ecosistemas que se pueden convertir en un punto de encuentro para la conservación de la biodiversidad y resiliencia climática.",
+    "photo": "/images/people/manuela.jpeg",
+    "linkedin": "https://www.linkedin.com/in/manuela-vb/",
     "state": "active",
     "projects": []
   }

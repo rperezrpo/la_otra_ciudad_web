@@ -8,7 +8,7 @@ const peopleData = await getPeople();
 
 // Only show people who have a photo — those without one are silently skipped
 const activePeople = peopleData.filter((p) => p.photo && p.state === 'active');
-const pastPeople = peopleData.filter((p) => p.photo && p.state !== 'active');
+const pastPeople = peopleData.filter((p) => p.state !== 'active');
 
 // EDIT: update the allies list as partnerships change
 // logo: path relative to /public — null = text-only tile
@@ -50,62 +50,31 @@ const aliados = [
         <span class="eyebrow">Nuestra historia</span>
         <h2 class="section-title" style="font-size: clamp(28px, 3vw, 42px);">Nacimos de las comunidades, para las comunidades</h2>
         <p class="section-body">
-          La Corporación La Otra Ciudad nació en 2021 en Medellín, impulsada por un grupo de jóvenes
-          urbanistas, arquitectos y activistas surgido del capítulo de Medio Ambiente y Movilidad del
-          Centro de Pensamiento Programático. Desde el inicio apostamos por una práctica que pusiera
-          en el centro los saberes y necesidades de los habitantes.
+          La Otra Ciudad (LOC) nació en 2021 en Medellín como un colectivo juvenil. Desde su origen
+          LOC ha sido liderado por jóvenes urbanistas, arquitectos y activistas apasionados por
+          mejorar las ciudades que habitamos. En estos 5 años de trabajo, la organización ha apostado
+          por una práctica que pone en el centro los saberes y necesidades de las poblaciones más vulnerables.
         </p>
         <p class="section-body" style="margin-top: 16px;">
-          En octubre de 2024 nos constituimos formalmente como Entidad Sin Ánimo de Lucro. Hoy somos
-          un equipo de ~20 personas trabajando en barrios de La Candelaria, Laureles, Manrique y el
-          municipio de Envigado, junto a comunidades de ladera, asentamientos informales y barrios populares.
+          En octubre de 2024 LOC se constituyó formalmente como Entidad Sin Ánimo de Lucro. Hoy la
+          integran un equipo de 13 profesionales cuyo trabajo junto a instituciones, empresas y
+          comunidades populares para construir espacios más verdes, justos y saludables ha sido
+          reconocido nacional e internacionalmente.
         </p>
       </div>
       <div>
-        <!-- SANITY: replace this placeholder with a real team photo -->
-        <div class="img-placeholder" style="height: 420px;">
-          <span>Equipo</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ─── VALUES ────────────────────────────────────────────────────── -->
-  <div class="section-full section-warm" style="padding: 80px 48px;">
-    <div style="max-width: 1200px; margin: 0 auto;">
-      <span class="eyebrow">Lo que nos mueve</span>
-      <h2 class="section-title">Principios que guían nuestro trabajo</h2>
-      <div class="card-grid-3" style="margin-top: 40px;">
-        {[
-          {
-            title: 'Participación real',
-            desc: 'Las comunidades no son beneficiarias pasivas: son expertas de su propio territorio y protagonistas de cualquier proceso.',
-            color: 'var(--c-teal)',
-          },
-          {
-            title: 'Equidad territorial',
-            desc: 'Trabajamos donde el Estado ha llegado tarde o incompleto, priorizando las zonas más vulneradas de la ciudad.',
-            color: 'var(--c-orange)',
-          },
-          {
-            title: 'Sostenibilidad',
-            desc: 'Buscamos que los procesos que acompañamos dejen capacidades instaladas en las comunidades para continuar solos.',
-            color: 'var(--c-pink)',
-          },
-        ].map((v) => (
-          <div style={`background: ${v.color}; border-radius: 8px; padding: 36px 32px;`}>
-            <h3 style="font-family: var(--font-sans); font-size: 22px; font-weight: 600; letter-spacing: -0.3px; color: #fff; margin-bottom: 12px;">{v.title}</h3>
-            <p style="font-size: 15px; font-weight: 300; line-height: 1.6; color: rgba(255,255,255,0.82);">{v.desc}</p>
-          </div>
-        ))}
+        <img
+          src="/images/groupal/recorridos_de_ciudad.jpeg"
+          alt="Equipo de La Otra Ciudad en recorrido por la ciudad"
+          style="width: 100%; height: 420px; object-fit: cover; border-radius: 8px; display: block;"
+        />
       </div>
     </div>
   </div>
 
   <!-- ─── TEAM ──────────────────────────────────────────────────────── -->
   <div class="section">
-    <span class="eyebrow">El equipo</span>
-    <h2 class="section-title">Personas comprometidas con la ciudad</h2>
+    <h2 class="section-title">Nuestro equipo</h2>
 
     <div class="team-grid" style="margin-top: 40px;">
       {activePeople.map((person) => (
@@ -153,6 +122,38 @@ const aliados = [
             ) : (
               <span style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: var(--fg2); text-align: center; line-height: 1.4;">{name}</span>
             )}
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── VALUES ────────────────────────────────────────────────────── -->
+  <div class="section-full section-warm" style="padding: 80px 48px;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <span class="eyebrow">Lo que nos mueve</span>
+      <h2 class="section-title">Principios que guían nuestro trabajo</h2>
+      <div class="card-grid-3" style="margin-top: 40px;">
+        {[
+          {
+            title: 'Participación real',
+            desc: 'Las comunidades no son beneficiarias pasivas: son expertas de su propio territorio y protagonistas de cualquier proceso.',
+            color: 'var(--c-teal)',
+          },
+          {
+            title: 'Equidad territorial',
+            desc: 'Trabajamos donde el Estado ha llegado tarde o incompleto, priorizando las zonas más vulneradas de la ciudad.',
+            color: 'var(--c-orange)',
+          },
+          {
+            title: 'Sostenibilidad',
+            desc: 'Buscamos que los procesos que acompañamos dejen capacidades instaladas en las comunidades para continuar solos.',
+            color: 'var(--c-pink)',
+          },
+        ].map((v) => (
+          <div style={`background: ${v.color}; border-radius: 8px; padding: 36px 32px;`}>
+            <h3 style="font-family: var(--font-sans); font-size: 22px; font-weight: 600; letter-spacing: -0.3px; color: #fff; margin-bottom: 12px;">{v.title}</h3>
+            <p style="font-size: 15px; font-weight: 300; line-height: 1.6; color: rgba(255,255,255,0.82);">{v.desc}</p>
           </div>
         ))}
       </div>

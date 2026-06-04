@@ -94,8 +94,6 @@ const enfoques = [
     </div>
 
     <!-- ─── FIVE STEPS ───────────────────────────────────────────────── -->
-    <span class="eyebrow">El proceso</span>
-    <h2 class="section-title" style="margin-top: 16px;">Cinco pasos, un solo camino</h2>
 
     <div class="steps-timeline">
       {pasos.map((paso) => (
@@ -118,8 +116,8 @@ const enfoques = [
   <!-- ─── TRANSVERSAL APPROACHES ────────────────────────────────────── -->
   <div class="section-full section-dark-warm" style="padding: 80px 48px;">
     <div style="max-width: 1100px; margin: 0 auto;">
-      <span class="eyebrow-light">Enfoques transversales</span>
-      <h2 class="section-title-light" style="margin-top: 16px;">Lo que atraviesa todo lo que hacemos</h2>
+      <span class="eyebrow-light">Lo que atraviesa todo nuestro trabajo</span>
+      <h2 class="section-title-light" style="margin-top: 16px;">Enfoques transversales</h2>
       <div class="card-grid-3" style="margin-top: 40px;">
         {enfoques.map((e) => (
           <div style={`background: ${e.bg}; border-radius: 8px; padding: 28px 24px; border: 1px solid ${e.border};`}>
@@ -255,10 +253,10 @@ const enfoques = [
     line-height: 1.35;
   }
 
-  /* ── Tooltip — floats over content so section height stays fixed ── */
+  /* ── Tooltip — floats above content, grows upward ── */
   .step-tooltip {
     position: absolute;
-    top: 100%;          /* just below the label */
+    bottom: 100%;       /* anchored at label top, expands upward */
     left: 50%;
     transform: translateX(-50%);
     width: 188px;
@@ -278,7 +276,7 @@ const enfoques = [
     font-size: 13.5px;
     line-height: 1.65;
     color: var(--fg2);
-    margin-top: 14px;
+    margin-bottom: 10px;
     text-align: center;
   }
 
