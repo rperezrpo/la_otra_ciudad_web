@@ -503,13 +503,30 @@
   /* Dark warm gradient with orange bottom border — inner pages header       */
 
   .page-hero {
-    background: linear-gradient(135deg, #1a1410 0%, #2a1a0a 60%, #3b1a1a 100%);
     padding: 80px 48px 72px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    border-bottom: 3px solid var(--c-teal);
+    border-bottom: 3px solid transparent;
   }
+
+  .page-hero--banner {
+    background: linear-gradient(135deg, #1a1410 0%, #2a1a0a 60%, #3b1a1a 100%);
+    border-bottom-color: var(--c-teal);
+  }
+
+  .page-hero--dark {
+    background: var(--bg-dark);
+    border-bottom-color: var(--c-orange);
+  }
+
+  .page-hero--light {
+    background: var(--bg1);
+    border-bottom-color: var(--c-cobalt);
+  }
+
+  .page-hero--light .page-hero-title { color: var(--c-black); }
+  .page-hero--light .page-hero-sub   { color: var(--fg2); }
 
   .page-hero-title {
     font-family: var(--font-display);
@@ -746,43 +763,6 @@
     font-size: 10px;
     letter-spacing: 0.5px;
     text-transform: uppercase;
-    color: var(--fg2);
-  }
-
-  /* ─── METHODOLOGY STEPS ────────────────────────────────────────────────── */
-
-  .step-row {
-    display: flex;
-    gap: 48px;
-    align-items: flex-start;
-    padding: 40px 0;
-    border-top: 1px solid rgba(26, 20, 16, 0.1);
-  }
-
-  .step-num {
-    font-family: var(--font-sans);
-    font-size: 40px;
-    font-weight: 700;
-    letter-spacing: -1.5px;
-    color: var(--c-cobalt);
-    min-width: 56px;
-    padding-top: 0;
-  }
-
-  .step-content { flex: 1; }
-
-  .step-title {
-    font-size: 22px;
-    font-weight: 600;
-    letter-spacing: -0.3px;
-    margin-bottom: 10px;
-    color: var(--c-black);
-  }
-
-  .step-desc {
-    font-size: 16px;
-    font-weight: 300;
-    line-height: 1.6;
     color: var(--fg2);
   }
 

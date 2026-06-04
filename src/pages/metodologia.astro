@@ -5,29 +5,34 @@ import PageHero from '../components/layout/PageHero.astro';
 // EDIT: update the steps if the methodology evolves
 const pasos = [
   {
-    n: '01',
     title: 'Entrada al territorio',
     desc: 'Iniciamos con un proceso de reconocimiento del contexto comunitario: sus liderazgos, conflictos, necesidades y potencias. No entramos con soluciones predefinidas, sino con preguntas abiertas.',
+    color: '#27ae60',
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`,
   },
   {
-    n: '02',
     title: 'Diagnóstico participativo',
     desc: 'Junto con la comunidad, mapeamos el territorio físico y simbólico. Usamos herramientas como cartografía social, entrevistas colectivas y recorridos barriales.',
+    color: '#3b6bdc',
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>`,
   },
   {
-    n: '03',
     title: 'Co-diseño de soluciones',
     desc: 'Los talleres de diseño participativo permiten que las soluciones emerjan del saber comunitario, con apoyo técnico. El resultado no es nuestro: es de las personas que lo van a habitar.',
+    color: '#e2611d',
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>`,
   },
   {
-    n: '04',
     title: 'Implementación acompañada',
     desc: 'Ejecutamos con la comunidad, no para ella. Acompañamos cada etapa del proceso con formación, soporte técnico y resolución colectiva de los obstáculos.',
+    color: '#8b5cf6',
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
   },
   {
-    n: '05',
     title: 'Evaluación y aprendizaje',
     desc: 'Al cierre de cada ciclo hacemos una evaluación participativa. Los aprendizajes se documentan y retroalimentan el siguiente proceso, construyendo conocimiento colectivo acumulado.',
+    color: '#ef4444',
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>`,
   },
 ];
 
@@ -35,14 +40,20 @@ const enfoques = [
   {
     title: 'Enfoque de género',
     desc: 'Reconocemos que el territorio tiene marcas de género, y trabajamos para hacer visible y transformar esas desigualdades.',
+    bg: 'rgba(236, 72, 153, 0.13)',
+    border: 'rgba(236, 72, 153, 0.28)',
   },
   {
     title: 'Enfoque étnico',
     desc: 'La ciudad es diversa. Nuestros procesos reconocen y respetan las identidades culturales de las comunidades afro, indígenas y campesinas urbanas.',
+    bg: 'rgba(226, 97, 29, 0.16)',
+    border: 'rgba(226, 97, 29, 0.32)',
   },
   {
     title: 'Enfoque ambiental',
     desc: 'El territorio es también ecológico. Integramos la relación con el ambiente en la planeación y el diseño comunitario.',
+    bg: 'rgba(20, 184, 166, 0.13)',
+    border: 'rgba(20, 184, 166, 0.28)',
   },
 ];
 ---
@@ -53,6 +64,7 @@ const enfoques = [
 >
 
   <!-- ─── PAGE HERO ─────────────────────────────────────────────────── -->
+  <!-- EDIT: drop a photo into /public/images/banners/metodologia.jpg to activate the image background -->
   <!-- EDIT: drop a photo into /public/images/banners/metodologia.jpg to activate the image background -->
   <PageHero eyebrow="Metodología" image="/images/banners/metodologia.jpg">
     <h1 class="page-hero-title">Cómo construimos con las comunidades</h1>
@@ -85,17 +97,20 @@ const enfoques = [
     <span class="eyebrow">El proceso</span>
     <h2 class="section-title" style="margin-top: 16px;">Cinco pasos, un solo camino</h2>
 
-    <div style="margin-top: 40px;">
+    <div class="steps-timeline">
       {pasos.map((paso) => (
-        <div class="step-row">
-          <div class="step-num">{paso.n}</div>
+        <div class="step-node" tabindex="0">
+          <div class="step-circle" style={`--sc: ${paso.color}`}>
+            <Fragment set:html={paso.icon} />
+          </div>
           <div class="step-content">
-            <div class="step-title">{paso.title}</div>
-            <div class="step-desc">{paso.desc}</div>
+            <div class="step-label">{paso.title}</div>
+            <div class="step-tooltip">
+              <div class="step-tooltip-inner">{paso.desc}</div>
+            </div>
           </div>
         </div>
       ))}
-      <div style="border-top: 1px solid rgba(26,20,16,0.1);"></div>
     </div>
 
   </div>
@@ -107,7 +122,7 @@ const enfoques = [
       <h2 class="section-title-light" style="margin-top: 16px;">Lo que atraviesa todo lo que hacemos</h2>
       <div class="card-grid-3" style="margin-top: 40px;">
         {enfoques.map((e) => (
-          <div style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 28px 24px; border: 1px solid rgba(255,255,255,0.08);">
+          <div style={`background: ${e.bg}; border-radius: 8px; padding: 28px 24px; border: 1px solid ${e.border};`}>
             <div style="font-size: 17px; font-weight: 600; letter-spacing: -0.2px; color: #fff; margin-bottom: 10px;">{e.title}</div>
             <div style="font-size: 14px; font-weight: 300; line-height: 1.6; color: rgba(255,255,255,0.55);">{e.desc}</div>
           </div>
@@ -126,3 +141,229 @@ const enfoques = [
   </div>
 
 </BaseLayout>
+
+<style>
+  /* ── Timeline container ── */
+  .steps-timeline {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+    margin-top: 56px;
+    padding-bottom: 16px;
+  }
+
+  /* horizontal connecting line: runs between centers of first and last circles */
+  .steps-timeline::before {
+    content: '';
+    position: absolute;
+    top: 52px; /* half of circle height (104px) */
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      #27ae60 0%,
+      #3b6bdc 28%,
+      #e2611d 52%,
+      #8b5cf6 76%,
+      #ef4444 100%
+    );
+    z-index: 0;
+    opacity: 0.35;
+  }
+
+  /* ── Each step node ── */
+  .step-node {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    outline: none;
+  }
+
+  /* ── Circle ── */
+  .step-circle {
+    width: 104px;
+    height: 104px;
+    border-radius: 50%;
+    background: var(--sc);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.12);
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  /* outer ring */
+  .step-circle::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    bottom: -10px;
+    left: -10px;
+    border-radius: 50%;
+    border: 2px solid var(--sc);
+    opacity: 0.28;
+    transform: scale(1);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+  }
+
+  .step-node:hover .step-circle,
+  .step-node:focus-visible .step-circle,
+  .step-node.active .step-circle {
+    transform: scale(1.08);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
+  }
+
+  .step-node:hover .step-circle::after,
+  .step-node:focus-visible .step-circle::after,
+  .step-node.active .step-circle::after {
+    opacity: 0.6;
+    transform: scale(1.12);
+  }
+
+  .step-circle :global(svg) {
+    width: 44px;
+    height: 44px;
+    color: #fff;
+    stroke: #fff;
+  }
+
+  /* ── Label + tooltip wrapper ── */
+  .step-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    position: relative; /* anchor for absolutely-positioned tooltip */
+  }
+
+  .step-label {
+    margin-top: 18px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.1px;
+    text-align: center;
+    color: var(--c-black);
+    max-width: 120px;
+    line-height: 1.35;
+  }
+
+  /* ── Tooltip — floats over content so section height stays fixed ── */
+  .step-tooltip {
+    position: absolute;
+    top: 100%;          /* just below the label */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 188px;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    z-index: 100;
+    transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  }
+
+  .step-tooltip-inner {
+    background: #fff;
+    border-radius: 12px;
+    padding: 14px 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.09);
+    border: 1px solid rgba(26, 20, 16, 0.07);
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--fg2);
+    margin-top: 14px;
+    text-align: center;
+  }
+
+  .step-node:hover .step-tooltip,
+  .step-node:focus-visible .step-tooltip,
+  .step-node.active .step-tooltip {
+    max-height: 300px;
+    opacity: 1;
+  }
+
+  /* ── Mobile: vertical stack ── */
+  @media (max-width: 799px) {
+    .steps-timeline {
+      flex-direction: column;
+      align-items: stretch;
+      margin-top: 32px;
+    }
+
+    .steps-timeline::before {
+      display: none;
+    }
+
+    .step-node {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 20px 0;
+      border-top: 1px solid rgba(26, 20, 16, 0.08);
+    }
+
+    .step-node:last-child {
+      border-bottom: 1px solid rgba(26, 20, 16, 0.08);
+    }
+
+    .step-circle {
+      width: 72px;
+      height: 72px;
+      flex-shrink: 0;
+    }
+
+    .step-circle::after {
+      top: -7px;
+      right: -7px;
+      bottom: -7px;
+      left: -7px;
+    }
+
+    .step-circle :global(svg) {
+      width: 32px;
+      height: 32px;
+    }
+
+    .step-content {
+      align-items: flex-start;
+      padding-top: 4px;
+    }
+
+    .step-label {
+      margin-top: 0;
+      text-align: left;
+      max-width: none;
+      font-size: 15px;
+    }
+
+    .step-tooltip {
+      /* back to normal flow on mobile so it expands within the list item */
+      position: static;
+      transform: none;
+      width: 100%;
+      max-width: none;
+    }
+
+    .step-tooltip-inner {
+      margin-top: 10px;
+    }
+  }
+</style>
+
+<script>
+  const nodes = document.querySelectorAll<HTMLElement>('.step-node');
+  nodes.forEach(node => {
+    node.addEventListener('click', () => {
+      const wasActive = node.classList.contains('active');
+      nodes.forEach(n => n.classList.remove('active'));
+      if (!wasActive) node.classList.add('active');
+    });
+  });
+</script>
