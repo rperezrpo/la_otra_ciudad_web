@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 /* ─── TAILWIND THEME ─────────────────────────────────────────────────────── */
 /* Tailwind v4 reads design tokens from CSS. These reproduce the tokens that  */
@@ -504,11 +505,17 @@
   /* Dark warm gradient with orange bottom border — inner pages header       */
 
   .page-hero {
+    padding: 0;
+    border-bottom: 3px solid transparent;
+  }
+
+  .page-hero-inner {
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 80px 48px 72px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    border-bottom: 3px solid transparent;
   }
 
   .page-hero--banner {
@@ -725,8 +732,8 @@
   }
 
   .status-activo {
-    color: var(--c-teal);
-    background: rgba(96, 157, 146, 0.12);
+    color: var(--c-cobalt);
+    background: rgba(59, 107, 220, 0.12);
   }
 
   .status-completado {
@@ -949,7 +956,7 @@
   .team-grid { grid-template-columns: repeat(2, 1fr); }
   .site-nav { padding: 0 24px; }
   .hero { padding: 80px 24px 64px; }
-  .page-hero { padding: 60px 24px 52px; }
+  .page-hero-inner { padding: 60px 24px 52px; }
   .stat-item { padding: 28px 32px; }
 }
 

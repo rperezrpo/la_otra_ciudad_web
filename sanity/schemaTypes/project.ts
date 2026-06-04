@@ -47,8 +47,34 @@ export const project = defineType({
     defineField({
       name: 'description',
       title: 'Descripción',
-      type: 'text',
-      rows: 10,
+      type: 'array',
+      of: [
+        {
+          type: 'block',
+          styles: [
+            { title: 'Normal', value: 'normal' },
+            { title: 'H2',     value: 'h2'     },
+            { title: 'H3',     value: 'h3'     },
+          ],
+          marks: {
+            decorators: [
+              { title: 'Negrita', value: 'strong' },
+              { title: 'Cursiva', value: 'em'     },
+            ],
+            annotations: [
+              {
+                title: 'Enlace',
+                name: 'link',
+                type: 'object',
+                fields: [{ title: 'URL', name: 'href', type: 'url' }],
+              },
+            ],
+          },
+          lists: [
+            { title: 'Lista', value: 'bullet' },
+          ],
+        },
+      ],
     }),
     defineField({
       name: 'neighborhood',

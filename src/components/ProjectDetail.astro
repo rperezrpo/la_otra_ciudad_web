@@ -1,12 +1,12 @@
 ---
-// ProjectDetail — full project page layout
-// SANITY: when Sanity is connected, pass the full Sanity document as props
+import PageHero from './layout/PageHero.astro';
+import PortableTextBody from './PortableTextBody.tsx';
 
 interface Props {
   title: string;
   category: string;
   heroImage: string;
-  description: string;
+  description: any[];
   neighborhood: string;
   partners: string[];
   year: number;
@@ -19,94 +19,315 @@ const { title, category, heroImage, description, neighborhood, partners, year, s
 const isActive = status === 'activo';
 ---
 
-<!-- Page hero -->
-<div class="page-hero">
-  <span class="eyebrow-light">{category}</span>
+<!-- Hero with image background, no eyebrow -->
+<PageHero image={heroImage}>
+  <a href="/proyectos" class="hero-back">← Todos los proyectos</a>
   <h1 class="page-hero-title">{title}</h1>
-  <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 4px;">
+  <div class="hero-meta">
     <span class:list={['status-badge', { 'status-activo': isActive, 'status-completado': !isActive }]}>
       {status}
     </span>
-    <span style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; color: rgba(255,255,255,0.4);">
-      {year}
-    </span>
+    <span class="meta-sep">·</span>
+    <span class="meta-badge">{category}</span>
+    <span class="meta-sep">·</span>
+    <span class="meta-badge">{year}</span>
   </div>
-</div>
+</PageHero>
 
-<div class="section">
-  <div class="two-col" style="align-items: start; gap: 64px;">
+<!-- Two-column: description + stacked prop cards -->
+<div class="section project-section">
+  <div class="project-layout">
 
-    <!-- Main content -->
-    <div>
-      <!-- Hero image -->
-      {heroImage ? (
-        <img
-          src={heroImage}
-          alt={title}
-          style="width: 100%; border-radius: 8px; aspect-ratio: 16/9; object-fit: cover; margin-bottom: 40px;"
-        />
-      ) : (
-        <!-- SANITY: replace with heroImage from Sanity -->
-        <div class="img-placeholder" style="aspect-ratio: 16/9; margin-bottom: 40px; height: auto;">
-          <span>{category}</span>
-        </div>
-      )}
-
-      <!-- Description -->
-      <!-- SANITY: replace this with rich text from Sanity (use @portabletext/astro) -->
-      <p style="font-size: 17px; font-weight: 300; line-height: 1.7; color: var(--fg1); letter-spacing: -0.1px;">
-        {description}
-      </p>
-
-      <!-- Gallery -->
-      {gallery.length > 0 && (
-        <div style="margin-top: 48px;">
-          <span class="eyebrow">Galería</span>
-          <div class="card-grid-2" style="margin-top: 16px;">
-            {gallery.map((img) => (
-              <img
-                src={img}
-                alt=""
-                style="width: 100%; border-radius: 8px; aspect-ratio: 4/3; object-fit: cover;"
-              />
-            ))}
-          </div>
-        </div>
-      )}
+    <div class="project-body">
+      <PortableTextBody value={description} />
     </div>
 
-    <!-- Sidebar metadata -->
-    <div style="position: sticky; top: 80px;">
-      <div style="background: var(--c-white-pure); border-radius: 8px; padding: 28px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 24px;">
+    <aside class="project-sidebar">
 
-        <div>
-          <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--fg3); margin-bottom: 6px;">Territorio</div>
-          <div style="font-size: 15px; font-weight: 400; color: var(--c-black);">{neighborhood}</div>
+      {neighborhood && (
+        <div class="prop-card prop-card--pink">
+          <div class="prop-label">Territorio</div>
+          <div class="prop-value">{neighborhood}</div>
         </div>
+      )}
 
-        <div>
-          <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--fg3); margin-bottom: 6px;">Año</div>
-          <div style="font-size: 15px; font-weight: 400; color: var(--c-black);">{year}</div>
-        </div>
-
-        {partners.length > 0 && (
-          <div>
-            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--fg3); margin-bottom: 10px;">Aliados</div>
-            <ul style="list-style: none; display: flex; flex-direction: column; gap: 6px;">
-              {partners.map((p) => (
-                <li style="font-size: 14px; font-weight: 300; color: var(--fg2);">{p}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        <div style="padding-top: 8px; border-top: 1px solid rgba(26,20,16,0.08);">
-          <a href="/proyectos" class="btn-outline" style="width: 100%; justify-content: center; font-size: 14px;">
-            ← Todos los proyectos
-          </a>
-        </div>
+      <div class="prop-card prop-card--cobalt">
+        <div class="prop-label">Año</div>
+        <div class="prop-value">{year}</div>
       </div>
-    </div>
+
+      {partners.length > 0 && (
+        <div class="prop-card prop-card--orange">
+          <div class="prop-label">Aliados</div>
+          <ul class="prop-list">
+            {partners.map((p) => <li class="prop-value">{p}</li>)}
+          </ul>
+        </div>
+      )}
+
+
+    </aside>
 
   </div>
 </div>
+
+<!-- Gallery mosaic — full width, below the two-col -->
+{gallery.length > 0 && (
+  <div class="section gallery-section">
+    <span class="eyebrow">Galería</span>
+    <div class="gallery-mosaic">
+      {gallery.map((img, i) => (
+        <div class:list={[
+          'mosaic-item',
+          { 'mosaic-wide': i % 5 === 0 },
+          { 'mosaic-tall': i % 5 === 1 },
+        ]}>
+          <img src={img} alt="" loading="lazy" />
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
+<!-- CTA — full-width row, card centered in the page -->
+<div class="cta-section">
+  <div class="cta-card">
+    <h2 class="cta-title">¿Te interesa este trabajo?</h2>
+    <div class="cta-actions">
+      <a href="/donar" class="btn-white">Apoya nuestro trabajo</a>
+      <a href="/contacto" class="cta-link">Hablemos →</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* ── Hero back link ─────────────────────────────────────────────── */
+
+  .hero-back {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+    margin-bottom: 20px;
+    display: inline-block;
+    transition: color 150ms;
+  }
+
+  .hero-back:hover { color: rgba(255, 255, 255, 0.9); }
+
+  /* ── Hero meta row ───────────────────────────────────────────────── */
+
+  .hero-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+
+  .meta-sep {
+    color: rgba(255, 255, 255, 0.35);
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+
+  /* Status badges inside the hero: solid background, white text */
+  .hero-meta :global(.status-activo) {
+    background: var(--c-cobalt);
+    color: #fff;
+  }
+
+  .hero-meta :global(.status-completado) {
+    background: var(--c-pink);
+    color: #fff;
+  }
+
+  .meta-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.75);
+    background: rgba(255, 255, 255, 0.14);
+    border-radius: 20px;
+    padding: 2px 8px;
+  }
+
+  /* ── Two-column layout ───────────────────────────────────────────── */
+
+  .project-section { padding-top: 48px; }
+
+  .project-layout {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 48px;
+    align-items: start;
+  }
+
+  /* ── Stacked prop cards ──────────────────────────────────────────── */
+
+  .project-sidebar {
+    position: sticky;
+    top: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .prop-card {
+    border-radius: 8px;
+    padding: 18px 20px;
+    border: 1.5px solid;
+  }
+
+  .prop-card--pink {
+    background: rgba(230, 34, 79, 0.07);
+    border-color: var(--c-pink);
+  }
+
+  .prop-card--cobalt {
+    background: rgba(59, 107, 220, 0.07);
+    border-color: var(--c-cobalt);
+  }
+
+  .prop-card--orange {
+    background: rgba(226, 97, 29, 0.08);
+    border-color: var(--c-orange);
+  }
+
+  .prop-card--teal {
+    background: rgba(96, 157, 146, 0.08);
+    border-color: var(--c-teal);
+  }
+
+  .prop-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .prop-card--pink   .prop-label { color: var(--c-pink); }
+  .prop-card--cobalt .prop-label { color: var(--c-cobalt); }
+  .prop-card--orange .prop-label { color: var(--c-orange); }
+  .prop-card--teal   .prop-label { color: var(--c-teal); }
+
+  .prop-value {
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--c-black);
+    line-height: 1.4;
+  }
+
+  .prop-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  /* ── Gallery mosaic ──────────────────────────────────────────────── */
+
+  .gallery-section { padding-top: 8px; padding-bottom: 64px; }
+
+  .gallery-mosaic {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 240px;
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .mosaic-item {
+    overflow: hidden;
+    border-radius: 6px;
+  }
+
+  .mosaic-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 300ms ease;
+  }
+
+  .mosaic-item:hover img { transform: scale(1.03); }
+
+  /* Every 5th group: 1st item wide, 2nd item tall */
+  .mosaic-wide { grid-column: span 2; }
+  .mosaic-tall { grid-row: span 2; }
+
+  /* ── CTA ─────────────────────────────────────────────────────────── */
+
+  .cta-section {
+    padding: 64px 48px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .cta-card {
+    border-radius: 8px;
+    padding: 32px 40px;
+    background: var(--c-grad-hero);
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .cta-title {
+    font-family: var(--font-display);
+    font-variation-settings: 'opsz' 144, 'SOFT' 30, 'WONK' 0;
+    font-size: clamp(22px, 2.5vw, 30px);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.8px;
+    color: #fff;
+    margin: 0;
+  }
+
+  .cta-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .cta-link {
+    font-size: 15px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.75);
+    text-decoration: none;
+    transition: color 150ms;
+  }
+
+  .cta-link:hover { color: #fff; }
+
+  /* ── Responsive ──────────────────────────────────────────────────── */
+
+  @media (max-width: 768px) {
+    .project-layout { grid-template-columns: 1fr; gap: 32px; }
+    .project-sidebar { position: static; }
+    .gallery-mosaic {
+      grid-template-columns: repeat(2, 1fr);
+      grid-auto-rows: 180px;
+    }
+    .mosaic-wide { grid-column: span 2; }
+    .mosaic-tall { grid-row: span 1; }
+  }
+
+  @media (max-width: 560px) {
+    .gallery-mosaic {
+      grid-template-columns: 1fr;
+      grid-auto-rows: 200px;
+    }
+    .mosaic-wide { grid-column: span 1; }
+  }
+</style>

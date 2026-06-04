@@ -30,6 +30,8 @@ const bgStyle = (type === 'banner' && image)
 ---
 
 <div class={`page-hero page-hero--${type}`} style={bgStyle}>
-  {eyebrow && <span class={type === 'light' ? 'eyebrow' : 'eyebrow-light'}>{eyebrow}</span>}
-  <slot />
+  <div class="page-hero-inner">
+    {eyebrow && <span class={type === 'light' ? 'eyebrow' : 'eyebrow-light'}>{eyebrow}</span>}
+    <slot />
+  </div>
 </div>

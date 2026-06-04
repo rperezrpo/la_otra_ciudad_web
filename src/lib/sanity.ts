@@ -75,12 +75,29 @@ export interface ProjectDetailData {
   slug: string
   category: string
   heroImage: string
-  description: string
+  description: any[]   // Portable Text blocks
   neighborhood: string
   partners: string[]
   year: number
   status: string
   gallery: string[]
+}
+
+/** Handles both legacy plain-text descriptions and new Portable Text arrays. */
+function normalizeDescription(val: any): any[] {
+  if (!val) return []
+  if (Array.isArray(val)) return val
+  // Legacy: plain string → wrap as a single Portable Text paragraph
+  if (typeof val === 'string') {
+    return val.split(/\n\n+/).filter(Boolean).map((text, i) => ({
+      _type: 'block',
+      _key: `legacy-${i}`,
+      style: 'normal',
+      markDefs: [],
+      children: [{ _type: 'span', _key: `s${i}`, text, marks: [] }],
+    }))
+  }
+  return []
 }
 
 export async function getProjectSlugs(): Promise<string[]> {
@@ -111,7 +128,7 @@ export async function getProject(slug: string): Promise<ProjectDetailData | null
     slug: p.slug,
     category: p.category,
     heroImage: img(p.heroImage, 1600),
-    description: p.description ?? '',
+    description: normalizeDescription(p.description),
     neighborhood: p.neighborhood ?? '',
     partners: p.partners ?? [],
     year: p.year,
