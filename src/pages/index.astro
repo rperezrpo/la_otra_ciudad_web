@@ -3,7 +3,7 @@ import BaseLayout from '../components/layout/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { getFeaturedProjects } from '../lib/sanity';
 
-const featured = await getFeaturedProjects(3);
+const featured = await getFeaturedProjects(5);
 ---
 
 <BaseLayout title="Inicio">
@@ -61,31 +61,115 @@ const featured = await getFeaturedProjects(3);
   </div>
 
   <!-- ─── FEATURED PROJECTS ─────────────────────────────────────────── -->
-  <div class="section-full section-warm" style="padding: 80px 48px;">
-    <div style="max-width: 1200px; margin: 0 auto;">
-      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; flex-wrap: wrap; gap: 16px;">
-        <div>
-          <span class="eyebrow">Nuestro trabajo</span>
-          <h2 class="section-title">Proyectos que transforman</h2>
-        </div>
-        <a href="/proyectos" class="btn-outline">Ver todos →</a>
+  <div class="section-full section-warm" style="padding: 80px 0;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 48px; display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; flex-wrap: wrap; gap: 16px;">
+      <div>
+        <span class="eyebrow">Nuestro trabajo</span>
+        <h2 class="section-title">Proyectos que transforman</h2>
       </div>
+      <a href="/proyectos" class="btn-outline">Ver todos →</a>
+    </div>
 
-      <div class="card-grid-3">
-        {featured.map((project) => (
-          <ProjectCard
-            title={project.title}
-            slug={project.slug}
-            category={project.category}
-            summary={project.summary}
-            heroImage={project.heroImage}
-            status={project.status}
-            year={project.year}
-          />
+    <div class="carousel-outer" id="proj-carousel">
+      <div class="carousel-track" id="proj-track">
+        {[...featured, ...featured].map((project, i) => (
+          <div class="carousel-item" aria-hidden={i >= featured.length ? 'true' : undefined}>
+            <ProjectCard
+              title={project.title}
+              slug={project.slug}
+              category={project.category}
+              summary={project.summary}
+              heroImage={project.heroImage}
+              status={project.status}
+              year={project.year}
+            />
+          </div>
         ))}
       </div>
     </div>
   </div>
+
+  <style>
+    .carousel-outer {
+      overflow: hidden;
+      cursor: grab;
+      user-select: none;
+      -webkit-user-select: none;
+      padding: 4px 0 28px;
+    }
+    .carousel-outer.is-dragging { cursor: grabbing; }
+    .carousel-outer.is-dragging a { pointer-events: none; }
+
+    .carousel-track {
+      display: flex;
+      gap: 24px;
+      padding: 0 48px;
+      will-change: transform;
+    }
+
+    .carousel-item {
+      flex: 0 0 360px;
+      min-width: 0;
+    }
+
+    @media (max-width: 600px) {
+      .carousel-item { flex: 0 0 280px; }
+      .carousel-track { padding: 0 24px; }
+    }
+  </style>
+
+  <script>
+    const outer = document.getElementById('proj-carousel');
+    const track = document.getElementById('proj-track');
+    const items = track.querySelectorAll('.carousel-item');
+    const N = items.length / 2;
+
+    let pos = 0;
+    let dragging = false;
+    let startX = 0;
+    let startPos = 0;
+
+    function loopWidth() {
+      const gap = parseFloat(getComputedStyle(track).gap) || 0;
+      return N * (items[0].offsetWidth + gap);
+    }
+
+    function wrap(p) {
+      const lw = loopWidth();
+      return ((p % lw) + lw) % lw;
+    }
+
+    function render() {
+      track.style.transform = `translateX(-${pos}px)`;
+    }
+
+    outer.addEventListener('mousedown', e => {
+      dragging = true;
+      startX = e.clientX;
+      startPos = pos;
+      outer.classList.add('is-dragging');
+    });
+    window.addEventListener('mousemove', e => {
+      if (!dragging) return;
+      pos = wrap(startPos + (startX - e.clientX));
+      render();
+    });
+    window.addEventListener('mouseup', () => {
+      dragging = false;
+      outer.classList.remove('is-dragging');
+    });
+
+    outer.addEventListener('touchstart', e => {
+      startX = e.touches[0].clientX;
+      startPos = pos;
+    }, { passive: true });
+    outer.addEventListener('touchmove', e => {
+      pos = wrap(startPos + (startX - e.touches[0].clientX));
+      render();
+    }, { passive: true });
+
+    render();
+  </script>
 
   <!-- ─── QUOTE BANNER ──────────────────────────────────────────────── -->
   <div style="background: var(--c-grad-hero); padding: 96px 48px;">
