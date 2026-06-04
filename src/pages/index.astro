@@ -2,6 +2,8 @@
 import BaseLayout from '../components/layout/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { getFeaturedProjects } from '../lib/sanity';
+import { Image } from 'astro:assets';
+import sanRafael2 from '../../public/images/projects/fotos_intervenciones/san_rafael_2.jpg';
 
 const featured = await getFeaturedProjects(5);
 ---
@@ -52,9 +54,11 @@ const featured = await getFeaturedProjects(5);
         </div>
       </div>
       <div>
-        <img
-          src="/images/projects/fotos_intervenciones/san_rafael_2.jpg"
+        <Image
+          src={sanRafael2}
           alt="Comunidad San Rafael"
+          width={760}
+          height={380}
           style="width: 100%; height: 380px; object-fit: cover; border-radius: 12px; display: block;"
         />
       </div>
