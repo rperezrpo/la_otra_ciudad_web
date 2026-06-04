@@ -2,6 +2,7 @@
 // ProjectCard — used on the home page and /proyectos listing
 // SANITY: when Sanity is connected, this component receives the same props
 //         from a Sanity document instead of from projects.json
+import { Image } from 'astro:assets';
 
 interface Props {
   title: string;
@@ -21,13 +22,14 @@ const isActive = status === 'activo';
 <a href={`/proyectos/${slug}`} class="card" style="display: flex; flex-direction: column; height: 100%; text-decoration: none; cursor: pointer;">
   <!-- Hero image -->
   {heroImage ? (
-    <img
+    <Image
       src={heroImage}
       alt={title}
+      width={360}
+      height={270}
       style="width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block;"
     />
   ) : (
-    <!-- SANITY: replace this placeholder with heroImage from Sanity -->
     <div class="img-placeholder" style="aspect-ratio: 4/3;">
       <span>{category}</span>
     </div>
