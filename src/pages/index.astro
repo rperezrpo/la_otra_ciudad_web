@@ -65,7 +65,7 @@ const featured = await getFeaturedProjects(5);
     <div style="max-width: 1200px; margin: 0 auto; padding: 0 48px; display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; flex-wrap: wrap; gap: 16px;">
       <div>
         <span class="eyebrow">Nuestro trabajo</span>
-        <h2 class="section-title">Proyectos que transforman</h2>
+        <h2 class="section-title">Transformaciones recientes</h2>
       </div>
       <a href="/proyectos" class="btn-outline">Ver todos →</a>
     </div>
@@ -168,6 +168,9 @@ const featured = await getFeaturedProjects(5);
       render();
     }, { passive: true });
 
+    // Start with the last card peeking ~45% from the left edge so it's
+    // immediately obvious this is a scrollable carousel.
+    pos = wrap(-(items[0].offsetWidth * 0.45));
     render();
   </script>
 
