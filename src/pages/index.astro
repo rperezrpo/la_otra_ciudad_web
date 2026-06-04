@@ -52,10 +52,11 @@ const featured = await getFeaturedProjects(5);
         </div>
       </div>
       <div>
-        <!-- SANITY: replace this placeholder with a real community photo -->
-        <div class="img-placeholder" style="height: 380px;">
-          <span>Comunidad</span>
-        </div>
+        <img
+          src="/images/projects/fotos_intervenciones/san_rafael_2.jpg"
+          alt="Comunidad San Rafael"
+          style="width: 100%; height: 380px; object-fit: cover; border-radius: 12px; display: block;"
+        />
       </div>
     </div>
   </div>
@@ -143,30 +144,40 @@ const featured = await getFeaturedProjects(5);
       track.style.transform = `translateX(-${pos}px)`;
     }
 
-    outer.addEventListener('mousedown', e => {
+    // Pointer events cover mouse + touch + stylus.
+    // setPointerCapture ensures pointerup fires even when the cursor leaves the window,
+    // which fixes the "sticky drag" bug.
+    outer.addEventListener('pointerdown', e => {
       dragging = true;
       startX = e.clientX;
       startPos = pos;
       outer.classList.add('is-dragging');
+      outer.setPointerCapture(e.pointerId);
     });
-    window.addEventListener('mousemove', e => {
+
+    outer.addEventListener('pointermove', e => {
       if (!dragging) return;
       pos = wrap(startPos + (startX - e.clientX));
       render();
     });
-    window.addEventListener('mouseup', () => {
+
+    outer.addEventListener('pointerup', () => {
       dragging = false;
       outer.classList.remove('is-dragging');
     });
 
-    outer.addEventListener('touchstart', e => {
-      startX = e.touches[0].clientX;
-      startPos = pos;
-    }, { passive: true });
-    outer.addEventListener('touchmove', e => {
-      pos = wrap(startPos + (startX - e.touches[0].clientX));
+    outer.addEventListener('pointercancel', () => {
+      dragging = false;
+      outer.classList.remove('is-dragging');
+    });
+
+    // Wheel support: trackpad horizontal swipe (deltaX) and mouse wheel (deltaY).
+    outer.addEventListener('wheel', e => {
+      e.preventDefault();
+      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      pos = wrap(pos + delta);
       render();
-    }, { passive: true });
+    }, { passive: false });
 
     // Start with the last card peeking ~45% from the left edge so it's
     // immediately obvious this is a scrollable carousel.
