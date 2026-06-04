@@ -127,6 +127,7 @@ const featured = await getFeaturedProjects(5);
 
     let pos = 0;
     let dragging = false;
+    let didDrag = false;
     let startX = 0;
     let startPos = 0;
 
@@ -144,38 +145,60 @@ const featured = await getFeaturedProjects(5);
       track.style.transform = `translateX(-${pos}px)`;
     }
 
-    // Pointer events cover mouse + touch + stylus.
-    // setPointerCapture ensures pointerup fires even when the cursor leaves the window,
-    // which fixes the "sticky drag" bug.
-    outer.addEventListener('pointerdown', e => {
+    function stopDrag() {
+      if (!dragging) return;
+      dragging = false;
+      outer.classList.remove('is-dragging');
+    }
+
+    // Prevent the browser from starting a native link/image drag, which would
+    // steal mousemove events and break drag-scrolling over cards.
+    outer.addEventListener('dragstart', e => e.preventDefault());
+
+    outer.addEventListener('mousedown', e => {
       dragging = true;
+      didDrag = false;
       startX = e.clientX;
       startPos = pos;
       outer.classList.add('is-dragging');
-      outer.setPointerCapture(e.pointerId);
     });
 
-    outer.addEventListener('pointermove', e => {
+    window.addEventListener('mousemove', e => {
       if (!dragging) return;
-      pos = wrap(startPos + (startX - e.clientX));
+      const dx = startX - e.clientX;
+      if (Math.abs(dx) > 5) didDrag = true;
+      pos = wrap(startPos + dx);
       render();
     });
 
-    outer.addEventListener('pointerup', () => {
-      dragging = false;
-      outer.classList.remove('is-dragging');
-    });
+    window.addEventListener('mouseup', stopDrag);
+    // Stops drag if cursor leaves the browser window entirely
+    document.addEventListener('mouseleave', stopDrag);
 
-    outer.addEventListener('pointercancel', () => {
-      dragging = false;
-      outer.classList.remove('is-dragging');
-    });
+    // Suppress card navigation after a drag (but allow plain clicks)
+    outer.addEventListener('click', e => {
+      if (didDrag) {
+        e.preventDefault();
+        e.stopPropagation();
+        didDrag = false;
+      }
+    }, true);
 
-    // Wheel support: trackpad horizontal swipe (deltaX) and mouse wheel (deltaY).
+    outer.addEventListener('touchstart', e => {
+      startX = e.touches[0].clientX;
+      startPos = pos;
+      didDrag = false;
+    }, { passive: true });
+    outer.addEventListener('touchmove', e => {
+      pos = wrap(startPos + (startX - e.touches[0].clientX));
+      render();
+    }, { passive: true });
+
+    // Trackpad horizontal swipe only; ignore vertical so page scroll works normally
     outer.addEventListener('wheel', e => {
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
       e.preventDefault();
-      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-      pos = wrap(pos + delta);
+      pos = wrap(pos + e.deltaX);
       render();
     }, { passive: false });
 
