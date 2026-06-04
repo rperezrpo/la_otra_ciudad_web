@@ -20,7 +20,7 @@
   /* Font families → font-display, font-sans, font-mono */
   --font-display: "Fraunces", Georgia, serif;
   --font-sans:    "Inter", system-ui, helvetica, sans-serif;
-  --font-mono:    "Space Mono", "SF Mono", Menlo, monospace;
+  --font-mono:    "Ubuntu Sans Mono", "SF Mono", Menlo, monospace;
 
   /* Custom font weights → font-hairline, font-thin, font-extralight */
   --font-weight-hairline:   200;
@@ -88,34 +88,10 @@
 }
 
 @font-face {
-  font-family: 'Space Mono';
-  src: url('/fonts/SpaceMono-Regular.ttf') format('truetype');
-  font-weight: 400;
+  font-family: 'Ubuntu Sans Mono';
+  src: url('/fonts/UbuntuSansMono.ttf') format('truetype');
+  font-weight: 100 900;
   font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Space Mono';
-  src: url('/fonts/SpaceMono-Bold.ttf') format('truetype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Space Mono';
-  src: url('/fonts/SpaceMono-Italic.ttf') format('truetype');
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Space Mono';
-  src: url('/fonts/SpaceMono-BoldItalic.ttf') format('truetype');
-  font-weight: 700;
-  font-style: italic;
   font-display: swap;
 }
 
@@ -156,7 +132,7 @@
   /* Fonts */
   --font-display: 'Fraunces', Georgia, serif;
   --font-sans:    'Inter', system-ui, helvetica, sans-serif;
-  --font-mono:    'Space Mono', 'SF Mono', Menlo, monospace;
+  --font-mono:    'Ubuntu Sans Mono', 'SF Mono', Menlo, monospace;
 
   /* Shadows */
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
@@ -304,7 +280,7 @@
     border-radius: 50px;
     padding: 12px 24px;
     font-size: 15px;
-    font-weight: 500;
+    font-weight: 700;
     font-family: var(--font-sans);
     letter-spacing: -0.1px;
     cursor: pointer;
@@ -346,11 +322,12 @@
   }
 
   /* ─── SECTION LABELS (eyebrow) ─────────────────────────────────────────── */
-  /* Space Mono uppercase with positive tracking = technical signpost labels  */
+  /* Ubuntu Sans Mono uppercase with positive tracking = technical signpost labels  */
 
   .eyebrow {
     font-family: var(--font-mono);
     font-size: 11px;
+    font-weight: 700;
     letter-spacing: 0.6px;
     text-transform: uppercase;
     color: var(--fg2);
@@ -361,6 +338,7 @@
   .eyebrow-light {
     font-family: var(--font-mono);
     font-size: 11px;
+    font-weight: 700;
     letter-spacing: 0.6px;
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.55);
@@ -614,7 +592,7 @@
     border-radius: 50px;
     padding: 13px 28px;
     font-size: 15px;
-    font-weight: 500;
+    font-weight: 700;
     cursor: pointer;
     font-family: var(--font-sans);
     letter-spacing: -0.14px;
@@ -907,7 +885,7 @@
   .nav-cta {
     margin-left: 16px;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 700;
     padding: 9px 20px;
     background: var(--c-teal);
     color: #fff;
