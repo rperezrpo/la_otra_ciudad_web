@@ -16,13 +16,17 @@ const { name, role, photo, bio, linkedin } = Astro.props;
 
 <div class="person-card">
 
-  <!-- Avatar — sits above the popup in z-order -->
+  <!-- Avatar -->
   <div class="person-avatar">
     <img src={photo} alt={name} class="person-photo" />
   </div>
 
   {bio && (
     <div class="person-bio-popup" aria-hidden="true">
+      <div class="popup-header">
+        <span class="popup-name">{name}</span>
+        <span class="popup-role">{role}</span>
+      </div>
       <p class="person-bio-text">{bio}</p>
       {linkedin && (
         <a
@@ -33,7 +37,6 @@ const { name, role, photo, bio, linkedin } = Astro.props;
           title="LinkedIn"
           tabindex="-1"
         >
-          <!-- Same icon as SiteFooter -->
           <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
             <rect x="2" y="9" width="4" height="12"/>
@@ -61,10 +64,10 @@ const { name, role, photo, bio, linkedin } = Astro.props;
     z-index: 10;
   }
 
-  /* ── Avatar — z-index 2 so it sits ON TOP of the popup ── */
+  /* ── Avatar ── */
   .person-avatar {
     position: relative;
-    z-index: 2;
+    z-index: 1;
     width: 100%;
     aspect-ratio: 1;
     border-radius: 8px;
@@ -85,67 +88,69 @@ const { name, role, photo, bio, linkedin } = Astro.props;
     transform: scale(1.04);
   }
 
-  /* ── Side bio popup ── */
+  /* ── Overlay bio popup — centered over the full card, slightly larger ── */
   .person-bio-popup {
     position: absolute;
-    /* Overlap generously so the popup's own rounded corners
-       stay hidden behind the avatar — increase if still visible */
-    top: 0;
-    left: calc(100% - 30px);
-    /* gap(24) + overlap(30) wider so far edge aligns with adjacent card's border */
-    width: calc(100% + 54px);
-    /* height is pinned to the avatar's px height by JS — no aspect-ratio here */
-    z-index: 1;                    /* below avatar (z-index 2) */
+    inset: -14px;              /* expands 14 px beyond all four edges of .person-card */
+    z-index: 5;                /* above avatar and name/role labels */
 
-    background: var(--c-white-pure);
-    border: 2px solid var(--c-teal);
-    border-radius: 8px;
-    /* left padding > overlap (20px) so text never sits over the image */
-    padding: 18px 24px 16px 54px;
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(16px) saturate(1.4);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    border: 1.5px solid rgba(255, 255, 255, 0.7);
+    border-radius: 12px;
+    padding: 18px 20px 16px;
 
     display: flex;
     flex-direction: column;
 
-    /* Subtle shadow on right/bottom only — not the hidden left edge */
-    box-shadow: 6px 6px 24px -4px rgba(26, 20, 16, 0.14);
+    box-shadow: 0 8px 36px -6px rgba(26, 20, 16, 0.18);
 
-    /* Default: start slightly to the right, fade in */
+    /* Hidden state: slightly shrunk + invisible */
     opacity: 0;
-    transform: translateX(8px);
+    transform: scale(0.92);
     transition:
       opacity 180ms ease,
       transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
     pointer-events: none;
   }
 
-  /* Flip: popup appears to the LEFT */
-  .person-card.bio-flip .person-bio-popup {
-    left: auto;
-    right: calc(100% - 30px);
-    transform: translateX(-8px);
-    /* mirror the padding: overlap is on the right side */
-    padding: 18px 54px 16px 24px;
-  }
-
-  /* LinkedIn button mirrors to the bottom-left in flipped popup */
-  .person-card.bio-flip .person-linkedin {
-    align-self: flex-start;
-    margin-left: -2px;
-    margin-right: 0;
-  }
-
-  /* Reveal on hover */
+  /* Revealed state */
   .person-card:hover .person-bio-popup {
     opacity: 1;
-    transform: translateX(0);
+    transform: scale(1);
     pointer-events: auto;
+  }
+
+  /* ── Name + role inside popup ── */
+  .popup-header {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+  }
+
+  .popup-name {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+    color: var(--c-black);
+  }
+
+  .popup-role {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--fg2);
   }
 
   /* ── Bio text — fills remaining space; JS shrinks font to fit ── */
   .person-bio-text {
     font-family: var(--font-sans);
     font-size: 12.5px;
-    font-weight: 300;
+    font-weight: 400;
     line-height: 1.6;
     letter-spacing: -0.1px;
     color: var(--fg1);
@@ -154,11 +159,11 @@ const { name, role, photo, bio, linkedin } = Astro.props;
     overflow: hidden;
   }
 
-  /* ── LinkedIn circle icon — mirrors the footer social buttons ── */
+  /* ── LinkedIn circle icon ── */
   .person-linkedin {
     flex-shrink: 0;
     align-self: flex-end;
-    margin-top: 6px;
+    margin-top: 8px;
     margin-right: -2px;
     margin-bottom: -2px;
     width: 26px;
@@ -179,10 +184,10 @@ const { name, role, photo, bio, linkedin } = Astro.props;
     color: #fff;
   }
 
-  /* ── Name + role ── */
+  /* ── Name + role below avatar (visible when not hovering) ── */
   .person-name {
     position: relative;
-    z-index: 2;
+    z-index: 1;
     font-size: 16px;
     font-weight: 600;
     letter-spacing: -0.2px;
@@ -192,7 +197,7 @@ const { name, role, photo, bio, linkedin } = Astro.props;
 
   .person-role {
     position: relative;
-    z-index: 2;
+    z-index: 1;
     font-family: var(--font-mono);
     font-size: 10px;
     letter-spacing: 0.5px;
@@ -202,27 +207,7 @@ const { name, role, photo, bio, linkedin } = Astro.props;
 </style>
 
 <script>
-  // ── Flip popup to the left for cards near the right viewport edge ──
-  function updateFlip() {
-    document.querySelectorAll<HTMLElement>('.person-card').forEach((card) => {
-      if (!card.querySelector('.person-bio-popup')) return;
-      const { right, width } = card.getBoundingClientRect();
-      // popup right edge = card_right - overlap(30) + popup_width(card_width+54) = card_right + card_width + 24
-      card.classList.toggle('bio-flip', right + width + 24 > window.innerWidth - 8);
-    });
-  }
-
-  // ── Pin popup height to the avatar's pixel height (ignores popup width) ──
-  function fixPopupHeight() {
-    document.querySelectorAll<HTMLElement>('.person-card').forEach((card) => {
-      const avatar = card.querySelector<HTMLElement>('.person-avatar');
-      const popup  = card.querySelector<HTMLElement>('.person-bio-popup');
-      if (!avatar || !popup) return;
-      popup.style.height = avatar.offsetHeight + 'px';
-    });
-  }
-
-  // ── Shrink bio font until text fits inside the popup square ──
+  // Shrink bio font until text fits inside the popup
   function fitBioText() {
     document.querySelectorAll<HTMLElement>('.person-bio-popup').forEach((popup) => {
       const text = popup.querySelector<HTMLElement>('.person-bio-text');
@@ -236,7 +221,7 @@ const { name, role, photo, bio, linkedin } = Astro.props;
     });
   }
 
-  const init = () => { updateFlip(); fixPopupHeight(); fitBioText(); };
+  const init = () => { fitBioText(); };
   document.fonts ? document.fonts.ready.then(init) : window.addEventListener('load', init);
-  window.addEventListener('resize', () => { updateFlip(); fixPopupHeight(); fitBioText(); });
+  window.addEventListener('resize', fitBioText);
 </script>
