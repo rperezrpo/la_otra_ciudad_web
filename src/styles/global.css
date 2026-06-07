@@ -103,6 +103,14 @@
   --c-teal:        #609d92;
   --c-cobalt:      #3b6bdc;
   --c-pink:        #e6224f;
+  --c-purple:      #8b5cf6;
+
+  /* Dark variants (gradient endpoints, also usable standalone) */
+  --c-orange-dark: #7a3408;
+  --c-teal-dark:   #0e5c4a;
+  --c-cobalt-dark: #162557;
+  --c-pink-dark:   #6a0e38;
+  --c-purple-dark: #4c1d95;
 
   /* Base surfaces */
   --c-black:       #1a1410;   /* warm off-black — use instead of #000 */
@@ -113,11 +121,25 @@
   --c-glass-dark:  rgba(0, 0, 0, 0.08);
   --c-glass-light: rgba(255, 255, 255, 0.20);
 
-  /* Gradients */
-  --c-grad-hero: linear-gradient(135deg, #609d92 0%, #e6224f 45%, #e2611d 100%);
-  --c-grad-soft: linear-gradient(135deg, #e2611d 0%, #a4a97d 100%);
-  --c-grad-dark: linear-gradient(135deg, #e6224f 0%, #1a1410 38%, #1a1410 62%, #e2611d 100%);
+  /* Gradients — multi-color */
+  --c-grad-hero:     linear-gradient(135deg, #609d92 0%, #e6224f 45%, #e2611d 100%);
+  --c-grad-soft:     linear-gradient(135deg, #e2611d 0%, #a4a97d 100%);
+  --c-grad-dark:     linear-gradient(135deg, #e6224f 0%, #1a1410 38%, #1a1410 62%, #e2611d 100%);
   --c-grad-enfoques: linear-gradient(135deg, #0e5c4a 0%, #6a0e38 52%, #7a3408 100%);
+
+  /* Gradients — single-color (default → dark) */
+  --c-grad-orange: linear-gradient(to bottom, #e2611d, #7a3408);
+  --c-grad-teal:   linear-gradient(to bottom, #609d92, #0e5c4a);
+  --c-grad-cobalt: linear-gradient(to bottom, #3b6bdc, #162557);
+  --c-grad-pink:   linear-gradient(to bottom, #e6224f, #6a0e38);
+  --c-grad-purple: linear-gradient(to bottom, #8b5cf6, #4c1d95);
+  --c-grad-black:  linear-gradient(to bottom, #1a1410, #000000);
+  --c-grad-white:  linear-gradient(to bottom, #f7f3ee, #c4b9ac);
+
+  /* Page accent — overridden per-page via BaseLayout pageColor prop */
+  --page-accent:          var(--c-orange);
+  --page-accent-dark:     var(--c-orange-dark);
+  --page-accent-gradient: var(--c-grad-orange);
 
   /* Semantic foreground */
   --fg1: #1a1410;
@@ -321,6 +343,58 @@
     outline-offset: 3px;
   }
 
+  .btn-accent {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--page-accent);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: var(--font-sans);
+    letter-spacing: -0.1px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 150ms;
+  }
+
+  .btn-accent:hover { opacity: 0.88; }
+
+  .btn-accent:focus-visible {
+    outline: 2px dashed var(--page-accent);
+    outline-offset: 3px;
+  }
+
+  .btn-outline-accent {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--page-accent);
+    border: 1.5px solid var(--page-accent);
+    border-radius: 50px;
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: 400;
+    font-family: var(--font-sans);
+    letter-spacing: -0.1px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 150ms;
+  }
+
+  .btn-outline-accent:hover { opacity: 0.82; }
+
+  .btn-outline-accent:focus-visible {
+    outline: 2px dashed var(--page-accent);
+    outline-offset: 3px;
+  }
+
   /* ─── SECTION LABELS (eyebrow) ─────────────────────────────────────────── */
   /* Ubuntu Sans Mono uppercase with positive tracking = technical signpost labels  */
 
@@ -374,6 +448,16 @@
 
   .section-dark-warm {
     background: var(--c-grad-enfoques);
+    color: #fff;
+  }
+
+  .section-accent {
+    background: var(--page-accent);
+    color: #fff;
+  }
+
+  .section-accent-gradient {
+    background: var(--page-accent-gradient);
     color: #fff;
   }
 
@@ -498,17 +582,17 @@
 
   .page-hero--banner {
     background: linear-gradient(135deg, #1a1410 0%, #2a1a0a 60%, #3b1a1a 100%);
-    border-bottom-color: var(--c-teal);
+    border-bottom-color: var(--page-accent);
   }
 
   .page-hero--dark {
     background: var(--bg-dark);
-    border-bottom-color: var(--c-orange);
+    border-bottom-color: var(--page-accent);
   }
 
   .page-hero--light {
     background: var(--bg1);
-    border-bottom-color: var(--c-cobalt);
+    border-bottom-color: var(--page-accent);
   }
 
   .page-hero--light .page-hero-title { color: var(--c-black); }
@@ -875,12 +959,14 @@
   .nav-link[data-color="pink"]:hover   { background: rgba(230, 34, 79, 0.12);  color: var(--c-pink); }
   .nav-link[data-color="cobalt"]:hover { background: rgba(59, 107, 220, 0.12); color: var(--c-cobalt); }
   .nav-link[data-color="teal"]:hover   { background: rgba(226, 97, 29, 0.12);  color: var(--c-orange); }
+  .nav-link[data-color="purple"]:hover { background: rgba(139, 92, 246, 0.12); color: var(--c-purple); }
 
   .nav-link.active { color: #fff; }
   .nav-link.active-orange { background: var(--c-teal); }
   .nav-link.active-pink   { background: var(--c-pink); }
   .nav-link.active-cobalt { background: var(--c-cobalt); }
   .nav-link.active-teal   { background: var(--c-orange); }
+  .nav-link.active-purple { background: var(--c-purple); }
 
   .nav-cta {
     margin-left: 16px;

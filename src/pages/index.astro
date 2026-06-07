@@ -6,9 +6,27 @@ import { Image } from 'astro:assets';
 import sanRafael2 from '../../public/images/projects/fotos_intervenciones/san_rafael_2.jpg';
 
 const featured = await getFeaturedProjects(5);
+
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'NGO',
+  name: 'Corporación La Otra Ciudad',
+  url: 'https://laotraciudad.org',
+  logo: 'https://laotraciudad.org/images/logo.svg',
+  description: 'Corporación sin ánimo de lucro que co-crea ciudades más justas, sostenibles y saludables en Medellín, Colombia.',
+  foundingDate: '2021',
+  areaServed: { '@type': 'City', name: 'Medellín', containedInPlace: { '@type': 'Country', name: 'Colombia' } },
+  contactPoint: { '@type': 'ContactPoint', email: 'info@laotraciudad.org', contactType: 'customer service' },
+  sameAs: [],
+};
 ---
 
-<BaseLayout title="Inicio">
+<BaseLayout
+  title="Inicio"
+  description="Corporación La Otra Ciudad — co-creamos ciudades más biodiversas, justas y saludables junto a comunidades de Medellín, Colombia."
+  jsonLd={orgSchema}
+  pageColor="orange"
+>
 
   <!-- ─── HERO ──────────────────────────────────────────────────────── -->
   <section class="hero">

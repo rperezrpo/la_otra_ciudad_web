@@ -19,17 +19,31 @@ export const project = defineType({
       validation: (r) => r.required(),
     }),
     defineField({
-      name: 'category',
-      title: 'Categoría',
+      name: 'categoria_principal',
+      title: 'Categoría principal',
       type: 'string',
       options: {
         list: [
-          { title: 'Hábitat', value: 'Hábitat' },
-          { title: 'Educación', value: 'Educación' },
-          { title: 'Cultura', value: 'Cultura' },
+          { title: 'Paisajes Regenerativos', value: 'Paisajes Regenerativos' },
+          { title: 'Espacio Público',         value: 'Espacio Público'         },
+          { title: 'Acompañamiento Comunitario', value: 'Acompañamiento Comunitario' },
         ],
       },
       validation: (r) => r.required(),
+    }),
+    defineField({
+      name: 'category',
+      title: 'Categorías',
+      type: 'array',
+      of: [{ type: 'string' }],
+      options: {
+        list: [
+          { title: 'Paisajes Regenerativos', value: 'Paisajes Regenerativos' },
+          { title: 'Espacio Público',         value: 'Espacio Público'         },
+          { title: 'Acompañamiento Comunitario', value: 'Acompañamiento Comunitario' },
+        ],
+        layout: 'grid',
+      },
     }),
     defineField({
       name: 'heroImage',

@@ -5,6 +5,8 @@
 // type="dark"    solid deep dark, orange accent border
 // type="light"   cream background, dark text, cobalt accent border
 //
+// accentColor: override the bottom border colour (any CSS color / variable)
+//
 // Usage:
 //   <PageHero type="banner" eyebrow="Proyectos" image="/images/banners/proyectos.jpg">
 //     <h1 class="page-hero-title">...</h1>
@@ -18,18 +20,22 @@
 interface Props {
   type?: 'banner' | 'dark' | 'light';
   eyebrow?: string;
-  image?: string; // photo overlay — only used with type="banner"
+  image?: string;       // photo overlay — only used with type="banner"
+  accentColor?: string; // override bottom border color (e.g. "var(--c-purple)")
 }
 
-const { type = 'banner', eyebrow, image } = Astro.props;
+const { type = 'banner', eyebrow, image, accentColor } = Astro.props;
 
 // Only apply inline bgStyle for banner+image; all other backgrounds come from CSS.
-const bgStyle = (type === 'banner' && image)
-  ? `background-image: linear-gradient(135deg, rgba(26,20,16,0.78) 0%, rgba(42,26,10,0.68) 55%, rgba(59,26,26,0.58) 100%), url('${image}'); background-size: cover; background-position: center;`
-  : '';
+const bgStyle = [
+  (type === 'banner' && image)
+    ? `background-image: linear-gradient(135deg, rgba(26,20,16,0.78) 0%, rgba(42,26,10,0.68) 55%, rgba(59,26,26,0.58) 100%), url('${image}'); background-size: cover; background-position: center;`
+    : '',
+  accentColor ? `border-bottom-color: ${accentColor};` : '',
+].filter(Boolean).join(' ');
 ---
 
-<div class={`page-hero page-hero--${type}`} style={bgStyle}>
+<div class={`page-hero page-hero--${type}`} style={bgStyle || undefined}>
   <div class="page-hero-inner">
     {eyebrow && <span class={type === 'light' ? 'eyebrow' : 'eyebrow-light'}>{eyebrow}</span>}
     <slot />

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://laotraciudad.org/sitemap-index.xml

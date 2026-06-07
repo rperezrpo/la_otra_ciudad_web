@@ -15,11 +15,35 @@ export async function getStaticPaths() {
 }
 
 const { project } = Astro.props;
+
+const CATEGORY_COLOR: Record<string, 'teal' | 'cobalt' | 'purple'> = {
+  'Paisajes Regenerativos':      'teal',
+  'Espacio Público':             'cobalt',
+  'Acompañamiento Comunitario':  'purple',
+};
+const projectColor = CATEGORY_COLOR[project.category] ?? 'teal';
+
+const projectSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: project.title,
+  description: project.summary,
+  image: project.heroImage || undefined,
+  publisher: {
+    '@type': 'Organization',
+    name: 'Corporación La Otra Ciudad',
+    url: 'https://laotraciudad.org',
+  },
+};
 ---
 
 <BaseLayout
   title={project.title}
   description={project.summary}
+  ogImage={project.heroImage || undefined}
+  ogType="article"
+  jsonLd={projectSchema}
+  pageColor={projectColor}
 >
   <ProjectDetail
     title={project.title}

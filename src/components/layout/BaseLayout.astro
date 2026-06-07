@@ -3,25 +3,73 @@ import SiteNav from './SiteNav.astro';
 import SiteFooter from './SiteFooter.astro';
 import '../../styles/global.css';
 
+type PageColor = 'orange' | 'teal' | 'cobalt' | 'pink' | 'purple';
+
+const PAGE_COLORS: Record<PageColor, { accent: string; dark: string; gradient: string }> = {
+  orange: { accent: 'var(--c-orange)', dark: 'var(--c-orange-dark)', gradient: 'var(--c-grad-orange)' },
+  teal:   { accent: 'var(--c-teal)',   dark: 'var(--c-teal-dark)',   gradient: 'var(--c-grad-teal)'   },
+  cobalt: { accent: 'var(--c-cobalt)', dark: 'var(--c-cobalt-dark)', gradient: 'var(--c-grad-cobalt)' },
+  pink:   { accent: 'var(--c-pink)',   dark: 'var(--c-pink-dark)',   gradient: 'var(--c-grad-pink)'   },
+  purple: { accent: 'var(--c-purple)', dark: 'var(--c-purple-dark)', gradient: 'var(--c-grad-purple)' },
+};
+
 interface Props {
   title: string;
   description?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  jsonLd?: object;
+  pageColor?: PageColor;
 }
 
 const {
   title,
   description = 'Corporación La Otra Ciudad. Co-creando ciudades más justas, sostenibles y saludables en Medellín, Colombia.',
+  ogImage = '/images/og-default.jpg',
+  ogType = 'website',
+  jsonLd,
+  pageColor,
 } = Astro.props;
+
+const palette = pageColor ? PAGE_COLORS[pageColor] : null;
+const pageStyle = palette
+  ? `--page-accent: ${palette.accent}; --page-accent-dark: ${palette.dark}; --page-accent-gradient: ${palette.gradient};`
+  : undefined;
+
+const siteUrl = 'https://laotraciudad.org';
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
+const ogImageAbsolute = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`;
+const fullTitle = `${title} · La Otra Ciudad`;
 ---
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" style={pageStyle}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <title>{title} · La Otra Ciudad</title>
+    <title>{fullTitle}</title>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageAbsolute} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="La Otra Ciudad" />
+    <meta property="og:locale" content="es_CO" />
+
+    <!-- Twitter / X Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageAbsolute} />
+
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </head>
   <body>
     <SiteNav />
