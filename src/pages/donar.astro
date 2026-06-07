@@ -97,6 +97,9 @@ const whyDonate = [
           ))}
         </div>
 
+        <!-- Error banner (shown when redirected back from /api/donate with ?error=) -->
+        <div id="error-banner" style="display:none; background: rgba(230,34,79,0.08); border: 1px solid rgba(230,34,79,0.25); border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; font-size: 14px; color: var(--c-pink); line-height: 1.5;"></div>
+
         <!-- Amount presets (rebuilt client-side when currency changes) -->
         <span class="eyebrow">Elige un monto</span>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px;" id="amount-grid"></div>
@@ -271,6 +274,21 @@ const whyDonate = [
     // El servidor (/api/donate) convierte a COP, firma y redirige a Wompi.
     window.location.href = `/api/donate?amount=${amount}&currency=${selectedCurrency}`;
   });
+
+  // Show error banner if redirected back from /api/donate with ?error=
+  const errorBanner = document.getElementById('error-banner') as HTMLElement;
+  const errorParam = new URLSearchParams(window.location.search).get('error');
+  if (errorParam === 'config') {
+    errorBanner.style.display = 'block';
+    errorBanner.textContent = 'Las donaciones no están disponibles en este momento. Por favor escríbenos a info@laotraciudad.org.';
+  } else if (errorParam === 'minimo') {
+    errorBanner.style.display = 'block';
+    const min = new URLSearchParams(window.location.search).get('min') ?? '10000';
+    const cur = new URLSearchParams(window.location.search).get('currency') ?? 'COP';
+    errorBanner.textContent = `El monto mínimo de donación es ${Number(min).toLocaleString('es-CO')} ${cur}.`;
+  }
+  // Clean the URL so the error doesn't persist on reload.
+  if (errorParam) history.replaceState(null, '', window.location.pathname);
 
   // Initial render.
   buildAmountGrid();

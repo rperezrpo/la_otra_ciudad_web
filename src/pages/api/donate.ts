@@ -47,12 +47,15 @@ async function toCop(amount: number, currency: Currency): Promise<number> {
   return Math.round(amount * FALLBACK_TO_COP[currency]);
 }
 
+const redirect = (to: string, status = 302) =>
+  new Response(null, { status, headers: { Location: to } });
+
 export const GET: APIRoute = async ({ url, request }) => {
+  const origin = new URL(request.url).origin;
+
   if (!PUBLIC_KEY || !INTEGRITY_SECRET) {
     console.error('Wompi keys are not set (PUBLIC_WOMPI_PUBLIC_KEY / WOMPI_INTEGRITY_SECRET)');
-    return new Response('Las donaciones no están configuradas todavía. Intenta más tarde.', {
-      status: 500,
-    });
+    return redirect(`${origin}/donar?error=config`);
   }
 
   // Currency chosen on the form (defaults to COP).
@@ -66,10 +69,7 @@ export const GET: APIRoute = async ({ url, request }) => {
   const amount = Math.floor(rawAmount);
 
   if (!Number.isFinite(amount) || amount < MINIMUMS[currency]) {
-    return new Response(
-      `El monto mínimo de donación es ${MINIMUMS[currency].toLocaleString('es-CO')} ${currency}.`,
-      { status: 400 },
-    );
+    return redirect(`${origin}/donar?error=minimo&currency=${currency}&min=${MINIMUMS[currency]}`);
   }
 
   // Convert to COP — the only currency Wompi can charge.
@@ -86,9 +86,6 @@ export const GET: APIRoute = async ({ url, request }) => {
     .update(`${reference}${amountInCents}${SETTLE_CURRENCY}${INTEGRITY_SECRET}`)
     .digest('hex');
 
-  // Where Wompi sends the donor back after paying. Derive from the current
-  // request so it works in dev, preview and production without extra config.
-  const origin = new URL(request.url).origin;
   const redirectUrl = `${origin}/donar/gracias`;
 
   // Build the URL manually — URLSearchParams encodes ':' as '%3A', but Wompi's
