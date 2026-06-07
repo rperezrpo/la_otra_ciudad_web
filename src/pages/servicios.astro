@@ -18,7 +18,7 @@ const services = [
     label:   'Diseño de',
     title:   'Espacio Público',
     desc:    'Diseñamos espacios públicos que invitan a quedarse: lugares activos, seguros y disfrutables, con identidad propia, que la gente elige habitar y que dinamizan la vida social y económica del entorno.',
-    image:   '/images/banners/espacios_publicos.JPG',
+    image:   '/images/banners/espacios_publicos.jpg',
     color:   'var(--c-cobalt)',
   },
   {
@@ -70,17 +70,16 @@ const clientes = [
         <h2 class="section-title">Rigor técnico con raíces en la comunidad</h2>
       </div>
       <div>
-        <!-- EDIT: texto de descripción general de los servicios -->
         <p class="section-body" style="margin-top: 0;">
-          Desde 2021, La Otra Ciudad ha desarrollado proyectos de transformación urbana en
-          territorios vulnerables de Medellín y sus municipios, combinando metodologías
-          participativas, soluciones basadas en la naturaleza y diseño colaborativo.
+          Nuestros servicios nacen de cinco años de experiencia en la implementación de metodologías
+          participativas, soluciones basadas en la naturaleza y diseño colaborativo. No ofrecemos
+          soluciones genéricas, sino procesos que parten de análisis completos de los potenciales y
+          necesidades de un territorio y sus comunidades.
         </p>
         <p class="section-body">
-          Nuestros servicios nacen de ese trabajo de campo: no ofrecemos soluciones genéricas,
-          sino procesos que parten del reconocimiento profundo del territorio y sus comunidades.
-          Cada proyecto es una oportunidad para aprender, fortalecer capacidades locales y
-          construir ciudad desde adentro.
+          LOC se enfoca en producir diseños con la mejor calidad mediante procesos socialmente
+          sensibles. De esa manera logramos fortalecer las capacidades locales, produciendo
+          beneficios de largo plazo para nuestros aliados y clientes.
         </p>
       </div>
     </div>
@@ -118,10 +117,8 @@ const clientes = [
 
   <!-- ─── NUESTROS CLIENTES ─────────────────────────────────────────────── -->
   <div class="section">
-    <div style="text-align: center; margin-bottom: 48px;">
-      <!-- EDIT: ajustar título -->
-      <span class="eyebrow">Con quiénes trabajamos</span>
-      <h2 class="section-title" style="margin-top: 8px;">Nuestros clientes</h2>
+    <div style="margin-bottom: 48px;">
+      <h2 class="section-title">Con quiénes hemos trabajado</h2>
     </div>
 
     <div class="clients-grid">
@@ -244,8 +241,6 @@ const clientes = [
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 16px;
-    max-width: 960px;
-    margin: 0 auto;
   }
 
   @media (max-width: 800px) {

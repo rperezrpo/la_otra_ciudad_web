@@ -33,27 +33,39 @@ const orgSchema = {
     <span class="hero-eyebrow">Corporación La Otra Ciudad · Medellín</span>
     <h1 class="hero-title">Construimos ciudades más biodiversas, justas y saludables</h1>
     <p class="hero-sub">Transformamos territorios desde adentro, con las comunidades, para las comunidades.</p>
-    <div class="hero-actions">
-      <a href="/proyectos" class="btn-hero-primary">Ver proyectos</a>
-      <a href="/quienes-somos" class="btn-hero-secondary">Quiénes somos</a>
-    </div>
+    <button class="hero-scroll-btn" onclick="document.getElementById('hero-next').scrollIntoView({behavior:'smooth'})" aria-label="Desplazarse hacia abajo">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </button>
   </section>
 
   <!-- ─── STATS ─────────────────────────────────────────────────────── -->
   <!-- EDIT: update numbers as the organization grows -->
-  <div class="stats-strip">
-    {[
-      ['1.035+', 'm² de espacio público transformado', 'var(--c-orange)'],
-      ['393',    'Plantas nativas sembradas',           'var(--c-teal)'],
-      ['21',     'Talleres con comunidades',            'var(--c-cobalt)'],
-      ['2',   'Premios internacionales',                   'var(--c-pink)'],
-    ].map(([num, label, color]) => (
-      <div class="stat-item">
-        <div class="stat-num" style={`color: ${color};`}>{num}</div>
-        <div class="stat-label">{label}</div>
+  {(() => {
+    // Two asymmetric brush-blob base shapes; transforms create the 4 variations
+    const A = 'M 10,60 C 5,36 28,12 68,9 C 108,6 158,20 178,40 C 196,58 186,78 158,84 C 130,90 72,88 38,78 C 14,70 14,80 10,60 Z';
+    const B = 'M 22,14 C 52,4 126,8 162,26 C 190,40 192,64 170,76 C 148,88 96,90 56,84 C 20,78 4,60 6,42 C 8,22 8,22 22,14 Z';
+    const stats: [string, string, string, string, string][] = [
+      ['1.035+', 'm² de espacio público transformado', 'var(--c-orange)', A, ''],
+      ['393',    'Plantas nativas sembradas',           'var(--c-teal)',   B, ''],
+      ['21',     'Talleres con comunidades',            'var(--c-cobalt)', A, 'scale(-1 1) translate(-200 0)'],
+      ['2',      'Premios internacionales',             'var(--c-pink)',   B, 'rotate(180 100 50)'],
+    ];
+    return (
+      <div id="hero-next" class="stats-strip">
+        {stats.map(([num, label, color, path, tf]) => (
+          <div class="stat-item">
+            <svg class="stat-blob" viewBox="0 0 200 100" aria-hidden="true">
+              <path fill={color} fill-opacity="0.13" d={path} transform={tf || undefined} />
+            </svg>
+            <div class="stat-num" style={`color: ${color};`}>{num}</div>
+            <div class="stat-label">{label}</div>
+          </div>
+        ))}
       </div>
-    ))}
-  </div>
+    );
+  })()}
 
   <!-- ─── MISSION INTRO ─────────────────────────────────────────────── -->
   <div class="section">
@@ -67,7 +79,7 @@ const orgSchema = {
           artísticas y fortalecimiento del tejido social, siempre junto a las comunidades.
         </p>
         <div style="margin-top: 28px; display: flex; gap: 12px; flex-wrap: wrap;">
-          <a href="/quienes-somos" class="btn-accent">Conocernos</a>
+          <a href="/quienes-somos" class="btn-accent">Quiénes somos</a>
           <a href="/metodologia" class="btn-outline">Nuestra metodología</a>
         </div>
       </div>
@@ -235,7 +247,7 @@ const orgSchema = {
     <div style="max-width: 900px; margin: 0 auto; text-align: center;">
       <span class="eyebrow-light">Nuestra misión</span>
       <p style="font-family: var(--font-display); font-variation-settings: 'opsz' 144, 'SOFT' 30, 'WONK' 0; font-size: clamp(32px, 4vw, 52px); font-weight: 400; line-height: 1.15; letter-spacing: -1px; color: #fff; margin: 0 0 40px;">
-        Promovemos ciudades biodiversas, justas y saludables junto a comunidades históricamente marginadas.
+        Promover el desarrollo sostenible de comunidades urbanas vulnerables, mejorando su calidad de vida y dignificando los territorios que habitan
       </p>
       <a href="/donar" class="btn-hero-primary" style="font-size: 16px;">Apoya nuestro trabajo ↗</a>
     </div>
@@ -254,9 +266,9 @@ const orgSchema = {
         </p>
         <div class="feature-band">
           {[
-            ['01', 'Escuchar',   'Procesos de diagnóstico participativo con la comunidad'],
-            ['02', 'Co-diseñar', 'Talleres de co-diseño y co-creación de soluciones'],
-            ['03', 'Actuar',     'Implementación participativa con acompañamiento técnico'],
+            ['01', 'Mapear',      'Procesos de diagnóstico participativo con la comunidad'],
+            ['02', 'Co-crear',   'Talleres de co-diseño y co-creación de soluciones'],
+            ['03', 'Implementar','Implementación participativa con acompañamiento técnico'],
           ].map(([n, t, d]) => (
             <div class="feature-item">
               <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.6px; color: var(--c-teal); margin-bottom: 6px;">{n}</div>
@@ -273,7 +285,7 @@ const orgSchema = {
   <!-- ─── DONATE CTA ────────────────────────────────────────────────── -->
   <div class="section-full section-gradient" style="padding: 96px 48px; text-align: center;">
     <span class="eyebrow-light">Sé parte del cambio</span>
-    <h2 style="font-family: var(--font-display); font-variation-settings: 'opsz' 144, 'SOFT' 30, 'WONK' 0; font-size: clamp(36px, 5vw, 60px); font-weight: 400; line-height: 1.1; letter-spacing: -1.2px; color: #fff; max-width: 640px; margin: 0 auto 20px;">
+    <h2 style="font-family: var(--font-display); font-variation-settings: 'opsz' 144, 'SOFT' 30, 'WONK' 0; font-size: clamp(36px, 5vw, 60px); font-weight: 400; line-height: 1.1; letter-spacing: -1.2px; color: #fff; white-space: nowrap; margin: 0 auto 20px;">
       Tu donación construye ciudad
     </h2>
     <p style="font-size: 18px; font-weight: 300; color: rgba(255,255,255,0.8); max-width: 480px; margin: 0 auto 36px; line-height: 1.5;">
@@ -281,5 +293,85 @@ const orgSchema = {
     </p>
     <a href="/donar" class="btn-hero-primary" style="font-size: 16px;">Quiero donar</a>
   </div>
+
+
+<script>
+  (() => {
+    const strip = document.getElementById('hero-next');
+    if (!strip) return;
+
+    // Parse numeric value from strings like "1.035+", "393", "21", "2"
+    function parseValue(str: string): { prefix: string; value: number; suffix: string } {
+      const m = str.match(/^([^\d]*)(\d[\d.,]*)(.*)$/);
+      if (!m) return { prefix: '', value: 0, suffix: str };
+      return {
+        prefix: m[1],
+        value: parseFloat(m[2].replace(/\./g, '').replace(',', '.')),
+        suffix: m[3],
+      };
+    }
+
+    function easeOutExpo(t: number): number {
+      return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+    }
+
+    function countUp(el: HTMLElement, delay: number) {
+      const raw = el.dataset.value ?? el.textContent?.trim() ?? '0';
+      const { prefix, value, suffix } = parseValue(raw);
+      const duration = 1400;
+      let start: number | null = null;
+
+      const useDecimalDot = raw.includes('.');
+      const formatted = (n: number) => {
+        const rounded = Math.round(n);
+        if (useDecimalDot && value >= 1000) {
+          return rounded.toLocaleString('de-DE').replace(/,/g, '.');
+        }
+        return String(rounded);
+      };
+
+      el.textContent = prefix + '0' + suffix;
+
+      setTimeout(() => {
+        const step = (ts: number) => {
+          if (!start) start = ts;
+          const progress = Math.min((ts - start) / duration, 1);
+          el.textContent = prefix + formatted(easeOutExpo(progress) * value) + suffix;
+          if (progress < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      }, delay);
+    }
+
+    // Store original values before any manipulation
+    strip.querySelectorAll<HTMLElement>('.stat-num').forEach(el => {
+      el.dataset.value = el.textContent?.trim() ?? '';
+    });
+
+    // Set initial state for entrance animation
+    strip.querySelectorAll<HTMLElement>('.stat-item').forEach(item => {
+      item.style.opacity = '0';
+      item.style.transform = 'translateY(20px)';
+    });
+
+    const obs = new IntersectionObserver(entries => {
+      if (!entries[0].isIntersecting) return;
+      obs.disconnect();
+
+      strip.querySelectorAll<HTMLElement>('.stat-item').forEach((item, i) => {
+        const delay = i * 120;
+        setTimeout(() => {
+          item.style.transition = 'opacity 500ms ease, transform 500ms ease';
+          item.style.opacity = '1';
+          item.style.transform = 'translateY(0)';
+          const numEl = item.querySelector<HTMLElement>('.stat-num');
+          if (numEl) countUp(numEl, 0);
+        }, delay);
+      });
+    }, { threshold: 0.25 });
+
+    obs.observe(strip);
+  })();
+</script>
 
 </BaseLayout>
