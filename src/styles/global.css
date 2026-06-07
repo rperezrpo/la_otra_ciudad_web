@@ -291,31 +291,6 @@
     padding: 8px 18px 10px;
   }
 
-  .btn-orange {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    background: var(--c-teal);
-    color: #fff;
-    border: none;
-    border-radius: 50px;
-    padding: 12px 24px;
-    font-size: 15px;
-    font-weight: 700;
-    font-family: var(--font-sans);
-    letter-spacing: -0.1px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: opacity 150ms;
-  }
-
-  .btn-orange:hover { opacity: 0.88; }
-
-  .btn-orange:focus-visible {
-    outline: 2px dashed var(--c-teal);
-    outline-offset: 3px;
-  }
 
   .btn-outline {
     display: inline-flex;
