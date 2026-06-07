@@ -9,8 +9,11 @@ export const prerender = false;
 // WOMPI_INTEGRITY_SECRET   → server-side ONLY. Used to sign the transaction so
 //                            the amount can't be tampered with in the URL.
 // Create both at https://comercios.wompi.co → Desarrolladores.
-const PUBLIC_KEY = import.meta.env.PUBLIC_WOMPI_PUBLIC_KEY;
-const INTEGRITY_SECRET = import.meta.env.WOMPI_INTEGRITY_SECRET;
+// Variable names as configured in Vercel:
+//   prod  → WOMPI_PUBLICA  + WOMPI_INTEGRITY
+//   test  → WOMPI_PUBLIC_TEST + WOMPI_INTEGRITY_TEST
+const PUBLIC_KEY = import.meta.env.WOMPI_PUBLICA ?? import.meta.env.WOMPI_PUBLIC_TEST;
+const INTEGRITY_SECRET = import.meta.env.WOMPI_INTEGRITY ?? import.meta.env.WOMPI_INTEGRITY_TEST;
 
 // Wompi only ever settles in COP. Donors may choose a foreign currency, in
 // which case we convert the amount to COP here before charging.
