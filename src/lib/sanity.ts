@@ -19,7 +19,8 @@ function img(source: SanityImageSource | undefined, width: number): string {
 const PROJECT_CARD_FIELDS = `
   title,
   "slug": slug.current,
-  category,
+  "category": categoria_principal,
+  "categories": category[],
   summary,
   heroImage,
   status,
@@ -31,6 +32,7 @@ export interface ProjectCardData {
   title: string
   slug: string
   category: string
+  categories: string[]
   summary: string
   heroImage: string
   status: string
@@ -41,12 +43,31 @@ function toCard(p: any): ProjectCardData {
   return {
     title: p.title,
     slug: p.slug,
-    category: p.category,
+    category: p.category ?? '',
+    categories: p.categories ?? [],
     summary: p.summary ?? '',
     heroImage: img(p.heroImage, 800),
     status: p.status,
     year: p.year,
   }
+}
+
+export async function getProjectsBySlug(slugs: string[]): Promise<ProjectCardData[]> {
+  const data = await sanityClient.fetch(
+    `*[_type == "project" && slug.current in $slugs]{${PROJECT_CARD_FIELDS}}`,
+    { slugs }
+  )
+  // Preserve the order defined in slugs
+  const map = new Map(data.map((p: any) => [p.slug, toCard(p)]))
+  return slugs.map(s => map.get(s)).filter(Boolean) as ProjectCardData[]
+}
+
+export async function getProjectsByCategory(category: string): Promise<ProjectCardData[]> {
+  const data = await sanityClient.fetch(
+    `*[_type == "project" && categoria_principal == $category] | order(year desc, title asc){${PROJECT_CARD_FIELDS}}`,
+    { category }
+  )
+  return data.map(toCard)
 }
 
 export async function getProjects(): Promise<ProjectCardData[]> {
@@ -111,7 +132,8 @@ export async function getProject(slug: string): Promise<ProjectDetailData | null
     `*[_type == "project" && slug.current == $slug][0]{
       title,
       "slug": slug.current,
-      category,
+      "category": categoria_principal,
+      category[],
       heroImage,
       description,
       neighborhood,

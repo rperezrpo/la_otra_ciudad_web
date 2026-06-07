@@ -2,10 +2,23 @@
 const pathname = Astro.url.pathname;
 
 // To add or rename nav links, edit this array.
+// Links with `children` render as a hover-dropdown on desktop and as
+// indented sub-links in the mobile drawer.
 const links = [
   { href: '/quienes-somos', label: 'Quiénes Somos', color: 'orange', activeClass: 'active-orange' },
   { href: '/proyectos',     label: 'Proyectos',      color: 'pink',   activeClass: 'active-pink'   },
   { href: '/metodologia',   label: 'Metodología',    color: 'cobalt', activeClass: 'active-cobalt' },
+  {
+    href: '/servicios',
+    label: 'Servicios',
+    color: 'purple',
+    activeClass: 'active-purple',
+    children: [
+      { href: '/servicios/paisajes-regenerativos',      label: 'Paisajes Regenerativos'      },
+      { href: '/servicios/espacio-publico',             label: 'Espacio Público'             },
+      { href: '/servicios/acompanamiento-comunitario',  label: 'Acompañamiento Comunitario'  },
+    ],
+  },
   { href: '/contacto',      label: 'Contacto',       color: 'teal',   activeClass: 'active-teal'   },
 ];
 
@@ -27,15 +40,41 @@ function isActive(href: string) {
   </a>
 
   <div class="nav-links">
-    {links.map((link) => (
-      <a
-        href={link.href}
-        class:list={['nav-link', { active: isActive(link.href), [link.activeClass]: isActive(link.href) }]}
-        data-color={link.color}
-      >
-        {link.label}
-      </a>
-    ))}
+    {links.map((link) =>
+      link.children ? (
+        <div class="nav-dropdown-wrap">
+          <a
+            href={link.href}
+            class:list={['nav-link', 'nav-link--dropdown', { active: isActive(link.href), [link.activeClass]: isActive(link.href) }]}
+            data-color={link.color}
+          >
+            {link.label}
+            <svg class="nav-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true">
+              <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <div class="nav-dropdown" role="menu">
+            {link.children.map((child) => (
+              <a
+                href={child.href}
+                class:list={['nav-dropdown-item', { 'nav-dropdown-item--active': pathname.startsWith(child.href) }]}
+                role="menuitem"
+              >
+                {child.label}
+              </a>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <a
+          href={link.href}
+          class:list={['nav-link', { active: isActive(link.href), [link.activeClass]: isActive(link.href) }]}
+          data-color={link.color}
+        >
+          {link.label}
+        </a>
+      )
+    )}
   </div>
 
   <a href="/donar" class="nav-cta">Donar ↗</a>
@@ -53,13 +92,23 @@ function isActive(href: string) {
 <div class="nav-drawer" id="nav-drawer" aria-hidden="true">
   <div class="nav-drawer-inner">
     {links.map((link) => (
-      <a
-        href={link.href}
-        class:list={['nav-drawer-link', { active: isActive(link.href), [link.activeClass]: isActive(link.href) }]}
-        data-color={link.color}
-      >
-        {link.label}
-      </a>
+      <>
+        <a
+          href={link.href}
+          class:list={['nav-drawer-link', { active: isActive(link.href), [link.activeClass]: isActive(link.href) }]}
+          data-color={link.color}
+        >
+          {link.label}
+        </a>
+        {link.children && link.children.map((child) => (
+          <a
+            href={child.href}
+            class:list={['nav-drawer-sublink', { 'nav-drawer-sublink--active': pathname.startsWith(child.href) }]}
+          >
+            {child.label}
+          </a>
+        ))}
+      </>
     ))}
     <a href="/donar" class="nav-cta nav-drawer-cta">Donar ↗</a>
   </div>
@@ -97,6 +146,90 @@ function isActive(href: string) {
   .nav-hamburger.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
   .nav-hamburger.is-open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
   .nav-hamburger.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* ─── DROPDOWN (desktop) ───────────────────────────────────────────────── */
+  .nav-dropdown-wrap {
+    position: relative;
+  }
+
+  /* Invisible bridge that fills the gap between the link and the dropdown,
+     keeping the mouse inside .nav-dropdown-wrap while it travels down. */
+  .nav-dropdown-wrap::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: 8px;
+  }
+
+  .nav-link--dropdown {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .nav-chevron {
+    flex-shrink: 0;
+    transition: transform 200ms ease;
+    opacity: 0.6;
+  }
+  .nav-dropdown-wrap:hover .nav-chevron,
+  .nav-dropdown-wrap:focus-within .nav-chevron {
+    transform: rotate(180deg);
+    opacity: 1;
+  }
+
+  .nav-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--c-white-pure);
+    border: 1px solid rgba(26, 20, 16, 0.10);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(26, 20, 16, 0.12), 0 2px 6px rgba(26, 20, 16, 0.06);
+    padding: 6px;
+    min-width: 220px;
+    z-index: 400;
+    /* Hidden by default */
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%) translateY(-4px);
+    transition: opacity 160ms ease, transform 160ms ease;
+  }
+  .nav-dropdown-wrap:hover .nav-dropdown,
+  .nav-dropdown-wrap:focus-within .nav-dropdown {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .nav-dropdown-item {
+    display: block;
+    padding: 9px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 400;
+    font-family: var(--font-sans);
+    color: var(--c-black);
+    text-decoration: none;
+    transition: background 110ms, color 110ms;
+    white-space: nowrap;
+  }
+  .nav-dropdown-item:hover {
+    background: rgba(139, 92, 246, 0.10);
+    color: var(--c-purple);
+  }
+  .nav-dropdown-item--active {
+    background: var(--c-purple);
+    color: #fff;
+  }
+  .nav-dropdown-item--active:hover {
+    background: var(--c-purple);
+    color: #fff;
+    opacity: 0.88;
+  }
 
   /* ─── MOBILE DRAWER ────────────────────────────────────────────────────── */
   .nav-drawer {
@@ -137,12 +270,40 @@ function isActive(href: string) {
   .nav-drawer-link[data-color="pink"]:hover   { background: rgba(230, 34, 79, 0.12);  color: var(--c-pink); }
   .nav-drawer-link[data-color="cobalt"]:hover { background: rgba(59, 107, 220, 0.12); color: var(--c-cobalt); }
   .nav-drawer-link[data-color="teal"]:hover   { background: rgba(226, 97, 29, 0.12);  color: var(--c-orange); }
+  .nav-drawer-link[data-color="purple"]:hover { background: rgba(139, 92, 246, 0.12); color: var(--c-purple); }
 
   .nav-drawer-link.active { color: #fff; }
   .nav-drawer-link.active-orange { background: var(--c-teal); }
   .nav-drawer-link.active-pink   { background: var(--c-pink); }
   .nav-drawer-link.active-cobalt { background: var(--c-cobalt); }
   .nav-drawer-link.active-teal   { background: var(--c-orange); }
+  .nav-drawer-link.active-purple { background: var(--c-purple); }
+
+  /* Sub-links in drawer (under Servicios) */
+  .nav-drawer-sublink {
+    display: block;
+    font-size: 14px;
+    font-weight: 400;
+    padding: 8px 16px 8px 32px;
+    border-radius: 8px;
+    color: rgba(26, 20, 16, 0.60);
+    text-decoration: none;
+    font-family: var(--font-sans);
+    transition: background 110ms, color 110ms;
+  }
+  .nav-drawer-sublink::before {
+    content: '↳ ';
+    font-size: 11px;
+    opacity: 0.5;
+  }
+  .nav-drawer-sublink:hover {
+    background: rgba(139, 92, 246, 0.10);
+    color: var(--c-purple);
+  }
+  .nav-drawer-sublink--active {
+    color: var(--c-purple);
+    font-weight: 500;
+  }
 
   .nav-drawer-cta {
     margin-top: 8px;
