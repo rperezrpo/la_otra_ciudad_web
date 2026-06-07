@@ -717,7 +717,7 @@
   }
 
   .stat-item {
-    padding: 40px 64px;
+    padding: 48px 64px;
     text-align: center;
     position: relative;
   }
@@ -750,7 +750,7 @@
     font-weight: 600;
     letter-spacing: 0.6px;
     text-transform: uppercase;
-    color: var(--fg2);
+    color: rgba(247, 243, 238, 0.75);
     margin-top: 6px;
     position: relative;
   }

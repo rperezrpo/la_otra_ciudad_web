@@ -1,14 +1,54 @@
 ---
 import BaseLayout from '../components/layout/BaseLayout.astro';
-import PageHero from '../components/layout/PageHero.astro';
 
-// EDIT: update donation amounts and impact labels
-const presets = [
-  { amount: 20000,  label: 'Cubre los materiales de un taller con la comunidad' },
-  { amount: 50000,  label: 'Financia una jornada de diagnóstico participativo' },
-  { amount: 100000, label: 'Costea la siembra de plantas nativas en espacio público' },
-  { amount: 200000, label: 'Apoya la readecuación de 1 m² de espacio comunitario' },
+// EDIT: fixed donation amounts and impact labels, per currency.
+// Wompi only charges COP — foreign currencies are converted to COP at checkout
+// (see src/pages/api/donate.ts). Amounts below are what the donor sees/picks.
+const IMPACTS = [
+  'Cubre los materiales de un taller con la comunidad',
+  'Financia una jornada de diagnóstico participativo',
+  'Costea la siembra de plantas nativas en espacio público',
+  'Apoya la readecuación de un espacio comunitario',
 ];
+
+const CURRENCIES = {
+  COP: {
+    label: 'COP', locale: 'es-CO', min: 10000, default: 30000,
+    presets: [
+      { amount: 10000,  impact: IMPACTS[0] },
+      { amount: 30000,  impact: IMPACTS[1] },
+      { amount: 50000,  impact: IMPACTS[2] },
+      { amount: 100000, impact: IMPACTS[3] },
+    ],
+  },
+  USD: {
+    label: 'USD', locale: 'en-US', min: 3, default: 15,
+    presets: [
+      { amount: 5,  impact: IMPACTS[0] },
+      { amount: 15, impact: IMPACTS[1] },
+      { amount: 30, impact: IMPACTS[2] },
+      { amount: 60, impact: IMPACTS[3] },
+    ],
+  },
+  EUR: {
+    label: 'EUR', locale: 'de-DE', min: 3, default: 15,
+    presets: [
+      { amount: 5,  impact: IMPACTS[0] },
+      { amount: 15, impact: IMPACTS[1] },
+      { amount: 30, impact: IMPACTS[2] },
+      { amount: 60, impact: IMPACTS[3] },
+    ],
+  },
+  CHF: {
+    label: 'CHF', locale: 'de-CH', min: 3, default: 15,
+    presets: [
+      { amount: 5,  impact: IMPACTS[0] },
+      { amount: 15, impact: IMPACTS[1] },
+      { amount: 30, impact: IMPACTS[2] },
+      { amount: 60, impact: IMPACTS[3] },
+    ],
+  },
+} as const;
 
 const whyDonate = [
   { stat: '100%',          desc: 'A programas directos, cero en publicidad comercial' },
@@ -26,7 +66,7 @@ const whyDonate = [
 
   <!-- ─── HERO ──────────────────────────────────────────────────────── -->
   <!-- EDIT: drop a photo into /public/images/banners/donar.jpg to activate the image background -->
-  <!-- Note: donar uses its own orange hero, not PageHero — keeping it distinct intentionally -->
+  <!-- Note: donar uses its own teal hero, not PageHero — keeping it distinct intentionally -->
   <div style="background: var(--c-teal); padding: 80px 48px; text-align: center;">
     <span style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: rgba(255,255,255,0.7); display: block; margin-bottom: 24px;">Donar</span>
     <h1 style="font-family: var(--font-display); font-variation-settings: 'opsz' 144, 'SOFT' 40, 'WONK' 0; font-size: clamp(40px, 6vw, 72px); font-weight: 400; line-height: 1.0; letter-spacing: -1.5px; color: #fff; max-width: 640px; margin: 0 auto 20px;">
@@ -43,48 +83,32 @@ const whyDonate = [
       <!-- ─── DONATION SELECTOR ──────────────────────────────────────── -->
       <div id="donation-form">
 
-        <!-- Frequency toggle -->
-        <span class="eyebrow">Frecuencia</span>
-        <div style="display: flex; gap: 8px; margin-top: 12px; margin-bottom: 32px;">
-          <button
-            class="freq-btn"
-            data-freq="mensual"
-            style="flex: 1; padding: 12px; border-radius: 8px; border: 2px solid var(--c-teal); background: rgba(96,157,146,0.1); color: var(--c-teal); font-family: var(--font-sans); font-size: 15px; font-weight: 600; cursor: pointer;"
-          >
-            Mensual ★
-          </button>
-          <button
-            class="freq-btn"
-            data-freq="una-vez"
-            style="flex: 1; padding: 12px; border-radius: 8px; border: 2px solid rgba(26,20,16,0.15); background: var(--c-white-pure); color: var(--c-black); font-family: var(--font-sans); font-size: 15px; font-weight: 400; cursor: pointer;"
-          >
-            Una vez
-          </button>
-        </div>
-
-        <!-- Amount presets -->
-        <span class="eyebrow">Elige un monto</span>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px;" id="amount-grid">
-          {presets.map(({ amount }) => (
+        <!-- Currency selector -->
+        <span class="eyebrow">Moneda</span>
+        <div style="display: flex; gap: 8px; margin-top: 12px; margin-bottom: 32px;" id="currency-grid">
+          {Object.keys(CURRENCIES).map((code, i) => (
             <button
-              class="amount-btn"
-              data-amount={amount}
-              data-selected={amount === 50000 ? 'true' : 'false'}
-              style={`border: 2px solid ${amount === 50000 ? 'var(--c-teal)' : 'rgba(26,20,16,0.12)'}; border-radius: 8px; padding: 16px 24px; cursor: pointer; text-align: center; font-size: 20px; font-weight: 400; font-family: var(--font-display); transition: all 150ms; background: ${amount === 50000 ? 'rgba(96,157,146,0.1)' : 'var(--c-white-pure)'}; color: ${amount === 50000 ? 'var(--c-teal)' : 'var(--c-black)'};`}
+              class="currency-btn"
+              data-currency={code}
+              style={`flex: 1; padding: 12px; border-radius: 8px; border: 2px solid ${i === 0 ? 'var(--c-teal)' : 'rgba(26,20,16,0.15)'}; background: ${i === 0 ? 'rgba(96,157,146,0.1)' : 'var(--c-white-pure)'}; color: ${i === 0 ? 'var(--c-teal)' : 'var(--c-black)'}; font-family: var(--font-sans); font-size: 15px; font-weight: ${i === 0 ? '600' : '400'}; cursor: pointer;`}
             >
-              {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(amount)}
+              {code}{i > 0 ? '*' : ''}
             </button>
           ))}
         </div>
+
+        <!-- Amount presets (rebuilt client-side when currency changes) -->
+        <span class="eyebrow">Elige un monto</span>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px;" id="amount-grid"></div>
 
         <div style="margin-top: 10px;">
           <input
             class="form-input"
             type="number"
             id="custom-amount"
-            placeholder="Otro monto (COP)"
+            placeholder="Otro monto"
             style="text-align: center; font-size: 18px; font-weight: 400;"
-            min="1000"
+            min="0"
           />
         </div>
 
@@ -92,19 +116,15 @@ const whyDonate = [
         <div id="impact-box" style="margin-top: 20px; background: rgba(226,97,29,0.08); border: 1px solid rgba(226,97,29,0.2); border-radius: 8px; padding: 16px 20px;">
           <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--c-orange); margin-bottom: 6px;">Tu impacto</div>
           <div id="impact-text" style="font-size: 15px; font-weight: 400; line-height: 1.5; color: var(--c-black);">
-            Financia una sesión de cartografía social
+            Financia una jornada de diagnóstico participativo
           </div>
         </div>
 
-        <!-- ─── STRIPE / PAYU PLACEHOLDER ─────────────────────────────── -->
-        <!--
-          PAYMENT INTEGRATION:
-          Replace the button below with the actual payment widget.
-          Options:
-            • Stripe: embed <stripe-buy-button> or redirect to Stripe Checkout
-            • PayU: use the PayU payment button or redirect URL
-            • Wompi (Colombia): embed Wompi button widget
-          Keep the amount and frequency values — pass them to the payment provider.
+        <!-- ─── PAGO (Wompi) ──────────────────────────────────────────────
+          El botón envía monto + moneda a /api/donate, que convierte a COP (si
+          aplica), firma la transacción con el secreto de integridad y redirige
+          al checkout de Wompi (PSE, Nequi, Bancolombia, Daviplata, tarjetas).
+          Configura PUBLIC_WOMPI_PUBLIC_KEY y WOMPI_INTEGRITY_SECRET (.env).
         -->
         <button
           id="continue-btn"
@@ -113,7 +133,8 @@ const whyDonate = [
         >
           Continuar con el pago →
         </button>
-        <!-- END PAYMENT PLACEHOLDER -->
+
+        <p id="fx-note" style="display: none; font-size: 12px; color: var(--fg2); text-align: center; margin-top: 12px; line-height: 1.5;"></p>
 
         <p style="font-size: 11px; color: var(--fg3); text-align: center; margin-top: 14px; font-family: var(--font-mono); letter-spacing: 0.5px;">
           PAGO SEGURO · RECIBO DEDUCIBLE DE IMPUESTOS
@@ -137,64 +158,121 @@ const whyDonate = [
     </div>
   </div>
 
+  <!-- Donation config consumed by the client script -->
+  <script type="application/json" id="currency-config" set:html={JSON.stringify(CURRENCIES)}></script>
+
 </BaseLayout>
 
 <!-- Client-side donation selector -->
 <script>
-  const impacts: Record<number, string> = {
-    20000:  'Cubre los materiales de un taller con la comunidad',
-    50000:  'Financia una jornada de diagnóstico participativo',
-    100000: 'Costea la siembra de plantas nativas en espacio público',
-    200000: 'Apoya la readecuación de 1 m² de espacio comunitario',
-  };
+  type Preset = { amount: number; impact: string };
+  type CurrencyCfg = { label: string; locale: string; min: number; default: number; presets: Preset[] };
 
-  let selectedAmount = 50000;
-  let selectedFreq = 'mensual';
+  const CURRENCIES: Record<string, CurrencyCfg> = JSON.parse(
+    document.getElementById('currency-config')!.textContent || '{}',
+  );
 
-  const amountBtns = document.querySelectorAll<HTMLButtonElement>('.amount-btn');
+  let selectedCurrency = Object.keys(CURRENCIES)[0]; // COP
+  let selectedAmount = CURRENCIES[selectedCurrency].default;
+
+  const amountGrid = document.getElementById('amount-grid') as HTMLElement;
   const customInput = document.getElementById('custom-amount') as HTMLInputElement;
   const impactText = document.getElementById('impact-text') as HTMLElement;
-  const freqBtns = document.querySelectorAll<HTMLButtonElement>('.freq-btn');
+  const currencyBtns = document.querySelectorAll<HTMLButtonElement>('.currency-btn');
+  const continueBtn = document.getElementById('continue-btn') as HTMLButtonElement;
+  const fxNote = document.getElementById('fx-note') as HTMLElement;
 
-  function selectAmount(amount: number) {
-    selectedAmount = amount;
-    amountBtns.forEach((btn) => {
-      const isSelected = Number(btn.dataset.amount) === amount;
-      btn.style.borderColor = isSelected ? 'var(--c-teal)' : 'rgba(26,20,16,0.12)';
-      btn.style.background = isSelected ? 'rgba(96,157,146,0.1)' : 'var(--c-white-pure)';
-      btn.style.color = isSelected ? 'var(--c-teal)' : 'var(--c-black)';
-    });
-    impactText.textContent = impacts[amount] ?? 'Apoya nuestros programas comunitarios';
+  const fmt = (amount: number, currency: string) =>
+    new Intl.NumberFormat(CURRENCIES[currency].locale, {
+      style: 'currency', currency, maximumFractionDigits: 0,
+    }).format(amount);
+
+  function impactFor(amount: number): string {
+    const presets = CURRENCIES[selectedCurrency].presets;
+    // Pick the impact of the highest preset the amount reaches.
+    let label = 'Apoya nuestros programas comunitarios';
+    for (const p of presets) if (amount >= p.amount) label = p.impact;
+    return label;
   }
 
-  amountBtns.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      customInput.value = '';
-      selectAmount(Number(btn.dataset.amount));
+  function paintAmountButtons() {
+    amountGrid.querySelectorAll<HTMLButtonElement>('.amount-btn').forEach((btn) => {
+      const isSel = Number(btn.dataset.amount) === selectedAmount && customInput.value === '';
+      btn.style.borderColor = isSel ? 'var(--c-teal)' : 'rgba(26,20,16,0.12)';
+      btn.style.background = isSel ? 'rgba(96,157,146,0.1)' : 'var(--c-white-pure)';
+      btn.style.color = isSel ? 'var(--c-teal)' : 'var(--c-black)';
     });
+  }
+
+  function buildAmountGrid() {
+    const cfg = CURRENCIES[selectedCurrency];
+    amountGrid.innerHTML = '';
+    cfg.presets.forEach(({ amount }) => {
+      const btn = document.createElement('button');
+      btn.className = 'amount-btn';
+      btn.dataset.amount = String(amount);
+      btn.textContent = fmt(amount, selectedCurrency);
+      btn.style.cssText =
+        'border: 2px solid rgba(26,20,16,0.12); border-radius: 8px; padding: 16px 24px; cursor: pointer; text-align: center; font-size: 20px; font-weight: 400; font-family: var(--font-display); transition: all 150ms; background: var(--c-white-pure); color: var(--c-black);';
+      btn.addEventListener('click', () => {
+        customInput.value = '';
+        selectedAmount = amount;
+        paintAmountButtons();
+        impactText.textContent = impactFor(amount);
+      });
+      amountGrid.appendChild(btn);
+    });
+    customInput.placeholder = `Otro monto (${cfg.label})`;
+    customInput.min = String(cfg.min);
+  }
+
+  function selectCurrency(code: string) {
+    selectedCurrency = code;
+    selectedAmount = CURRENCIES[code].default;
+    customInput.value = '';
+    currencyBtns.forEach((b) => {
+      const active = b.dataset.currency === code;
+      b.style.borderColor = active ? 'var(--c-teal)' : 'rgba(26,20,16,0.15)';
+      b.style.background = active ? 'rgba(96,157,146,0.1)' : 'var(--c-white-pure)';
+      b.style.color = active ? 'var(--c-teal)' : 'var(--c-black)';
+      b.style.fontWeight = active ? '600' : '400';
+    });
+    buildAmountGrid();
+    paintAmountButtons();
+    impactText.textContent = impactFor(selectedAmount);
+    // For non-COP, remind the donor the charge happens in COP.
+    if (code === 'COP') {
+      fxNote.style.display = 'none';
+    } else {
+      fxNote.style.display = 'block';
+      fxNote.textContent = `* Se cobrará el equivalente en pesos colombianos (COP). El monto exacto en COP se muestra en el checkout antes de confirmar.`;
+    }
+  }
+
+  currencyBtns.forEach((btn) => {
+    btn.addEventListener('click', () => selectCurrency(btn.dataset.currency!));
   });
 
   customInput.addEventListener('input', () => {
-    amountBtns.forEach((btn) => {
-      btn.style.borderColor = 'rgba(26,20,16,0.12)';
-      btn.style.background = 'var(--c-white-pure)';
-      btn.style.color = 'var(--c-black)';
-    });
-    const val = Number(customInput.value);
-    selectedAmount = val;
-    impactText.textContent = impacts[val] ?? 'Apoya nuestros programas comunitarios';
+    selectedAmount = Number(customInput.value);
+    paintAmountButtons();
+    impactText.textContent = impactFor(selectedAmount);
   });
 
-  freqBtns.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      selectedFreq = btn.dataset.freq ?? 'mensual';
-      freqBtns.forEach((b) => {
-        const isActive = b.dataset.freq === selectedFreq;
-        b.style.borderColor = isActive ? 'var(--c-teal)' : 'rgba(26,20,16,0.15)';
-        b.style.background = isActive ? 'rgba(96,157,146,0.1)' : 'var(--c-white-pure)';
-        b.style.color = isActive ? 'var(--c-teal)' : 'var(--c-black)';
-        b.style.fontWeight = isActive ? '600' : '400';
-      });
-    });
+  // ─── PAGO: redirige al checkout de Wompi con el monto y la moneda ────────
+  continueBtn.addEventListener('click', () => {
+    const min = CURRENCIES[selectedCurrency].min;
+    const amount = Math.floor(selectedAmount);
+    if (!Number.isFinite(amount) || amount < min) {
+      customInput.focus();
+      customInput.reportValidity?.();
+      return;
+    }
+    // El servidor (/api/donate) convierte a COP, firma y redirige a Wompi.
+    window.location.href = `/api/donate?amount=${amount}&currency=${selectedCurrency}`;
   });
+
+  // Initial render.
+  buildAmountGrid();
+  paintAmountButtons();
 </script>

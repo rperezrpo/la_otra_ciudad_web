@@ -66,7 +66,6 @@ const enfoques = [
 
   <!-- ─── PAGE HERO ─────────────────────────────────────────────────── -->
   <!-- EDIT: drop a photo into /public/images/banners/metodologia.jpg to activate the image background -->
-  <!-- EDIT: drop a photo into /public/images/banners/metodologia.jpg to activate the image background -->
   <PageHero eyebrow="Metodología" image="/images/banners/metodologia.jpg">
     <h1 class="page-hero-title">Cómo construimos con las comunidades</h1>
     <p class="page-hero-sub">Nuestra práctica combina investigación-acción participativa, planeación territorial y pedagogía crítica.</p>
@@ -95,21 +94,28 @@ const enfoques = [
     </div>
 
     <!-- ─── FIVE STEPS ───────────────────────────────────────────────── -->
-
     <div class="steps-timeline">
       {pasos.map((paso) => (
-        <div class="step-node" tabindex="0">
+        <div
+          class="step-node"
+          tabindex="0"
+          data-title={paso.title}
+          data-desc={paso.desc}
+          data-color={paso.color}
+        >
           <div class="step-circle" style={`--sc: ${paso.color}`}>
             <Fragment set:html={paso.icon} />
           </div>
-          <div class="step-content">
-            <div class="step-label">{paso.title}</div>
-            <div class="step-tooltip">
-              <div class="step-tooltip-inner">{paso.desc}</div>
-            </div>
-          </div>
+          <div class="step-label">{paso.title}</div>
         </div>
       ))}
+    </div>
+
+    <!-- ─── SHARED DESCRIPTION PANEL ────────────────────────────────── -->
+    <div class="steps-panel" id="steps-panel">
+      <div class="steps-panel-inner" id="steps-panel-inner">
+        <p class="steps-panel-placeholder">Paso a paso de nuestro trabajo</p>
+      </div>
     </div>
 
   </div>
@@ -148,10 +154,9 @@ const enfoques = [
     align-items: flex-start;
     position: relative;
     margin-top: 56px;
-    padding-bottom: 16px;
   }
 
-  /* horizontal connecting line: runs between centers of first and last circles */
+  /* horizontal connecting line */
   .steps-timeline::before {
     content: '';
     position: absolute;
@@ -180,6 +185,7 @@ const enfoques = [
     position: relative;
     z-index: 1;
     outline: none;
+    cursor: pointer;
   }
 
   /* ── Circle ── */
@@ -193,7 +199,6 @@ const enfoques = [
     justify-content: center;
     box-shadow: 0 2px 16px rgba(0, 0, 0, 0.12);
     position: relative;
-    cursor: pointer;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
 
@@ -234,15 +239,7 @@ const enfoques = [
     stroke: #fff;
   }
 
-  /* ── Label + tooltip wrapper ── */
-  .step-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    position: relative; /* anchor for absolutely-positioned tooltip */
-  }
-
+  /* ── Label ── */
   .step-label {
     margin-top: 18px;
     font-size: 14px;
@@ -252,40 +249,63 @@ const enfoques = [
     color: var(--c-black);
     max-width: 120px;
     line-height: 1.35;
+    transition: color 0.2s ease;
   }
 
-  /* ── Tooltip — floats above content, grows upward ── */
-  .step-tooltip {
-    position: absolute;
-    bottom: 100%;       /* anchored at label top, expands upward */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 188px;
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
-    z-index: 100;
-    transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  .step-node:hover .step-label,
+  .step-node:focus-visible .step-label,
+  .step-node.active .step-label {
+    color: var(--sc);
   }
 
-  .step-tooltip-inner {
-    background: #fff;
+  /* ── Shared description panel ── */
+  .steps-panel {
+    margin-top: 28px;
     border-radius: 12px;
-    padding: 14px 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.09);
+    background: #fff;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
     border: 1px solid rgba(26, 20, 16, 0.07);
-    font-size: 13.5px;
-    line-height: 1.65;
+    border-left-width: 4px;
+    border-left-color: var(--panel-color, rgba(26, 20, 16, 0.10));
+    min-height: 96px;
+    display: flex;
+    align-items: center;
+    transition: border-left-color 0.3s ease;
+  }
+
+  .steps-panel-inner {
+    padding: 22px 28px;
+    width: 100%;
+    transition: opacity 0.15s ease;
+  }
+
+  .steps-panel-inner.fading {
+    opacity: 0;
+  }
+
+  .steps-panel-placeholder {
+    margin: 0;
+    font-size: 15px;
+    font-style: italic;
     color: var(--fg2);
-    margin-bottom: 10px;
+    opacity: 0.45;
     text-align: center;
   }
 
-  .step-node:hover .step-tooltip,
-  .step-node:focus-visible .step-tooltip,
-  .step-node.active .step-tooltip {
-    max-height: 300px;
-    opacity: 1;
+  .steps-panel-title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+    color: var(--c-black);
+    margin-bottom: 6px;
+  }
+
+  .steps-panel-desc {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--fg2);
+    font-weight: 300;
+    max-width: 780px;
   }
 
   /* ── Mobile: vertical stack ── */
@@ -302,9 +322,9 @@ const enfoques = [
 
     .step-node {
       flex-direction: row;
-      align-items: flex-start;
+      align-items: center;
       gap: 20px;
-      padding: 20px 0;
+      padding: 16px 0;
       border-top: 1px solid rgba(26, 20, 16, 0.08);
     }
 
@@ -330,11 +350,6 @@ const enfoques = [
       height: 32px;
     }
 
-    .step-content {
-      align-items: flex-start;
-      padding-top: 4px;
-    }
-
     .step-label {
       margin-top: 0;
       text-align: left;
@@ -342,32 +357,96 @@ const enfoques = [
       font-size: 15px;
     }
 
-    .step-tooltip {
-      /* back to normal flow on mobile so it expands within the list item */
-      position: static;
-      transform: none;
-      width: 100%;
-      max-width: none;
-    }
-
-    .step-tooltip-inner {
-      margin-top: 10px;
+    .steps-panel {
+      margin-top: 20px;
     }
   }
 </style>
 
 <script>
   const nodes = document.querySelectorAll<HTMLElement>('.step-node');
+  const panel = document.getElementById('steps-panel') as HTMLElement;
+  const panelInner = document.getElementById('steps-panel-inner') as HTMLElement;
+
+  let activeNode: HTMLElement | null = null;
+  let fadeTimeout: ReturnType<typeof setTimeout> | null = null;
+
+  function fadePanel(newContent: string, color: string) {
+    if (fadeTimeout) clearTimeout(fadeTimeout);
+    panelInner.classList.add('fading');
+    fadeTimeout = setTimeout(() => {
+      panelInner.innerHTML = newContent;
+      panel.style.setProperty('--panel-color', color);
+      panelInner.classList.remove('fading');
+      fadeTimeout = null;
+    }, 150);
+  }
+
+  function showDefault() {
+    fadePanel('<p class="steps-panel-placeholder">Paso a paso de nuestro trabajo</p>', 'rgba(26,20,16,0.10)');
+  }
+
+  function showStep(node: HTMLElement) {
+    const title = node.dataset.title ?? '';
+    const desc = node.dataset.desc ?? '';
+    const color = node.dataset.color ?? '#000';
+    fadePanel(
+      `<div class="steps-panel-title">${title}</div><div class="steps-panel-desc">${desc}</div>`,
+      color
+    );
+  }
+
   nodes.forEach(node => {
+    // Desktop: hover shows step, leave returns to active or default
+    node.addEventListener('mouseenter', () => {
+      showStep(node);
+    });
+
+    node.addEventListener('mouseleave', () => {
+      if (activeNode) {
+        showStep(activeNode);
+      } else {
+        showDefault();
+      }
+    });
+
+    // Click: toggle sticky active state
     node.addEventListener('click', (e) => {
       e.stopPropagation();
-      const wasActive = node.classList.contains('active');
-      nodes.forEach(n => n.classList.remove('active'));
-      if (!wasActive) node.classList.add('active');
+      const wasActive = activeNode === node;
+      if (activeNode) activeNode.classList.remove('active');
+      if (wasActive) {
+        activeNode = null;
+        showDefault();
+      } else {
+        node.classList.add('active');
+        activeNode = node;
+        showStep(node);
+      }
+    });
+
+    // Keyboard navigation
+    node.addEventListener('focus', () => {
+      showStep(node);
+    });
+
+    node.addEventListener('blur', () => {
+      setTimeout(() => {
+        if (activeNode) {
+          showStep(activeNode);
+        } else {
+          showDefault();
+        }
+      }, 100);
     });
   });
 
+  // Click outside deactivates
   document.addEventListener('click', () => {
-    nodes.forEach(n => n.classList.remove('active'));
+    if (activeNode) {
+      activeNode.classList.remove('active');
+      activeNode = null;
+      showDefault();
+    }
   });
 </script>

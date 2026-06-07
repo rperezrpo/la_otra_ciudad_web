@@ -40,39 +40,12 @@ const orgSchema = {
     </button>
   </section>
 
-  <!-- ─── STATS ─────────────────────────────────────────────────────── -->
-  <!-- EDIT: update numbers as the organization grows -->
-  {(() => {
-    // Two asymmetric brush-blob base shapes; transforms create the 4 variations
-    const A = 'M 10,60 C 5,36 28,12 68,9 C 108,6 158,20 178,40 C 196,58 186,78 158,84 C 130,90 72,88 38,78 C 14,70 14,80 10,60 Z';
-    const B = 'M 22,14 C 52,4 126,8 162,26 C 190,40 192,64 170,76 C 148,88 96,90 56,84 C 20,78 4,60 6,42 C 8,22 8,22 22,14 Z';
-    const stats: [string, string, string, string, string][] = [
-      ['1.035+', 'm² de espacio público transformado', 'var(--c-orange)', A, ''],
-      ['393',    'Plantas nativas sembradas',           'var(--c-teal)',   B, ''],
-      ['21',     'Talleres con comunidades',            'var(--c-cobalt)', A, 'scale(-1 1) translate(-200 0)'],
-      ['2',      'Premios internacionales',             'var(--c-pink)',   B, 'rotate(180 100 50)'],
-    ];
-    return (
-      <div id="hero-next" class="stats-strip">
-        {stats.map(([num, label, color, path, tf]) => (
-          <div class="stat-item">
-            <svg class="stat-blob" viewBox="0 0 200 100" aria-hidden="true">
-              <path fill={color} fill-opacity="0.13" d={path} transform={tf || undefined} />
-            </svg>
-            <div class="stat-num" style={`color: ${color};`}>{num}</div>
-            <div class="stat-label">{label}</div>
-          </div>
-        ))}
-      </div>
-    );
-  })()}
-
   <!-- ─── MISSION INTRO ─────────────────────────────────────────────── -->
-  <div class="section">
+  <div id="hero-next" class="section">
     <div class="two-col">
       <div>
         <span class="eyebrow">Nuestra misión</span>
-        <h2 class="section-title">Mejoramos la calidad de vida de comunidades urbanas y dignificamos los territorios que habitan</h2>
+        <h2 class="section-title">Construimos territorios dignos para quienes más lo necesitan</h2>
         <p class="section-body">
           Somos una corporación sin ánimo de lucro fundada en Medellín en 2021. Trabajamos mediante
           soluciones basadas en la naturaleza, diseño participativo de espacio público, intervenciones
@@ -94,6 +67,32 @@ const orgSchema = {
       </div>
     </div>
   </div>
+
+  <!-- ─── STATS ─────────────────────────────────────────────────────── -->
+  <!-- EDIT: update numbers as the organization grows -->
+  {(() => {
+    const A = 'M 10,60 C 5,36 28,12 68,9 C 108,6 158,20 178,40 C 196,58 186,78 158,84 C 130,90 72,88 38,78 C 14,70 14,80 10,60 Z';
+    const B = 'M 22,14 C 52,4 126,8 162,26 C 190,40 192,64 170,76 C 148,88 96,90 56,84 C 20,78 4,60 6,42 C 8,22 8,22 22,14 Z';
+    const stats: [string, string, string, string, string][] = [
+      ['1.035+', 'm² de espacio público transformado', 'var(--c-orange)', A, ''],
+      ['393',    'Plantas nativas sembradas',           'var(--c-teal)',   B, ''],
+      ['21',     'Talleres con comunidades',            'var(--c-cobalt)', A, 'scale(-1 1) translate(-200 0)'],
+      ['2',      'Premios internacionales',             'var(--c-pink)',   B, 'rotate(180 100 50)'],
+    ];
+    return (
+      <div class="stats-strip" style="background-image: linear-gradient(135deg, rgba(26,20,16,0.84) 0%, rgba(42,26,10,0.76) 55%, rgba(59,26,26,0.70) 100%), url('/images/projects/alto_flores/alto_flores3.jpg'); background-size: cover; background-position: center;">
+        {stats.map(([num, label, color, path, tf]) => (
+          <div class="stat-item">
+            <svg class="stat-blob" viewBox="0 0 200 100" aria-hidden="true">
+              <path fill={color} fill-opacity="0.22" d={path} transform={tf || undefined} />
+            </svg>
+            <div class="stat-num" style={`color: ${color};`}>{num}</div>
+            <div class="stat-label">{label}</div>
+          </div>
+        ))}
+      </div>
+    );
+  })()}
 
   <!-- ─── FEATURED PROJECTS ─────────────────────────────────────────── -->
   <div class="section-full section-warm" style="padding: 80px 0;">
@@ -285,7 +284,7 @@ const orgSchema = {
   <!-- ─── DONATE CTA ────────────────────────────────────────────────── -->
   <div class="section-full section-gradient" style="padding: 96px 48px; text-align: center;">
     <span class="eyebrow-light">Sé parte del cambio</span>
-    <h2 style="font-family: var(--font-display); font-variation-settings: 'opsz' 144, 'SOFT' 30, 'WONK' 0; font-size: clamp(36px, 5vw, 60px); font-weight: 400; line-height: 1.1; letter-spacing: -1.2px; color: #fff; white-space: nowrap; margin: 0 auto 20px;">
+    <h2 style="font-family: var(--font-display); font-variation-settings: 'opsz' 144, 'SOFT' 30, 'WONK' 0; font-size: clamp(36px, 5vw, 60px); font-weight: 400; line-height: 1.1; letter-spacing: -1.2px; color: #fff; margin: 0 auto 20px;">
       Tu donación construye ciudad
     </h2>
     <p style="font-size: 18px; font-weight: 300; color: rgba(255,255,255,0.8); max-width: 480px; margin: 0 auto 36px; line-height: 1.5;">
@@ -297,7 +296,7 @@ const orgSchema = {
 
 <script>
   (() => {
-    const strip = document.getElementById('hero-next');
+    const strip = document.querySelector('.stats-strip');
     if (!strip) return;
 
     // Parse numeric value from strings like "1.035+", "393", "21", "2"
