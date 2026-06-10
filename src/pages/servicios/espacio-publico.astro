@@ -1,4 +1,4 @@
----
+﻿---
 import BaseLayout from '../../components/layout/BaseLayout.astro';
 import PageHero from '../../components/layout/PageHero.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
@@ -10,7 +10,7 @@ const projects = await getProjectsByCategory('Espacio Público');
 <BaseLayout
   title="Espacio Público"
   description="Diseñamos espacios públicos que invitan a quedarse: lugares activos, seguros y disfrutables, con identidad propia, que la gente elige habitar y que dinamizan la vida social y económica del entorno."
-  pageColor="cobalt"
+  pageColor="cobalto"
 >
   <PageHero type="banner" eyebrow="Servicios · Diseño de" image="/images/banners/espacios_publicos.jpg">
     <h1 class="page-hero-title">Espacio Público</h1>
@@ -67,14 +67,14 @@ const projects = await getProjectsByCategory('Espacio Público');
   )}
 
   <!-- ─── CTA ────────────────────────────────────────────────────────────── -->
-  <div class="section-full" style="background: var(--c-cobalt); padding: 72px 48px; text-align: center;">
+  <div class="section-full" style="background: var(--c-cobalto); padding: 72px 48px; text-align: center;">
     <span style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: rgba(255,255,255,0.6);">
       ¿Tienes un espacio que transformar?
     </span>
     <h2 style="font-family: var(--font-display); font-variation-settings: 'opsz' 144, 'SOFT' 30, 'WONK' 0; font-size: clamp(28px, 4vw, 48px); font-weight: 400; letter-spacing: -1px; line-height: 1.1; color: #fff; max-width: 560px; margin: 16px auto 24px;">
       Conversemos sobre tu territorio
     </h2>
-    <a href="/contacto" class="btn-hero-primary" style="background: #fff; color: var(--c-cobalt);">Escríbenos →</a>
+    <a href="/contacto" class="btn-hero-primary" style="background: #fff; color: var(--c-cobalto);">Escríbenos →</a>
   </div>
 
 </BaseLayout>

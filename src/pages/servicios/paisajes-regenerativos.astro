@@ -1,4 +1,4 @@
----
+﻿---
 import BaseLayout from '../../components/layout/BaseLayout.astro';
 import PageHero from '../../components/layout/PageHero.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
@@ -10,7 +10,7 @@ const projects = await getProjectsByCategory('Paisajes Regenerativos');
 <BaseLayout
   title="Paisajes Regenerativos"
   description="Transformamos espacios verdes en oasis de vida y biodiversidad que son resilientes a climas extremos y requieren menor mantenimiento que un paisaje artificial."
-  pageColor="teal"
+  pageColor="aguamarina"
 >
   <PageHero type="banner" eyebrow="Servicios · Diseño de" image="/images/banners/paisajes_regenerativos.jpg">
     <h1 class="page-hero-title">Paisajes Regenerativos</h1>
@@ -68,14 +68,14 @@ const projects = await getProjectsByCategory('Paisajes Regenerativos');
   )}
 
   <!-- ─── CTA ────────────────────────────────────────────────────────────── -->
-  <div class="section-full" style="background: var(--c-teal); padding: 72px 48px; text-align: center;">
+  <div class="section-full" style="background: var(--c-aguamarina); padding: 72px 48px; text-align: center;">
     <span style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: rgba(255,255,255,0.6);">
       ¿Tienes un espacio verde que transformar?
     </span>
     <h2 style="font-family: var(--font-display); font-variation-settings: 'opsz' 144, 'SOFT' 30, 'WONK' 0; font-size: clamp(28px, 4vw, 48px); font-weight: 400; letter-spacing: -1px; line-height: 1.1; color: #fff; max-width: 560px; margin: 16px auto 24px;">
       Conversemos sobre tu territorio
     </h2>
-    <a href="/contacto" class="btn-hero-primary" style="background: #fff; color: var(--c-teal);">Escríbenos →</a>
+    <a href="/contacto" class="btn-hero-primary" style="background: #fff; color: var(--c-aguamarina);">Escríbenos →</a>
   </div>
 
 </BaseLayout>

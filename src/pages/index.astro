@@ -1,6 +1,7 @@
----
+﻿---
 import BaseLayout from '../components/layout/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import FlowerDiagram from '../components/FlowerDiagram.astro';
 import { getFeaturedProjects } from '../lib/sanity';
 import { Image } from 'astro:assets';
 import sanRafael2 from '../../public/images/projects/fotos_intervenciones/san_rafael_2.jpg';
@@ -25,7 +26,7 @@ const orgSchema = {
   title="Inicio"
   description="Corporación La Otra Ciudad — co-creamos ciudades más biodiversas, justas y saludables junto a comunidades de Medellín, Colombia."
   jsonLd={orgSchema}
-  pageColor="cobalt"
+  pageColor="cobalto"
 >
 
   <!-- ─── HERO ──────────────────────────────────────────────────────── -->
@@ -75,9 +76,9 @@ const orgSchema = {
     const B = 'M 22,14 C 52,4 126,8 162,26 C 190,40 192,64 170,76 C 148,88 96,90 56,84 C 20,78 4,60 6,42 C 8,22 8,22 22,14 Z';
     const stats: [string, string, string, string, string][] = [
       ['1.035+', 'm² de espacio público transformado', 'var(--c-orange)', A, ''],
-      ['393',    'Plantas nativas sembradas',           'var(--c-teal)',   B, ''],
-      ['21',     'Talleres con comunidades',            'var(--c-cobalt)', A, 'scale(-1 1) translate(-200 0)'],
-      ['2',      'Premios internacionales',             'var(--c-pink)',   B, 'rotate(180 100 50)'],
+      ['393',    'Plantas nativas sembradas',           'var(--c-aguamarina)',   B, ''],
+      ['21',     'Talleres con comunidades',            'var(--c-cobalto)', A, 'scale(-1 1) translate(-200 0)'],
+      ['2',      'Premios internacionales',             'var(--c-rosado)',   B, 'rotate(180 100 50)'],
     ];
     return (
       <div class="stats-strip" style="background-image: linear-gradient(135deg, rgba(26,20,16,0.84) 0%, rgba(42,26,10,0.76) 55%, rgba(59,26,26,0.70) 100%), url('/images/projects/alto_flores/alto_flores3.jpg'); background-size: cover; background-position: center;">
@@ -255,29 +256,29 @@ const orgSchema = {
   <!-- ─── METHODOLOGY PREVIEW ───────────────────────────────────────── -->
   <div class="section">
     <span class="eyebrow">Cómo trabajamos</span>
-    <div class="two-col" style="gap: 64px; margin-top: 8px; align-items: start;">
-      <h2 class="section-title">Un proceso centrado en la comunidad</h2>
+    <h2 class="section-title">Un proceso centrado en la comunidad</h2>
+
+    <div class="two-col" style="gap: 72px; align-items: center; margin-top: 32px;">
+
+      <!-- Columna izquierda: diagrama -->
+      <div>
+        <FlowerDiagram />
+      </div>
+
+      <!-- Columna derecha: párrafo -->
       <div>
         <p class="section-body" style="margin-top: 0;">
-          Nuestra metodología parte del reconocimiento de los saberes populares como base para la
-          transformación social. Combinamos aprendizaje basado en proyectos, investigación de impacto
-           y formación ciudadana.
+          En La Otra Ciudad creemos que transformar una ciudad empieza por mirarla como lo que es:
+          un ecosistema vivo, donde las personas, los barrios y la naturaleza forman parte de un mismo
+          tejido. Desde ahí trabajamos, no para imponer soluciones, sino para regenerar ese tejido
+          junto a quienes lo habitan.
         </p>
-        <div class="feature-band">
-          {[
-            ['01', 'Mapear',      'Procesos de diagnóstico participativo con la comunidad'],
-            ['02', 'Co-crear',   'Talleres de co-diseño y co-creación de soluciones'],
-            ['03', 'Implementar','Implementación participativa con acompañamiento técnico'],
-          ].map(([n, t, d]) => (
-            <div class="feature-item">
-              <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.6px; color: var(--c-teal); margin-bottom: 6px;">{n}</div>
-              <div class="feature-title">{t}</div>
-              <div class="feature-desc">{d}</div>
-            </div>
-          ))}
-        </div>
-        <a href="/metodologia" class="btn-outline" style="margin-top: 28px;">Ver metodología completa →</a>
+        <p class="section-body">
+          Los cuatro valores que guían nuestro diseño no son ideas sueltas, sino las piezas de una
+          misma forma de entender la ciudad. Haz click en el diagrama y descubre más sobre ellos.
+        </p>
       </div>
+
     </div>
   </div>
 

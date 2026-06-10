@@ -1,4 +1,4 @@
----
+﻿---
 const pathname = Astro.url.pathname;
 
 // To add or rename nav links, edit this array.
@@ -6,20 +6,20 @@ const pathname = Astro.url.pathname;
 // indented sub-links in the mobile drawer.
 const links = [
   { href: '/quienes-somos', label: 'Quiénes Somos', color: 'orange', activeClass: 'active-orange' },
-  { href: '/proyectos',     label: 'Proyectos',      color: 'pink',   activeClass: 'active-pink'   },
-  { href: '/metodologia',   label: 'Metodología',    color: 'cobalt', activeClass: 'active-cobalt' },
+  { href: '/proyectos',     label: 'Proyectos',      color: 'rosado',   activeClass: 'active-rosado'   },
+  { href: '/metodologia',   label: 'Metodología',    color: 'cobalto', activeClass: 'active-cobalto' },
   {
     href: '/servicios',
     label: 'Servicios',
-    color: 'purple',
-    activeClass: 'active-purple',
+    color: 'violeta',
+    activeClass: 'active-violeta',
     children: [
       { href: '/servicios/paisajes-regenerativos',      label: 'Paisajes Regenerativos'      },
       { href: '/servicios/espacio-publico',             label: 'Espacio Público'             },
       { href: '/servicios/acompanamiento-comunitario',  label: 'Acompañamiento Comunitario'  },
     ],
   },
-  { href: '/contacto',      label: 'Contacto',       color: 'teal',   activeClass: 'active-teal'   },
+  { href: '/contacto',      label: 'Contacto',       color: 'aguamarina',   activeClass: 'active-aguamarina'   },
 ];
 
 function isActive(href: string) {
@@ -31,7 +31,7 @@ function isActive(href: string) {
 <nav class="site-nav">
   <a href="/" class="nav-brand">
     <img
-      src="/images/logo/logo_completo_horizontal_color_letraNegra.svg"
+      src="/images/logo/logo_sinBordes_horizontal_color_letraNegra.svg"
       alt="La Otra Ciudad"
       style="height: 28px; width: auto;"
       onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';"
@@ -219,14 +219,14 @@ function isActive(href: string) {
   }
   .nav-dropdown-item:hover {
     background: rgba(139, 92, 246, 0.10);
-    color: var(--c-purple);
+    color: var(--c-violeta);
   }
   .nav-dropdown-item--active {
-    background: var(--c-purple);
+    background: var(--c-violeta);
     color: #fff;
   }
   .nav-dropdown-item--active:hover {
-    background: var(--c-purple);
+    background: var(--c-violeta);
     color: #fff;
     opacity: 0.88;
   }
@@ -266,18 +266,18 @@ function isActive(href: string) {
     transition: background 120ms;
   }
   .nav-drawer-link:hover { background: var(--c-glass-dark); }
-  .nav-drawer-link[data-color="orange"]:hover { background: rgba(96, 157, 146, 0.12); color: var(--c-teal); }
-  .nav-drawer-link[data-color="pink"]:hover   { background: rgba(230, 34, 79, 0.12);  color: var(--c-pink); }
-  .nav-drawer-link[data-color="cobalt"]:hover { background: rgba(59, 107, 220, 0.12); color: var(--c-cobalt); }
-  .nav-drawer-link[data-color="teal"]:hover   { background: rgba(226, 97, 29, 0.12);  color: var(--c-orange); }
-  .nav-drawer-link[data-color="purple"]:hover { background: rgba(139, 92, 246, 0.12); color: var(--c-purple); }
+  .nav-drawer-link[data-color="orange"]:hover { background: rgba(96, 157, 146, 0.12); color: var(--c-aguamarina); }
+  .nav-drawer-link[data-color="rosado"]:hover   { background: rgba(230, 34, 79, 0.12);  color: var(--c-rosado); }
+  .nav-drawer-link[data-color="cobalto"]:hover { background: rgba(59, 107, 220, 0.12); color: var(--c-cobalto); }
+  .nav-drawer-link[data-color="aguamarina"]:hover   { background: rgba(226, 97, 29, 0.12);  color: var(--c-orange); }
+  .nav-drawer-link[data-color="violeta"]:hover { background: rgba(139, 92, 246, 0.12); color: var(--c-violeta); }
 
   .nav-drawer-link.active { color: #fff; }
-  .nav-drawer-link.active-orange { background: var(--c-teal); }
-  .nav-drawer-link.active-pink   { background: var(--c-pink); }
-  .nav-drawer-link.active-cobalt { background: var(--c-cobalt); }
-  .nav-drawer-link.active-teal   { background: var(--c-orange); }
-  .nav-drawer-link.active-purple { background: var(--c-purple); }
+  .nav-drawer-link.active-orange { background: var(--c-aguamarina); }
+  .nav-drawer-link.active-rosado   { background: var(--c-rosado); }
+  .nav-drawer-link.active-cobalto { background: var(--c-cobalto); }
+  .nav-drawer-link.active-aguamarina   { background: var(--c-orange); }
+  .nav-drawer-link.active-violeta { background: var(--c-violeta); }
 
   /* Sub-links in drawer (under Servicios) */
   .nav-drawer-sublink {
@@ -298,10 +298,10 @@ function isActive(href: string) {
   }
   .nav-drawer-sublink:hover {
     background: rgba(139, 92, 246, 0.10);
-    color: var(--c-purple);
+    color: var(--c-violeta);
   }
   .nav-drawer-sublink--active {
-    color: var(--c-purple);
+    color: var(--c-violeta);
     font-weight: 500;
   }
 
@@ -336,7 +336,7 @@ function isActive(href: string) {
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: var(--c-teal);
+    background: var(--c-aguamarina);
     color: #fff;
     font-size: 16px;
     font-weight: 600;

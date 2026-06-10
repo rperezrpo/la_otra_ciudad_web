@@ -1,4 +1,4 @@
----
+﻿---
 import BaseLayout from '../../components/layout/BaseLayout.astro';
 import ProjectDetail from '../../components/ProjectDetail.astro';
 import { getProjectSlugs, getProject } from '../../lib/sanity';
@@ -16,12 +16,12 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props;
 
-const CATEGORY_COLOR: Record<string, 'teal' | 'cobalt' | 'purple'> = {
-  'Paisajes Regenerativos':      'teal',
-  'Espacio Público':             'cobalt',
-  'Acompañamiento Comunitario':  'purple',
+const CATEGORY_COLOR: Record<string, 'aguamarina' | 'cobalto' | 'violeta'> = {
+  'Paisajes Regenerativos':      'aguamarina',
+  'Espacio Público':             'cobalto',
+  'Acompañamiento Comunitario':  'violeta',
 };
-const projectColor = CATEGORY_COLOR[project.category] ?? 'teal';
+const projectColor = CATEGORY_COLOR[project.category] ?? 'aguamarina';
 
 const projectSchema = {
   '@context': 'https://schema.org',

@@ -1,0 +1,204 @@
+---
+/* Diagrama de flor — cuatro ejes temáticos de La Otra Ciudad */
+---
+
+<a href="/quienes-somos#valores" class="flower-wrap" aria-label="Ver nuestros valores">
+  <div class="flower">
+
+    <!-- Pétalo superior: Diseño regenerativo — aguamarina -->
+    <div class="petal petal--top" style="background: rgba(96,157,146,0.30);">
+      <span class="petal-label petal-label--top">Diseño regenerativo</span>
+    </div>
+
+    <!-- Pétalo derecho: Co-creación — rosado -->
+    <div class="petal petal--right" style="background: rgba(230,34,79,0.30);">
+      <span class="petal-label petal-label--right">Co-creación</span>
+    </div>
+
+    <!-- Pétalo inferior: Bienestar sistémico — violeta -->
+    <div class="petal petal--bottom" style="background: rgba(139,92,246,0.28);">
+      <span class="petal-label petal-label--bottom">Bienestar sistémico</span>
+    </div>
+
+    <!-- Pétalo izquierdo: Derecho a la ciudad — naranja -->
+    <div class="petal petal--left" style="background: rgba(226,97,29,0.30);">
+      <span class="petal-label petal-label--left">Derecho a la ciudad</span>
+    </div>
+
+    <!-- Centro -->
+    <div class="flower-center">
+      <img
+        src="/images/logo/logo_completo_cuadrado_color_letraNegra.svg"
+        alt="La Otra Ciudad"
+        class="flower-logo"
+      />
+    </div>
+
+  </div>
+</a>
+
+<style>
+  .flower-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 0 0;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .flower {
+    position: relative;
+    width: 380px;
+    height: 380px;
+    flex-shrink: 0;
+  }
+
+  /* ── Pétalo base ─────────────────────────────────────── */
+  .petal {
+    position: absolute;
+    width: 224px;
+    height: 224px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.30s ease, filter 0.30s ease;
+    will-change: transform;
+  }
+
+  /* ── Posiciones + transform-origin para crecer hacia afuera ── */
+  .petal--top {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    transform-origin: center bottom;
+  }
+  .petal--right {
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    transform-origin: left center;
+  }
+  .petal--bottom {
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    transform-origin: center top;
+  }
+  .petal--left {
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    transform-origin: right center;
+  }
+
+  /* ── Hover: solo el pétalo bajo el cursor crece hacia afuera ── */
+  .petal--top:hover    { transform: translateX(-50%) scale(1.10); filter: brightness(1.08); z-index: 5; }
+  .petal--right:hover  { transform: translateY(-50%) scale(1.10); filter: brightness(1.08); z-index: 5; }
+  .petal--bottom:hover { transform: translateX(-50%) scale(1.10); filter: brightness(1.08); z-index: 5; }
+  .petal--left:hover   { transform: translateY(-50%) scale(1.10); filter: brightness(1.08); z-index: 5; }
+
+  /* ── Texto de cada pétalo ────────────────────────────── */
+  .petal-label {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 1.25;
+    text-align: center;
+    color: var(--c-black);
+    pointer-events: none;
+    position: absolute;
+    transition: opacity 0.30s ease;
+  }
+
+  /* Top: centrado en la mitad exterior del pétalo */
+  .petal-label--top {
+    top: 42px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 116px;
+  }
+
+  /* Bottom: centrado en la mitad exterior del pétalo */
+  .petal-label--bottom {
+    bottom: 42px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 116px;
+  }
+
+  /* Right: texto horizontal en la mitad exterior del pétalo */
+  .petal-label--right {
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 80px;
+    text-align: center;
+  }
+
+  /* Left: texto horizontal en la mitad exterior del pétalo */
+  .petal-label--left {
+    left: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 80px;
+    text-align: center;
+  }
+
+  /* ── Centro ──────────────────────────────────────────── */
+  .flower-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 146px;
+    height: 146px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 2.5px solid rgba(26, 20, 16, 0.10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+    transition: transform 0.30s ease, box-shadow 0.30s ease;
+  }
+
+  .flower-center:hover {
+    transform: translate(-50%, -50%) scale(1.10);
+    box-shadow: 0 4px 28px rgba(0,0,0,0.14);
+  }
+
+  .flower-logo {
+    width: 100px;
+    height: auto;
+    display: block;
+  }
+
+  /* ── Responsive ──────────────────────────────────────── */
+  @media (max-width: 520px) {
+    .flower {
+      width: 320px;
+      height: 320px;
+    }
+    .petal {
+      width: 190px;
+      height: 190px;
+    }
+    .flower-center {
+      width: 124px;
+      height: 124px;
+    }
+    .flower-logo {
+      width: 82px;
+    }
+    .petal-label {
+      font-size: 11px;
+    }
+    .petal-label--top    { top: 36px; width: 100px; }
+    .petal-label--bottom { bottom: 36px; width: 100px; }
+    .petal-label--right  { right: 4px; width: 68px; }
+    .petal-label--left   { left: 4px;  width: 68px; }
+  }
+</style>
