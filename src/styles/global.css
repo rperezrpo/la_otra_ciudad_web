@@ -1,17 +1,17 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
 /* ─── TAILWIND THEME ─────────────────────────────────────────────────────── */
 /* Tailwind v4 reads design tokens from CSS. These reproduce the tokens that  */
-/* used to live in tailwind.config.mjs so utility classes (bg-loc-teal,       */
+/* used to live in tailwind.config.mjs so utility classes (bg-loc-aguamarina,       */
 /* font-display, tracking-h1, rounded-pill, max-w-content, …) keep working.   */
 
 @theme {
   /* Brand palette → bg-loc-*, text-loc-*, border-loc-* */
   --color-loc-orange:  #e2611d;
-  --color-loc-teal:    #609d92;
-  --color-loc-cobalt:  #3b6bdc;
-  --color-loc-pink:    #e6224f;
+  --color-loc-aguamarina:    #609d92;
+  --color-loc-cobalto:  #3b6bdc;
+  --color-loc-rosado:    #e6224f;
   --color-loc-black:   #1a1410;
   --color-loc-white:   #f7f3ee;
   --color-loc-bg2:     #f5f4f0;
@@ -100,17 +100,17 @@
 :root {
   /* Brand palette */
   --c-orange:      #e2611d;
-  --c-teal:        #609d92;
-  --c-cobalt:      #3b6bdc;
-  --c-pink:        #e6224f;
-  --c-purple:      #8b5cf6;
+  --c-aguamarina:        #609d92;
+  --c-cobalto:      #3b6bdc;
+  --c-rosado:        #e6224f;
+  --c-violeta:      #8b5cf6;
 
   /* Dark variants (gradient endpoints, also usable standalone) */
   --c-orange-dark: #7a3408;
-  --c-teal-dark:   #0e5c4a;
-  --c-cobalt-dark: #162557;
-  --c-pink-dark:   #6a0e38;
-  --c-purple-dark: #4c1d95;
+  --c-aguamarina-dark:   #0e5c4a;
+  --c-cobalto-dark: #162557;
+  --c-rosado-dark:   #6a0e38;
+  --c-violeta-dark: #4c1d95;
 
   /* Base surfaces */
   --c-black:       #1a1410;   /* warm off-black — use instead of #000 */
@@ -129,10 +129,10 @@
 
   /* Gradients — single-color (default → dark) */
   --c-grad-orange: linear-gradient(to bottom, #e2611d, #7a3408);
-  --c-grad-teal:   linear-gradient(to bottom, #609d92, #0e5c4a);
-  --c-grad-cobalt: linear-gradient(to bottom, #3b6bdc, #162557);
-  --c-grad-pink:   linear-gradient(to bottom, #e6224f, #6a0e38);
-  --c-grad-purple: linear-gradient(to bottom, #8b5cf6, #4c1d95);
+  --c-grad-aguamarina:   linear-gradient(to bottom, #609d92, #0e5c4a);
+  --c-grad-cobalto: linear-gradient(to bottom, #3b6bdc, #162557);
+  --c-grad-rosado:   linear-gradient(to bottom, #e6224f, #6a0e38);
+  --c-grad-violeta: linear-gradient(to bottom, #8b5cf6, #4c1d95);
   --c-grad-black:  linear-gradient(to bottom, #1a1410, #000000);
   --c-grad-white:  linear-gradient(to bottom, #f7f3ee, #c4b9ac);
 
@@ -526,6 +526,12 @@
     color: var(--fg2);
   }
 
+  .card-grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
   .card-grid-3 {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -785,7 +791,7 @@
   /* Fraunces for editorial moments — not for long body copy                  */
 
   .quote-block {
-    border-left: 3px solid var(--c-teal);
+    border-left: 3px solid var(--c-aguamarina);
     padding: 12px 24px;
     font-family: var(--font-display);
     font-variation-settings: 'opsz' 72, 'SOFT' 20, 'WONK' 0;
@@ -808,12 +814,12 @@
   }
 
   .status-activo {
-    color: var(--c-cobalt);
+    color: var(--c-cobalto);
     background: rgba(59, 107, 220, 0.12);
   }
 
   .status-completado {
-    color: var(--c-pink);
+    color: var(--c-rosado);
     background: rgba(230, 34, 79, 0.10);
   }
 
@@ -875,9 +881,9 @@
   .filter-tab:hover { border-color: var(--c-black); }
 
   .filter-tab[data-active="true"] {
-    background: var(--c-teal);
+    background: var(--c-aguamarina);
     color: #fff;
-    border-color: var(--c-teal);
+    border-color: var(--c-aguamarina);
   }
 
   /* ─── FORMS ────────────────────────────────────────────────────────────── */
@@ -915,7 +921,7 @@
 
   .form-input:focus,
   .form-textarea:focus,
-  .form-select:focus { border-color: var(--c-teal); }
+  .form-select:focus { border-color: var(--c-aguamarina); }
 
   .form-textarea { resize: vertical; min-height: 120px; }
 
@@ -969,25 +975,25 @@
 
   .nav-link:hover { background: var(--c-glass-dark); }
 
-  .nav-link[data-color="orange"]:hover { background: rgba(96, 157, 146, 0.12); color: var(--c-teal); }
-  .nav-link[data-color="pink"]:hover   { background: rgba(230, 34, 79, 0.12);  color: var(--c-pink); }
-  .nav-link[data-color="cobalt"]:hover { background: rgba(59, 107, 220, 0.12); color: var(--c-cobalt); }
-  .nav-link[data-color="teal"]:hover   { background: rgba(226, 97, 29, 0.12);  color: var(--c-orange); }
-  .nav-link[data-color="purple"]:hover { background: rgba(139, 92, 246, 0.12); color: var(--c-purple); }
+  .nav-link[data-color="orange"]:hover { background: rgba(96, 157, 146, 0.12); color: var(--c-aguamarina); }
+  .nav-link[data-color="rosado"]:hover   { background: rgba(230, 34, 79, 0.12);  color: var(--c-rosado); }
+  .nav-link[data-color="cobalto"]:hover { background: rgba(59, 107, 220, 0.12); color: var(--c-cobalto); }
+  .nav-link[data-color="aguamarina"]:hover   { background: rgba(226, 97, 29, 0.12);  color: var(--c-orange); }
+  .nav-link[data-color="violeta"]:hover { background: rgba(139, 92, 246, 0.12); color: var(--c-violeta); }
 
   .nav-link.active { color: #fff; }
-  .nav-link.active-orange { background: var(--c-teal); }
-  .nav-link.active-pink   { background: var(--c-pink); }
-  .nav-link.active-cobalt { background: var(--c-cobalt); }
-  .nav-link.active-teal   { background: var(--c-orange); }
-  .nav-link.active-purple { background: var(--c-purple); }
+  .nav-link.active-orange { background: var(--c-aguamarina); }
+  .nav-link.active-rosado   { background: var(--c-rosado); }
+  .nav-link.active-cobalto { background: var(--c-cobalto); }
+  .nav-link.active-aguamarina   { background: var(--c-orange); }
+  .nav-link.active-violeta { background: var(--c-violeta); }
 
   .nav-cta {
     margin-left: 16px;
     font-size: 14px;
     font-weight: 700;
     padding: 9px 20px;
-    background: var(--c-teal);
+    background: var(--c-aguamarina);
     color: #fff;
     border: none;
     border-radius: 50px;
@@ -1029,6 +1035,7 @@
   .section { padding: 32px 24px; }
   .section-full { padding: 64px 24px; }
   .two-col { grid-template-columns: 1fr; gap: 40px; }
+  .card-grid-4 { grid-template-columns: repeat(2, 1fr); }
   .card-grid-3 { grid-template-columns: 1fr; }
   .card-grid-2 { grid-template-columns: 1fr; }
   .team-grid { grid-template-columns: repeat(2, 1fr); }

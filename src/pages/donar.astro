@@ -1,4 +1,4 @@
----
+﻿---
 import BaseLayout from '../components/layout/BaseLayout.astro';
 
 // EDIT: fixed donation amounts and impact labels, per currency.
@@ -61,13 +61,13 @@ const whyDonate = [
 <BaseLayout
   title="Donar"
   description="Tu aporte transforma territorios. El 100% de las donaciones va directamente a nuestros programas."
-  pageColor="teal"
+  pageColor="aguamarina"
 >
 
   <!-- ─── HERO ──────────────────────────────────────────────────────── -->
   <!-- EDIT: drop a photo into /public/images/banners/donar.jpg to activate the image background -->
-  <!-- Note: donar uses its own teal hero, not PageHero — keeping it distinct intentionally -->
-  <div style="background: var(--c-teal); padding: 80px 48px; text-align: center;">
+  <!-- Note: donar uses its own aguamarina hero, not PageHero — keeping it distinct intentionally -->
+  <div style="background: var(--c-aguamarina); padding: 80px 48px; text-align: center;">
     <span style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: rgba(255,255,255,0.7); display: block; margin-bottom: 24px;">Donar</span>
     <h1 style="font-family: var(--font-display); font-variation-settings: 'opsz' 144, 'SOFT' 40, 'WONK' 0; font-size: clamp(40px, 6vw, 72px); font-weight: 400; line-height: 1.0; letter-spacing: -1.5px; color: #fff; max-width: 640px; margin: 0 auto 20px;">
       Tu aporte transforma territorios
@@ -90,7 +90,7 @@ const whyDonate = [
             <button
               class="currency-btn"
               data-currency={code}
-              style={`flex: 1; padding: 12px; border-radius: 8px; border: 2px solid ${i === 0 ? 'var(--c-teal)' : 'rgba(26,20,16,0.15)'}; background: ${i === 0 ? 'rgba(96,157,146,0.1)' : 'var(--c-white-pure)'}; color: ${i === 0 ? 'var(--c-teal)' : 'var(--c-black)'}; font-family: var(--font-sans); font-size: 15px; font-weight: ${i === 0 ? '600' : '400'}; cursor: pointer;`}
+              style={`flex: 1; padding: 12px; border-radius: 8px; border: 2px solid ${i === 0 ? 'var(--c-aguamarina)' : 'rgba(26,20,16,0.15)'}; background: ${i === 0 ? 'rgba(96,157,146,0.1)' : 'var(--c-white-pure)'}; color: ${i === 0 ? 'var(--c-aguamarina)' : 'var(--c-black)'}; font-family: var(--font-sans); font-size: 15px; font-weight: ${i === 0 ? '600' : '400'}; cursor: pointer;`}
             >
               {code}{i > 0 ? '*' : ''}
             </button>
@@ -98,7 +98,7 @@ const whyDonate = [
         </div>
 
         <!-- Error banner (shown when redirected back from /api/donate with ?error=) -->
-        <div id="error-banner" style="display:none; background: rgba(230,34,79,0.08); border: 1px solid rgba(230,34,79,0.25); border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; font-size: 14px; color: var(--c-pink); line-height: 1.5;"></div>
+        <div id="error-banner" style="display:none; background: rgba(230,34,79,0.08); border: 1px solid rgba(230,34,79,0.25); border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; font-size: 14px; color: var(--c-rosado); line-height: 1.5;"></div>
 
         <!-- Amount presets (rebuilt client-side when currency changes) -->
         <span class="eyebrow">Elige un monto</span>
@@ -151,7 +151,7 @@ const whyDonate = [
         <div style="display: flex; flex-direction: column; gap: 0; margin-top: 32px;">
           {whyDonate.map(({ stat, desc }) => (
             <div style="display: flex; gap: 20px; padding: 20px 0; border-bottom: 1px solid rgba(26,20,16,0.08); align-items: flex-start;">
-              <div style="font-family: var(--font-display); font-variation-settings: 'opsz' 72, 'SOFT' 20, 'WONK' 0; font-size: 28px; font-weight: 400; color: var(--c-teal); min-width: 100; line-height: 1;">{stat}</div>
+              <div style="font-family: var(--font-display); font-variation-settings: 'opsz' 72, 'SOFT' 20, 'WONK' 0; font-size: 28px; font-weight: 400; color: var(--c-aguamarina); min-width: 100; line-height: 1;">{stat}</div>
               <div style="font-size: 15px; font-weight: 300; line-height: 1.5; color: var(--fg2); padding-top: 4px;">{desc}</div>
             </div>
           ))}
@@ -201,9 +201,9 @@ const whyDonate = [
   function paintAmountButtons() {
     amountGrid.querySelectorAll<HTMLButtonElement>('.amount-btn').forEach((btn) => {
       const isSel = Number(btn.dataset.amount) === selectedAmount && customInput.value === '';
-      btn.style.borderColor = isSel ? 'var(--c-teal)' : 'rgba(26,20,16,0.12)';
+      btn.style.borderColor = isSel ? 'var(--c-aguamarina)' : 'rgba(26,20,16,0.12)';
       btn.style.background = isSel ? 'rgba(96,157,146,0.1)' : 'var(--c-white-pure)';
-      btn.style.color = isSel ? 'var(--c-teal)' : 'var(--c-black)';
+      btn.style.color = isSel ? 'var(--c-aguamarina)' : 'var(--c-black)';
     });
   }
 
@@ -235,9 +235,9 @@ const whyDonate = [
     customInput.value = '';
     currencyBtns.forEach((b) => {
       const active = b.dataset.currency === code;
-      b.style.borderColor = active ? 'var(--c-teal)' : 'rgba(26,20,16,0.15)';
+      b.style.borderColor = active ? 'var(--c-aguamarina)' : 'rgba(26,20,16,0.15)';
       b.style.background = active ? 'rgba(96,157,146,0.1)' : 'var(--c-white-pure)';
-      b.style.color = active ? 'var(--c-teal)' : 'var(--c-black)';
+      b.style.color = active ? 'var(--c-aguamarina)' : 'var(--c-black)';
       b.style.fontWeight = active ? '600' : '400';
     });
     buildAmountGrid();

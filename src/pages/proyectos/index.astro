@@ -1,4 +1,4 @@
----
+﻿---
 import BaseLayout from '../../components/layout/BaseLayout.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 import PageHero from '../../components/layout/PageHero.astro';
@@ -17,7 +17,7 @@ const SERVICE_CATEGORIES = [
 <BaseLayout
   title="Proyectos"
   description="Un recorrido por los proyectos de La Otra Ciudad en el territorio."
-  pageColor="pink"
+  pageColor="rosado"
 >
 
   <!-- ─── PAGE HERO ─────────────────────────────────────────────────── -->
@@ -33,9 +33,9 @@ const SERVICE_CATEGORIES = [
     <div style="display: flex; gap: 48px; margin-bottom: 64px; padding-bottom: 40px; border-bottom: 1px solid rgba(26,20,16,0.08); flex-wrap: wrap; justify-content: center; text-align: center;">
       {[
         ['1.035+', 'm² de espacio público',      'var(--c-orange)'],
-        ['393',    'Plantas nativas sembradas',   'var(--c-teal)'],
-        ['21',     'Talleres con comunidades',    'var(--c-cobalt)'],
-        ['2021',   'Año de fundación',            'var(--c-pink)'],
+        ['393',    'Plantas nativas sembradas',   'var(--c-aguamarina)'],
+        ['21',     'Talleres con comunidades',    'var(--c-cobalto)'],
+        ['2021',   'Año de fundación',            'var(--c-rosado)'],
       ].map(([n, l, color]) => (
         <div>
           <div style={`font-family: var(--font-sans); font-size: 40px; font-weight: 700; letter-spacing: -1.5px; color: ${color};`}>{n}</div>

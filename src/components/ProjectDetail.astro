@@ -1,4 +1,4 @@
----
+﻿---
 import PageHero from './layout/PageHero.astro';
 import PortableTextBody from './PortableTextBody.tsx';
 
@@ -45,13 +45,13 @@ const isActive = status === 'activo';
     <aside class="project-sidebar">
 
       {neighborhood && (
-        <div class="prop-card prop-card--pink">
+        <div class="prop-card prop-card--rosado">
           <div class="prop-label">Territorio</div>
           <div class="prop-value">{neighborhood}</div>
         </div>
       )}
 
-      <div class="prop-card prop-card--cobalt">
+      <div class="prop-card prop-card--cobalto">
         <div class="prop-label">Año</div>
         <div class="prop-value">{year}</div>
       </div>
@@ -135,12 +135,12 @@ const isActive = status === 'activo';
 
   /* Status badges inside the hero: solid background, white text */
   .hero-meta :global(.status-activo) {
-    background: var(--c-cobalt);
+    background: var(--c-cobalto);
     color: #fff;
   }
 
   .hero-meta :global(.status-completado) {
-    background: var(--c-pink);
+    background: var(--c-rosado);
     color: #fff;
   }
 
@@ -182,14 +182,14 @@ const isActive = status === 'activo';
     border: 1.5px solid;
   }
 
-  .prop-card--pink {
+  .prop-card--rosado {
     background: rgba(230, 34, 79, 0.07);
-    border-color: var(--c-pink);
+    border-color: var(--c-rosado);
   }
 
-  .prop-card--cobalt {
+  .prop-card--cobalto {
     background: rgba(59, 107, 220, 0.07);
-    border-color: var(--c-cobalt);
+    border-color: var(--c-cobalto);
   }
 
   .prop-card--orange {
@@ -197,9 +197,9 @@ const isActive = status === 'activo';
     border-color: var(--c-orange);
   }
 
-  .prop-card--teal {
+  .prop-card--aguamarina {
     background: rgba(96, 157, 146, 0.08);
-    border-color: var(--c-teal);
+    border-color: var(--c-aguamarina);
   }
 
   .prop-label {
@@ -210,10 +210,10 @@ const isActive = status === 'activo';
     margin-bottom: 6px;
   }
 
-  .prop-card--pink   .prop-label { color: var(--c-pink); }
-  .prop-card--cobalt .prop-label { color: var(--c-cobalt); }
+  .prop-card--rosado   .prop-label { color: var(--c-rosado); }
+  .prop-card--cobalto .prop-label { color: var(--c-cobalto); }
   .prop-card--orange .prop-label { color: var(--c-orange); }
-  .prop-card--teal   .prop-label { color: var(--c-teal); }
+  .prop-card--aguamarina   .prop-label { color: var(--c-aguamarina); }
 
   .prop-value {
     font-size: 15px;

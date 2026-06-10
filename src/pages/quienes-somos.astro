@@ -1,4 +1,4 @@
----
+﻿---
 import BaseLayout from '../components/layout/BaseLayout.astro';
 import PersonCard from '../components/PersonCard.astro';
 import PageHero from '../components/layout/PageHero.astro';
@@ -34,7 +34,7 @@ const aliados = [
 <BaseLayout
   title="Quiénes Somos"
   description="La Corporación La Otra Ciudad trabaja desde 2021 por ciudades más biodiversas, justas y saludables en Medellín."
-  pageColor="teal"
+  pageColor="aguamarina"
 >
 
   <!-- ─── PAGE HERO ─────────────────────────────────────────────────── -->
@@ -69,12 +69,52 @@ const aliados = [
           alt="Equipo de La Otra Ciudad en recorrido por la ciudad"
           style="width: 100%; height: 420px; object-fit: cover; border-radius: 8px; display: block;"
         />
+        <a href="#nuestro-equipo" class="btn-outline" style="display: inline-block; margin-top: 16px;">
+          Conoce el equipo →
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── VALUES ────────────────────────────────────────────────────── -->
+  <div id="valores" class="section-full" style="background: linear-gradient(135deg, #e2611d 0%, #3b6bdc 100%); padding: 80px 48px;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <span class="eyebrow-light">Lo que nos mueve</span>
+      <h2 class="section-title" style="color: #fff; max-width: none;">Principios que guían nuestro trabajo</h2>
+      <div class="card-grid-4" style="margin-top: 40px;">
+        {[
+          {
+            title: 'Diseño regenerativo',
+            desc: 'El proceso de diseño se nutre del aprendizaje continuo a través de la retroalimentación, la reflexión y el diálogo. Construye la capacidad de las personas y del entorno para relacionarse de forma sana a través de la co-evolución.',
+            color: 'var(--c-aguamarina)',
+          },
+          {
+            title: 'Co-creación',
+            desc: 'Diseñar la ciudad es una tarea colectiva. Trabajamos junto a comunidades, instituciones e investigadores en procesos iterativos para construir soluciones desde el territorio.',
+            color: 'var(--c-rosado)',
+          },
+          {
+            title: 'Bienestar Sistémico',
+            desc: 'La salud humana, el bienestar económico y la resiliencia ambiental son interdependientes. Para resolver los problemas urbanos es urgente una mirada holística del contexto.',
+            color: 'var(--c-violeta)',
+          },
+          {
+            title: 'Derecho a la ciudad',
+            desc: 'Todas las personas tienen derecho a habitar, usar y transformar la ciudad. El espacio urbano debe responder a las necesidades humanas, no a las fuerzas del mercado.',
+            color: 'var(--c-orange)',
+          },
+        ].map((v) => (
+          <div style={`background: ${v.color}; border-radius: 8px; padding: 36px 32px;`}>
+            <h3 style="font-family: var(--font-sans); font-size: 22px; font-weight: 600; letter-spacing: -0.3px; color: #fff; margin-bottom: 12px;">{v.title}</h3>
+            <p style="font-size: 15px; font-weight: 300; line-height: 1.6; color: rgba(255,255,255,0.82);">{v.desc}</p>
+          </div>
+        ))}
       </div>
     </div>
   </div>
 
   <!-- ─── TEAM ──────────────────────────────────────────────────────── -->
-  <div class="section">
+  <div id="nuestro-equipo" class="section">
     <h2 class="section-title">Nuestro equipo</h2>
 
     <div class="team-grid" style="margin-top: 40px;">
@@ -129,37 +169,6 @@ const aliados = [
     </div>
   </div>
 
-  <!-- ─── VALUES ────────────────────────────────────────────────────── -->
-  <div class="section-full section-warm" style="padding: 80px 48px;">
-    <div style="max-width: 1200px; margin: 0 auto;">
-      <span class="eyebrow">Lo que nos mueve</span>
-      <h2 class="section-title">Principios que guían nuestro trabajo</h2>
-      <div class="card-grid-3" style="margin-top: 40px;">
-        {[
-          {
-            title: 'Participación real',
-            desc: 'Las comunidades no son beneficiarias pasivas: son expertas de su propio territorio y protagonistas de cualquier proceso.',
-            color: 'var(--c-teal)',
-          },
-          {
-            title: 'Equidad territorial',
-            desc: 'Trabajamos donde el Estado ha llegado tarde o incompleto, priorizando las zonas más vulneradas de la ciudad.',
-            color: 'var(--c-orange)',
-          },
-          {
-            title: 'Sostenibilidad',
-            desc: 'Buscamos que los procesos que acompañamos dejen capacidades instaladas en las comunidades para continuar solos.',
-            color: 'var(--c-pink)',
-          },
-        ].map((v) => (
-          <div style={`background: ${v.color}; border-radius: 8px; padding: 36px 32px;`}>
-            <h3 style="font-family: var(--font-sans); font-size: 22px; font-weight: 600; letter-spacing: -0.3px; color: #fff; margin-bottom: 12px;">{v.title}</h3>
-            <p style="font-size: 15px; font-weight: 300; line-height: 1.6; color: rgba(255,255,255,0.82);">{v.desc}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
 
 </BaseLayout>
 

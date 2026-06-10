@@ -1,9 +1,9 @@
----
+﻿---
 // PageHero — shared header for all inner pages.
 //
 // type="banner"  dark warm gradient, optional photo overlay (default)
 // type="dark"    solid deep dark, orange accent border
-// type="light"   cream background, dark text, cobalt accent border
+// type="light"   cream background, dark text, cobalto accent border
 //
 // accentColor: override the bottom border colour (any CSS color / variable)
 //
@@ -21,7 +21,7 @@ interface Props {
   type?: 'banner' | 'dark' | 'light';
   eyebrow?: string;
   image?: string;       // photo overlay — only used with type="banner"
-  accentColor?: string; // override bottom border color (e.g. "var(--c-purple)")
+  accentColor?: string; // override bottom border color (e.g. "var(--c-violeta)")
 }
 
 const { type = 'banner', eyebrow, image, accentColor } = Astro.props;

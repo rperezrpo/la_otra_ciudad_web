@@ -1,16 +1,16 @@
----
+﻿---
 import SiteNav from './SiteNav.astro';
 import SiteFooter from './SiteFooter.astro';
 import '../../styles/global.css';
 
-type PageColor = 'orange' | 'teal' | 'cobalt' | 'pink' | 'purple';
+type PageColor = 'orange' | 'aguamarina' | 'cobalto' | 'rosado' | 'violeta';
 
 const PAGE_COLORS: Record<PageColor, { accent: string; dark: string; gradient: string }> = {
   orange: { accent: 'var(--c-orange)', dark: 'var(--c-orange-dark)', gradient: 'var(--c-grad-orange)' },
-  teal:   { accent: 'var(--c-teal)',   dark: 'var(--c-teal-dark)',   gradient: 'var(--c-grad-teal)'   },
-  cobalt: { accent: 'var(--c-cobalt)', dark: 'var(--c-cobalt-dark)', gradient: 'var(--c-grad-cobalt)' },
-  pink:   { accent: 'var(--c-pink)',   dark: 'var(--c-pink-dark)',   gradient: 'var(--c-grad-pink)'   },
-  purple: { accent: 'var(--c-purple)', dark: 'var(--c-purple-dark)', gradient: 'var(--c-grad-purple)' },
+  aguamarina:   { accent: 'var(--c-aguamarina)',   dark: 'var(--c-aguamarina-dark)',   gradient: 'var(--c-grad-aguamarina)'   },
+  cobalto: { accent: 'var(--c-cobalto)', dark: 'var(--c-cobalto-dark)', gradient: 'var(--c-grad-cobalto)' },
+  rosado:   { accent: 'var(--c-rosado)',   dark: 'var(--c-rosado-dark)',   gradient: 'var(--c-grad-rosado)'   },
+  violeta: { accent: 'var(--c-violeta)', dark: 'var(--c-violeta-dark)', gradient: 'var(--c-grad-violeta)' },
 };
 
 interface Props {
