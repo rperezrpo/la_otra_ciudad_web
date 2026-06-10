@@ -40,20 +40,17 @@ const enfoques = [
   {
     title: 'Enfoque de género',
     desc: 'Reconocemos que el territorio tiene marcas de género, y trabajamos para hacer visible y transformar esas desigualdades.',
-    bg: 'rgba(236, 72, 153, 0.13)',
-    border: 'rgba(236, 72, 153, 0.28)',
+    bg: 'var(--c-rosado)',
   },
   {
     title: 'Enfoque étnico',
     desc: 'La ciudad es diversa. Nuestros procesos reconocen y respetan las identidades culturales de las comunidades afro, indígenas y campesinas urbanas.',
-    bg: 'rgba(226, 97, 29, 0.16)',
-    border: 'rgba(226, 97, 29, 0.32)',
+    bg: 'var(--c-orange)',
   },
   {
     title: 'Enfoque ambiental',
     desc: 'El territorio es también ecológico. Integramos la relación con el ambiente en la planeación y el diseño comunitario.',
-    bg: 'rgba(20, 184, 166, 0.13)',
-    border: 'rgba(20, 184, 166, 0.28)',
+    bg: 'var(--c-aguamarina)',
   },
 ];
 ---
@@ -127,7 +124,7 @@ const enfoques = [
       <h2 class="section-title-light" style="margin-top: 16px;">Enfoques transversales</h2>
       <div class="card-grid-3" style="margin-top: 40px;">
         {enfoques.map((e) => (
-          <div style={`background: ${e.bg}; border-radius: 8px; padding: 28px 24px; border: 1px solid ${e.border};`}>
+          <div style={`background: ${e.bg}; border-radius: 8px; padding: 28px 24px;`}>
             <div style="font-size: 17px; font-weight: 600; letter-spacing: -0.2px; color: #fff; margin-bottom: 10px;">{e.title}</div>
             <div style="font-size: 14px; font-weight: 300; line-height: 1.6; color: rgba(255,255,255,0.55);">{e.desc}</div>
           </div>

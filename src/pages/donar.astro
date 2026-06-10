@@ -80,84 +80,105 @@ const whyDonate = [
   <div class="section">
     <div class="two-col" style="gap: 80px; align-items: start;">
 
-      <!-- ─── DONATION SELECTOR ──────────────────────────────────────── -->
-      <div id="donation-form">
-
-        <!-- Currency selector -->
-        <span class="eyebrow">Moneda</span>
-        <div style="display: flex; gap: 8px; margin-top: 12px; margin-bottom: 32px;" id="currency-grid">
-          {Object.keys(CURRENCIES).map((code, i) => (
-            <button
-              class="currency-btn"
-              data-currency={code}
-              style={`flex: 1; padding: 12px; border-radius: 8px; border: 2px solid ${i === 0 ? 'var(--c-aguamarina)' : 'rgba(26,20,16,0.15)'}; background: ${i === 0 ? 'rgba(96,157,146,0.1)' : 'var(--c-white-pure)'}; color: ${i === 0 ? 'var(--c-aguamarina)' : 'var(--c-black)'}; font-family: var(--font-sans); font-size: 15px; font-weight: ${i === 0 ? '600' : '400'}; cursor: pointer;`}
-            >
-              {code}{i > 0 ? '*' : ''}
-            </button>
-          ))}
-        </div>
-
-        <!-- Error banner (shown when redirected back from /api/donate with ?error=) -->
-        <div id="error-banner" style="display:none; background: rgba(230,34,79,0.08); border: 1px solid rgba(230,34,79,0.25); border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; font-size: 14px; color: var(--c-rosado); line-height: 1.5;"></div>
-
-        <!-- Amount presets (rebuilt client-side when currency changes) -->
-        <span class="eyebrow">Elige un monto</span>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px;" id="amount-grid"></div>
-
-        <div style="margin-top: 10px;">
-          <input
-            class="form-input"
-            type="number"
-            id="custom-amount"
-            placeholder="Otro monto"
-            style="text-align: center; font-size: 18px; font-weight: 400;"
-            min="0"
-          />
-        </div>
-
-        <!-- Impact indicator -->
-        <div id="impact-box" style="margin-top: 20px; background: rgba(226,97,29,0.08); border: 1px solid rgba(226,97,29,0.2); border-radius: 8px; padding: 16px 20px;">
-          <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--c-orange); margin-bottom: 6px;">Tu impacto</div>
-          <div id="impact-text" style="font-size: 15px; font-weight: 400; line-height: 1.5; color: var(--c-black);">
-            Financia una jornada de diagnóstico participativo
-          </div>
-        </div>
-
-        <!-- ─── PAGO (Wompi) ──────────────────────────────────────────────
-          El botón envía monto + moneda a /api/donate, que convierte a COP (si
-          aplica), firma la transacción con el secreto de integridad y redirige
-          al checkout de Wompi (PSE, Nequi, Bancolombia, Daviplata, tarjetas).
-          Configura PUBLIC_WOMPI_PUBLIC_KEY y WOMPI_INTEGRITY_SECRET (.env).
-        -->
-        <button
-          id="continue-btn"
-          class="btn-accent"
-          style="width: 100%; justify-content: center; margin-top: 24px; padding: 16px; font-size: 16px;"
-        >
-          Continuar con el pago →
-        </button>
-
-        <p id="fx-note" style="display: none; font-size: 12px; color: var(--fg2); text-align: center; margin-top: 12px; line-height: 1.5;"></p>
-
-        <p style="font-size: 11px; color: var(--fg3); text-align: center; margin-top: 14px; font-family: var(--font-mono); letter-spacing: 0.5px;">
-          PAGO SEGURO · RECIBO DEDUCIBLE DE IMPUESTOS
+      <!-- ─── QR DONACIÓN ───────────────────────────────────────────── -->
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 16px;">
+        <img
+          src="/images/other/qr_donacion.png"
+          alt="QR para donar"
+          style="width: 100%; max-width: 320px; border-radius: 12px; display: block;"
+        />
+        <p style="font-size: 13px; color: var(--fg2); text-align: center; font-family: var(--font-mono); letter-spacing: 0.5px; text-transform: uppercase;">
+          Escanea para donar desde tu celular
         </p>
       </div>
 
-      <!-- ─── WHY DONATE ─────────────────────────────────────────────── -->
+      <!-- ─── TRANSFERENCIA BANCOLOMBIA ─────────────────────────────── -->
       <div>
-        <span class="eyebrow">Por qué donar</span>
-        <h2 class="section-title" style="font-size: clamp(24px, 2.5vw, 36px); margin-top: 16px;">Tu dinero hace ciudad</h2>
-        <div style="display: flex; flex-direction: column; gap: 0; margin-top: 32px;">
-          {whyDonate.map(({ stat, desc }) => (
-            <div style="display: flex; gap: 20px; padding: 20px 0; border-bottom: 1px solid rgba(26,20,16,0.08); align-items: flex-start;">
-              <div style="font-family: var(--font-display); font-variation-settings: 'opsz' 72, 'SOFT' 20, 'WONK' 0; font-size: 28px; font-weight: 400; color: var(--c-aguamarina); min-width: 100; line-height: 1;">{stat}</div>
-              <div style="font-size: 15px; font-weight: 300; line-height: 1.5; color: var(--fg2); padding-top: 4px;">{desc}</div>
-            </div>
-          ))}
+        <p style="font-size: 16px; font-weight: 300; line-height: 1.6; color: var(--fg2); margin: 0 0 32px;">
+          Transfiéra a nuestra cuenta Bancolombia desde 10.000 pesos. Si quieres un certificado de donación, envíanos tu nombre completo y documento de identificación a <a href="mailto:donaciones@laotraciudad.org" style="color: var(--c-aguamarina); text-decoration: underline;">donaciones@laotraciudad.org</a>
+        </p>
+        <div style="display: flex; flex-direction: column; gap: 0;">
+          <div style="display: flex; gap: 20px; padding: 20px 0; border-bottom: 1px solid rgba(26,20,16,0.08); align-items: flex-start;">
+            <div style="font-family: var(--font-display); font-variation-settings: 'opsz' 72, 'SOFT' 20, 'WONK' 0; font-size: 28px; font-weight: 400; color: var(--c-aguamarina); min-width: 100px; line-height: 1;">100%</div>
+            <div style="font-size: 15px; font-weight: 300; line-height: 1.5; color: var(--fg2); padding-top: 4px;">de las donaciones van al funcionamiento de nuestra organización y la ejecución de proyectos.</div>
+          </div>
+          <div style="display: flex; gap: 20px; padding: 20px 0; border-bottom: 1px solid rgba(26,20,16,0.08); align-items: flex-start;">
+            <div style="font-family: var(--font-display); font-variation-settings: 'opsz' 72, 'SOFT' 20, 'WONK' 0; font-size: 28px; font-weight: 400; color: var(--c-aguamarina); min-width: 100px; line-height: 1;">Trazable</div>
+            <div style="font-size: 15px; font-weight: 300; line-height: 1.5; color: var(--fg2); padding-top: 4px;">Nuestros informes de gestión anuales permiten saber a dónde se fue cada centavo invertido en LOC.</div>
+          </div>
+          <div style="display: flex; gap: 20px; padding: 20px 0; border-bottom: 1px solid rgba(26,20,16,0.08); align-items: flex-start;">
+            <div style="font-family: var(--font-display); font-variation-settings: 'opsz' 72, 'SOFT' 20, 'WONK' 0; font-size: 28px; font-weight: 400; color: var(--c-aguamarina); min-width: 100px; line-height: 1;">Deducible</div>
+            <div style="font-size: 15px; font-weight: 300; line-height: 1.5; color: var(--fg2); padding-top: 4px;">Como parte del Régimen Tributario Especial, podemos certificar donaciones que son deducibles al impuesto de renta.</div>
+          </div>
         </div>
       </div>
 
+    </div>
+  </div>
+
+  <!-- ─── DONATION SELECTOR ──────────────────────────────────────────── -->
+  <div class="section" style="padding-top: 0;">
+    <div id="donation-form" style="max-width: 560px; margin: 0 auto;">
+
+      <!-- Currency selector -->
+      <span class="eyebrow">Moneda</span>
+      <div style="display: flex; gap: 8px; margin-top: 12px; margin-bottom: 32px;" id="currency-grid">
+        {Object.keys(CURRENCIES).map((code, i) => (
+          <button
+            class="currency-btn"
+            data-currency={code}
+            style={`flex: 1; padding: 12px; border-radius: 8px; border: 2px solid ${i === 0 ? 'var(--c-aguamarina)' : 'rgba(26,20,16,0.15)'}; background: ${i === 0 ? 'rgba(96,157,146,0.1)' : 'var(--c-white-pure)'}; color: ${i === 0 ? 'var(--c-aguamarina)' : 'var(--c-black)'}; font-family: var(--font-sans); font-size: 15px; font-weight: ${i === 0 ? '600' : '400'}; cursor: pointer;`}
+          >
+            {code}{i > 0 ? '*' : ''}
+          </button>
+        ))}
+      </div>
+
+      <!-- Error banner (shown when redirected back from /api/donate with ?error=) -->
+      <div id="error-banner" style="display:none; background: rgba(230,34,79,0.08); border: 1px solid rgba(230,34,79,0.25); border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; font-size: 14px; color: var(--c-rosado); line-height: 1.5;"></div>
+
+      <!-- Amount presets (rebuilt client-side when currency changes) -->
+      <span class="eyebrow">Elige un monto</span>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px;" id="amount-grid"></div>
+
+      <div style="margin-top: 10px;">
+        <input
+          class="form-input"
+          type="number"
+          id="custom-amount"
+          placeholder="Otro monto"
+          style="text-align: center; font-size: 18px; font-weight: 400;"
+          min="0"
+        />
+      </div>
+
+      <!-- Impact indicator -->
+      <div id="impact-box" style="margin-top: 20px; background: rgba(226,97,29,0.08); border: 1px solid rgba(226,97,29,0.2); border-radius: 8px; padding: 16px 20px;">
+        <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--c-orange); margin-bottom: 6px;">Tu impacto</div>
+        <div id="impact-text" style="font-size: 15px; font-weight: 400; line-height: 1.5; color: var(--c-black);">
+          Financia una jornada de diagnóstico participativo
+        </div>
+      </div>
+
+      <!-- ─── PAGO (Wompi) ──────────────────────────────────────────────
+        El botón envía monto + moneda a /api/donate, que convierte a COP (si
+        aplica), firma la transacción con el secreto de integridad y redirige
+        al checkout de Wompi (PSE, Nequi, Bancolombia, Daviplata, tarjetas).
+        Configura PUBLIC_WOMPI_PUBLIC_KEY y WOMPI_INTEGRITY_SECRET (.env).
+      -->
+      <button
+        id="continue-btn"
+        class="btn-accent"
+        style="width: 100%; justify-content: center; margin-top: 24px; padding: 16px; font-size: 16px;"
+      >
+        Continuar con el pago →
+      </button>
+
+      <p id="fx-note" style="display: none; font-size: 12px; color: var(--fg2); text-align: center; margin-top: 12px; line-height: 1.5;"></p>
+
+      <p style="font-size: 11px; color: var(--fg3); text-align: center; margin-top: 14px; font-family: var(--font-mono); letter-spacing: 0.5px;">
+        PAGO SEGURO · RECIBO DEDUCIBLE DE IMPUESTOS
+      </p>
     </div>
   </div>
 
