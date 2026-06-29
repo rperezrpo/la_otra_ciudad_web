@@ -19,6 +19,18 @@ export const person = defineType({
       validation: (r) => r.required(),
     }),
     defineField({
+      name: 'email',
+      title: 'Correo (Google Workspace)',
+      type: 'string',
+      description:
+        'Correo @laotraciudad.org con el que la persona inicia sesión para editar su propio perfil. No se muestra en el sitio público.',
+      validation: (r) =>
+        r.regex(/@laotraciudad\.org$/i, {
+          name: 'correo corporativo',
+          invert: false,
+        }),
+    }),
+    defineField({
       name: 'role',
       title: 'Rol',
       type: 'string',

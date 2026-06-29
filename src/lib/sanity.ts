@@ -171,6 +171,34 @@ export interface PersonData {
   state: string
 }
 
+/** A person's editable profile, matched by their Google Workspace email. */
+export interface EditablePerson {
+  _id: string
+  name: string
+  role: string
+  bio: string
+  linkedin: string
+  photo: string // resolved URL for previewing the current photo
+}
+
+export async function getPersonByEmail(email: string): Promise<EditablePerson | null> {
+  const p = await sanityClient.fetch(
+    `*[_type == "person" && lower(email) == lower($email)][0]{
+      _id, name, role, bio, linkedin, photo
+    }`,
+    { email }
+  )
+  if (!p) return null
+  return {
+    _id: p._id,
+    name: p.name ?? '',
+    role: p.role ?? '',
+    bio: p.bio ?? '',
+    linkedin: p.linkedin ?? '',
+    photo: img(p.photo, 400),
+  }
+}
+
 export async function getPeople(): Promise<PersonData[]> {
   const data = await sanityClient.fetch(
     `*[_type == "person"] | order(order asc, name asc){

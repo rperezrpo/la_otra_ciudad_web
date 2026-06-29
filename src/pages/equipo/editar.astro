@@ -1,0 +1,162 @@
+---
+export const prerender = false;
+
+import BaseLayout from '../../components/layout/BaseLayout.astro';
+import { getSession } from 'auth-astro/server';
+import { getPersonByEmail } from '../../lib/sanity';
+
+const session = await getSession(Astro.request);
+const email = session?.user?.email ?? null;
+const person = email ? await getPersonByEmail(email) : null;
+---
+
+<BaseLayout
+  title="Editar mi perfil"
+  description="Actualiza tu información del equipo de La Otra Ciudad."
+  pageColor="cobalto"
+>
+  <div class="section" style="max-width: 720px;">
+    <span class="eyebrow">Equipo</span>
+    <h1 class="section-title" style="font-size: clamp(28px, 3vw, 42px);">Editar mi perfil</h1>
+
+    {!email && (
+      <div style="margin-top: 24px;">
+        <p class="section-body">
+          Inicia sesión con tu correo <strong>@laotraciudad.org</strong> para
+          actualizar tu información del equipo.
+        </p>
+        <button id="login" class="btn-accent" style="margin-top: 24px; padding: 14px 28px;">
+          Iniciar sesión con Google
+        </button>
+      </div>
+    )}
+
+    {email && !person && (
+      <div style="margin-top: 24px;">
+        <p class="section-body">
+          Iniciaste sesión como <strong>{email}</strong>, pero aún no existe un
+          perfil del equipo asociado a ese correo. Escribe a Ricardo u otro
+          miembro de la Junta Directiva para que creen uno.
+        </p>
+        <button id="logout" class="btn-outline" style="margin-top: 24px;">
+          Cerrar sesión
+        </button>
+      </div>
+    )}
+
+    {email && person && (
+      <div style="margin-top: 24px;">
+        <p style="font-size: 14px; color: var(--fg3); margin-bottom: 24px;">
+          Sesión iniciada como {email} ·
+          <button id="logout" class="link-button" type="button">Cerrar sesión</button>
+        </p>
+
+        <form id="profile-form" enctype="multipart/form-data">
+          <div class="form-group">
+            <label class="form-label" for="name">Nombre completo</label>
+            <input class="form-input" type="text" id="name" name="name" value={person.name} required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="role">Rol</label>
+            <input class="form-input" type="text" id="role" name="role" value={person.role} placeholder="Ej. Urbanista" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="bio">Biografía</label>
+            <textarea class="form-textarea" id="bio" name="bio" placeholder="Cuéntanos brevemente sobre ti…">{person.bio}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="linkedin">LinkedIn</label>
+            <input class="form-input" type="url" id="linkedin" name="linkedin" value={person.linkedin} placeholder="https://www.linkedin.com/in/…" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="photo">Foto</label>
+            {person.photo && (
+              <img
+                src={person.photo}
+                alt="Foto actual"
+                style="width: 96px; height: 96px; object-fit: cover; border-radius: 8px; display: block; margin-bottom: 12px;"
+              />
+            )}
+            <input class="form-input" type="file" id="photo" name="photo" accept="image/jpeg,image/png,image/webp" />
+            <p style="font-size: 13px; color: var(--fg3); margin-top: 6px;">
+              JPG, PNG o WebP, máximo 5 MB. Déjalo vacío para conservar la foto actual.
+            </p>
+          </div>
+
+          <button type="submit" class="btn-accent" id="profile-submit" style="padding: 14px 28px;">
+            Guardar cambios
+          </button>
+
+          <p id="profile-status" role="status" aria-live="polite" style="display: none; margin-top: 16px; font-size: 15px; line-height: 1.5;"></p>
+        </form>
+      </div>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .link-button {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: var(--page-accent, var(--c-cobalto));
+    text-decoration: underline;
+    cursor: pointer;
+  }
+</style>
+
+<script>
+  import { signIn, signOut } from 'auth-astro/client';
+
+  document.getElementById('login')?.addEventListener('click', () => {
+    signIn('google');
+  });
+
+  document.querySelectorAll('#logout').forEach((btn) =>
+    btn.addEventListener('click', () => signOut())
+  );
+
+  const form = document.getElementById('profile-form') as HTMLFormElement | null;
+  const status = document.getElementById('profile-status') as HTMLParagraphElement | null;
+  const submitBtn = document.getElementById('profile-submit') as HTMLButtonElement | null;
+
+  if (form && status && submitBtn) {
+    const showStatus = (message: string, ok: boolean) => {
+      status.textContent = message;
+      status.style.display = 'block';
+      status.style.color = ok ? 'var(--fg2)' : '#b3261e';
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      submitBtn.disabled = true;
+      const originalLabel = submitBtn.textContent;
+      submitBtn.textContent = 'Guardando…';
+      status.style.display = 'none';
+
+      try {
+        const res = await fetch('/api/equipo/actualizar', {
+          method: 'POST',
+          body: new FormData(form),
+        });
+        const data = await res.json().catch(() => ({}));
+
+        if (res.ok) {
+          showStatus('¡Listo! Tus cambios se guardaron. Aparecerán en la web en el próximo despliegue.', true);
+        } else {
+          showStatus(data.error ?? 'No pudimos guardar los cambios. Intenta de nuevo.', false);
+        }
+      } catch {
+        showStatus('Hubo un problema de conexión. Intenta de nuevo.', false);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalLabel;
+      }
+    });
+  }
+</script>

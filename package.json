@@ -8,12 +8,15 @@
     "preview": "astro preview",
     "import": "node --env-file=.env scripts/import.mjs",
     "import:projects": "node --env-file=.env scripts/import-wix-projects.mjs",
-    "patch:descriptions": "node --env-file=.env scripts/patch-project-descriptions.mjs"
+    "patch:descriptions": "node --env-file=.env scripts/patch-project-descriptions.mjs",
+    "fix:project-types": "node --env-file=.env scripts/fix-project-field-types.mjs",
+    "set:emails": "node --env-file=.env scripts/set-emails.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.7",
     "@astrojs/sitemap": "^3.7.3",
     "@astrojs/vercel": "^10.0.8",
+    "@auth/core": "^0.34.3",
     "@portabletext/react": "^6.2.0",
     "@portabletext/to-html": "^5.0.2",
     "@sanity/astro": "^3.4.0",
@@ -23,6 +26,7 @@
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.3.0",
     "astro": "^6.4.3",
+    "auth-astro": "^4.2.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "resend": "^6.12.4",

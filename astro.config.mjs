@@ -4,6 +4,7 @@ import sanity from '@sanity/astro';
 import react from '@astrojs/react';
 import vercel from '@astrojs/vercel';
 import sitemap from '@astrojs/sitemap';
+import auth from 'auth-astro';
 
 // projectId is a public identifier — safe to commit (security is via CORS + tokens).
 const SANITY_PROJECT_ID = 'nkzuaihq';
@@ -32,5 +33,8 @@ export default defineConfig({
     }),
     react(),
     sitemap(),
+    // Google sign-in for team members (Auth.js). Injects /api/auth/* and reads
+    // the provider config from ./auth.config.mjs.
+    auth(),
   ],
 });
