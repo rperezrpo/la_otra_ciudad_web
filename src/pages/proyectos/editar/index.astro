@@ -1,0 +1,94 @@
+---
+export const prerender = false;
+
+import BaseLayout from '../../../components/layout/BaseLayout.astro';
+import { getSessionEmail, isProjectEditor } from '../../../lib/access';
+import { getEditableProjects } from '../../../lib/sanity';
+
+const email = await getSessionEmail(Astro.request);
+const isEditor = await isProjectEditor(email);
+const projects = isEditor ? await getEditableProjects() : [];
+---
+
+<BaseLayout title="Editar proyectos" description="Edición de proyectos del equipo." pageColor="cobalto">
+  <div class="section" style="max-width: 880px;">
+    <span class="eyebrow">Proyectos</span>
+    <h1 class="section-title" style="font-size: clamp(28px, 3vw, 42px);">Editar proyectos</h1>
+
+    {!email && (
+      <div style="margin-top: 24px;">
+        <p class="section-body">
+          Inicia sesión con tu correo <strong>@laotraciudad.org</strong> para editar proyectos.
+        </p>
+        <button id="login" class="btn-accent" style="margin-top: 24px; padding: 14px 28px;">
+          Iniciar sesión con Google
+        </button>
+      </div>
+    )}
+
+    {email && !isEditor && (
+      <div style="margin-top: 24px;">
+        <p class="section-body">
+          Iniciaste sesión como <strong>{email}</strong>, pero no tienes permisos para editar
+          proyectos. Si crees que deberías tenerlos, escribe a Ricardo u otro miembro de la Junta
+          Directiva.
+        </p>
+        <button id="logout" class="btn-outline" style="margin-top: 24px;">Cerrar sesión</button>
+      </div>
+    )}
+
+    {email && isEditor && (
+      <div style="margin-top: 24px;">
+        <p style="font-size: 14px; color: var(--fg3); margin-bottom: 24px;">
+          Sesión iniciada como {email} ·
+          <button id="logout" class="link-button" type="button">Cerrar sesión</button>
+        </p>
+        <p class="section-body" style="margin-bottom: 24px;">Elige un proyecto para editar:</p>
+
+        <div class="proj-list">
+          {projects.map((p) => (
+            <a href={`/proyectos/editar/${p.slug}`} class="proj-row">
+              <div class="proj-thumb">
+                {p.heroImage ? <img src={p.heroImage} alt="" /> : <span>—</span>}
+              </div>
+              <div class="proj-meta">
+                <span class="proj-title">{p.title}</span>
+                <span class="proj-sub">{[p.year, p.status].filter(Boolean).join(' · ')}</span>
+              </div>
+              <span class="proj-arrow">→</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .link-button {
+    background: none; border: none; padding: 0; font: inherit;
+    color: var(--page-accent, var(--c-cobalto)); text-decoration: underline; cursor: pointer;
+  }
+  .proj-list { display: flex; flex-direction: column; gap: 8px; }
+  .proj-row {
+    display: flex; align-items: center; gap: 16px; padding: 12px;
+    border: 1px solid rgba(26,20,16,0.1); border-radius: 8px;
+    text-decoration: none; color: inherit; transition: background 120ms, border-color 120ms;
+  }
+  .proj-row:hover { background: var(--c-white-pure); border-color: var(--page-accent, var(--c-cobalto)); }
+  .proj-thumb {
+    width: 64px; height: 48px; flex-shrink: 0; border-radius: 6px; overflow: hidden;
+    background: rgba(26,20,16,0.06); display: flex; align-items: center; justify-content: center; color: var(--fg3);
+  }
+  .proj-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .proj-meta { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+  .proj-title { font-weight: 600; font-size: 16px; }
+  .proj-sub { font-size: 13px; color: var(--fg3); }
+  .proj-arrow { color: var(--fg3); font-size: 18px; }
+</style>
+
+<script>
+  import { signIn, signOut } from 'auth-astro/client';
+  document.getElementById('login')?.addEventListener('click', () => signIn('google'));
+  document.querySelectorAll('#logout').forEach((b) => b.addEventListener('click', () => signOut()));
+</script>

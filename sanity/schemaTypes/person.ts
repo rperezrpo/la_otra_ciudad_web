@@ -71,6 +71,14 @@ export const person = defineType({
       type: 'number',
       description: 'Controla el orden en que aparece el equipo (menor primero).',
     }),
+    defineField({
+      name: 'canEditProjects',
+      title: '¿Puede editar proyectos?',
+      type: 'boolean',
+      description:
+        'Si está activo, esta persona puede editar cualquier proyecto desde /proyectos/editar.',
+      initialValue: false,
+    }),
   ],
   preview: {
     select: { title: 'name', subtitle: 'role', media: 'photo' },

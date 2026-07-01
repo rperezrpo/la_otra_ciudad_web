@@ -27,6 +27,7 @@
     "@tailwindcss/vite": "^4.3.0",
     "astro": "^6.4.3",
     "auth-astro": "^4.2.0",
+    "marked": "^18.0.5",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "resend": "^6.12.4",

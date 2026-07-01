@@ -1,6 +1,7 @@
 import { sanityClient } from 'sanity:client'
 import imageUrlBuilder from '@sanity/image-url'
 import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
+import { portableTextToMarkdown } from './portableText'
 
 const builder = imageUrlBuilder(sanityClient)
 
@@ -156,6 +157,81 @@ export async function getProject(slug: string): Promise<ProjectDetailData | null
     year: p.year,
     status: p.status,
     gallery: (p.gallery ?? []).map((g: SanityImageSource) => img(g, 1000)).filter(Boolean),
+  }
+}
+
+// ─── Project editing (self-service form) ─────────────────────────────────────
+
+export interface ProjectListItem {
+  slug: string
+  title: string
+  heroImage: string
+  status: string
+  year: number
+}
+
+export async function getEditableProjects(): Promise<ProjectListItem[]> {
+  const data = await sanityClient.fetch(
+    `*[_type == "project" && defined(slug.current)] | order(year desc, title asc){
+      title, "slug": slug.current, heroImage, status, year
+    }`
+  )
+  return data.map((p: any) => ({
+    slug: p.slug,
+    title: p.title ?? '(sin título)',
+    heroImage: img(p.heroImage, 240),
+    status: p.status ?? '',
+    year: p.year,
+  }))
+}
+
+export interface ProjectEditData {
+  slug: string
+  title: string
+  categoria_principal: string
+  category: string[]
+  summary: string
+  descriptionMarkdown: string
+  neighborhood: string
+  partners: string[]
+  year: number | null
+  status: string
+  featured: boolean
+  heroImage: string
+  gallery: { key: string; url: string }[]
+}
+
+export async function getProjectForEdit(slug: string): Promise<ProjectEditData | null> {
+  const p = await sanityClient.fetch(
+    `*[_type == "project" && slug.current == $slug][0]{
+      title, "slug": slug.current, categoria_principal, category, summary,
+      description, neighborhood, partners, year, status, featured, heroImage, gallery
+    }`,
+    { slug }
+  )
+  if (!p) return null
+  const desc = p.description
+  const descriptionMarkdown = Array.isArray(desc)
+    ? portableTextToMarkdown(desc)
+    : typeof desc === 'string'
+      ? desc
+      : ''
+  return {
+    slug: p.slug,
+    title: p.title ?? '',
+    categoria_principal: p.categoria_principal ?? '',
+    category: p.category ?? [],
+    summary: p.summary ?? '',
+    descriptionMarkdown,
+    neighborhood: p.neighborhood ?? '',
+    partners: p.partners ?? [],
+    year: p.year ?? null,
+    status: p.status ?? 'activo',
+    featured: !!p.featured,
+    heroImage: img(p.heroImage, 600),
+    gallery: (p.gallery ?? [])
+      .filter((g: any) => g?.asset)
+      .map((g: any) => ({ key: g._key, url: img(g, 400) })),
   }
 }
 

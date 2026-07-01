@@ -1,0 +1,215 @@
+---
+export const prerender = false;
+
+import BaseLayout from '../../../components/layout/BaseLayout.astro';
+import { getSessionEmail, isProjectEditor } from '../../../lib/access';
+import { getProjectForEdit } from '../../../lib/sanity';
+
+const { slug } = Astro.params;
+const email = await getSessionEmail(Astro.request);
+const isEditor = await isProjectEditor(email);
+const project = isEditor && slug ? await getProjectForEdit(slug) : null;
+
+const CATEGORIES = ['Paisajes Regenerativos', 'Espacio Público', 'Acompañamiento Comunitario'];
+---
+
+<BaseLayout title="Editar proyecto" description="Edición de proyecto." pageColor="cobalto">
+  <div class="section" style="max-width: 720px;">
+    <p style="margin-bottom: 8px;"><a href="/proyectos/editar" class="link-button">← Volver a la lista</a></p>
+
+    {!email && (
+      <div>
+        <h1 class="section-title">Editar proyecto</h1>
+        <p class="section-body" style="margin-top: 16px;">Inicia sesión para continuar.</p>
+        <button id="login" class="btn-accent" style="margin-top: 24px; padding: 14px 28px;">Iniciar sesión con Google</button>
+      </div>
+    )}
+
+    {email && !isEditor && (
+      <div>
+        <h1 class="section-title">Sin permisos</h1>
+        <p class="section-body" style="margin-top: 16px;">
+          Tu cuenta (<strong>{email}</strong>) no puede editar proyectos.
+        </p>
+      </div>
+    )}
+
+    {email && isEditor && !project && (
+      <div>
+        <h1 class="section-title">Proyecto no encontrado</h1>
+        <p class="section-body" style="margin-top: 16px;">No existe un proyecto con ese identificador.</p>
+      </div>
+    )}
+
+    {email && isEditor && project && (
+      <div>
+        <span class="eyebrow">Proyecto</span>
+        <h1 class="section-title" style="font-size: clamp(26px, 2.6vw, 38px);">{project.title}</h1>
+        <p style="font-size: 13px; color: var(--fg3); margin-top: 4px;">URL: /proyectos/{project.slug} (no editable)</p>
+
+        <form id="project-form" enctype="multipart/form-data" style="margin-top: 28px;">
+          <input type="hidden" name="slug" value={project.slug} />
+
+          <div class="form-group">
+            <label class="form-label" for="title">Título</label>
+            <input class="form-input" type="text" id="title" name="title" value={project.title} required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="categoria_principal">Categoría principal</label>
+            <select class="form-select" id="categoria_principal" name="categoria_principal" required>
+              {CATEGORIES.map((c) => (
+                <option value={c} selected={c === project.categoria_principal}>{c}</option>
+              ))}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Categorías (todas las que apliquen)</label>
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 6px;">
+              {CATEGORIES.map((c) => (
+                <label style="display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 400;">
+                  <input type="checkbox" name="category" value={c} checked={project.category.includes(c)} />
+                  {c}
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="summary">Resumen (para las tarjetas)</label>
+            <textarea class="form-textarea" id="summary" name="summary" rows="3">{project.summary}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="description">Descripción</label>
+            <details style="margin-bottom: 8px;">
+              <summary style="cursor: pointer; font-size: 13px; color: var(--fg3);">¿Cómo dar formato? (Markdown)</summary>
+              <div style="font-size: 13px; color: var(--fg2); margin-top: 8px; line-height: 1.6;">
+                <code>## Título</code> y <code>### Subtítulo</code> · <code>**negrita**</code> ·
+                <code>*cursiva*</code> · <code>[texto](https://enlace)</code> · listas con <code>- </code> al inicio de la línea.
+              </div>
+            </details>
+            <textarea class="form-textarea" id="description" name="description" rows="14" style="font-family: var(--font-mono); font-size: 14px;">{project.descriptionMarkdown}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="neighborhood">Territorio</label>
+            <input class="form-input" type="text" id="neighborhood" name="neighborhood" value={project.neighborhood} />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="partners">Aliados (uno por línea)</label>
+            <textarea class="form-textarea" id="partners" name="partners" rows="4">{project.partners.join('\n')}</textarea>
+          </div>
+
+          <div class="form-group" style="display: flex; gap: 24px; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 120px;">
+              <label class="form-label" for="year">Año</label>
+              <input class="form-input" type="number" id="year" name="year" value={project.year ?? ''} min="1990" max="2100" />
+            </div>
+            <div style="flex: 1; min-width: 160px;">
+              <label class="form-label">Estado</label>
+              <div style="display: flex; gap: 16px; margin-top: 10px;">
+                <label style="display: flex; align-items: center; gap: 6px; font-weight: 400;">
+                  <input type="radio" name="status" value="activo" checked={project.status !== 'completado'} /> Activo
+                </label>
+                <label style="display: flex; align-items: center; gap: 6px; font-weight: 400;">
+                  <input type="radio" name="status" value="completado" checked={project.status === 'completado'} /> Completado
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label style="display: flex; align-items: center; gap: 8px; font-weight: 400;">
+              <input type="checkbox" name="featured" checked={project.featured} /> Destacado en la portada
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Imagen principal</label>
+            {project.heroImage && (
+              <img src={project.heroImage} alt="Imagen actual" style="width: 100%; max-width: 320px; height: 180px; object-fit: cover; border-radius: 8px; display: block; margin-bottom: 10px;" />
+            )}
+            <input class="form-input" type="file" name="heroImage" accept="image/jpeg,image/png,image/webp" />
+            <p style="font-size: 13px; color: var(--fg3); margin-top: 6px;">Déjalo vacío para conservar la imagen actual.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Galería</label>
+            {project.gallery.length > 0 ? (
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; margin-bottom: 12px;">
+                {project.gallery.map((g) => (
+                  <label style="position: relative; cursor: pointer; display: block;">
+                    <img src={g.url} alt="" style="width: 100%; height: 90px; object-fit: cover; border-radius: 6px; display: block;" />
+                    <span style="display: flex; align-items: center; gap: 6px; font-size: 12px; margin-top: 4px;">
+                      <input type="checkbox" name="keepGallery" value={g.key} checked /> Mantener
+                    </span>
+                  </label>
+                ))}
+              </div>
+            ) : (
+              <p style="font-size: 14px; color: var(--fg3); margin-bottom: 10px;">No hay imágenes en la galería.</p>
+            )}
+            <input class="form-input" type="file" name="galleryNew" accept="image/jpeg,image/png,image/webp" multiple />
+            <p style="font-size: 13px; color: var(--fg3); margin-top: 6px;">
+              Desmarca "Mantener" para quitar una imagen. Selecciona archivos para agregar nuevas.
+            </p>
+          </div>
+
+          <button type="submit" class="btn-accent" id="project-submit" style="padding: 14px 28px;">Guardar cambios</button>
+          <p id="project-status" role="status" aria-live="polite" style="display: none; margin-top: 16px; font-size: 15px; line-height: 1.5;"></p>
+        </form>
+      </div>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .link-button {
+    background: none; border: none; padding: 0; font: inherit;
+    color: var(--page-accent, var(--c-cobalto)); text-decoration: underline; cursor: pointer;
+  }
+</style>
+
+<script>
+  import { signIn, signOut } from 'auth-astro/client';
+  document.getElementById('login')?.addEventListener('click', () => signIn('google'));
+
+  const form = document.getElementById('project-form') as HTMLFormElement | null;
+  const status = document.getElementById('project-status') as HTMLParagraphElement | null;
+  const submitBtn = document.getElementById('project-submit') as HTMLButtonElement | null;
+
+  if (form && status && submitBtn) {
+    const show = (msg: string, ok: boolean) => {
+      status.textContent = msg;
+      status.style.display = 'block';
+      status.style.color = ok ? 'var(--fg2)' : '#b3261e';
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      submitBtn.disabled = true;
+      const label = submitBtn.textContent;
+      submitBtn.textContent = 'Guardando…';
+      status.style.display = 'none';
+
+      try {
+        const res = await fetch('/api/proyectos/actualizar', { method: 'POST', body: new FormData(form) });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok) {
+          show('¡Listo! Los cambios se guardaron. Aparecerán en la web en el próximo despliegue.', true);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          show(data.error ?? 'No pudimos guardar los cambios. Intenta de nuevo.', false);
+        }
+      } catch {
+        show('Hubo un problema de conexión. Intenta de nuevo.', false);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = label;
+      }
+    });
+  }
+</script>
