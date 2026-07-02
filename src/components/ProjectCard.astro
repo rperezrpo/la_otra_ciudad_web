@@ -1,8 +1,10 @@
 ---
-// ProjectCard — used on the home page and /proyectos listing
-// SANITY: when Sanity is connected, this component receives the same props
-//         from a Sanity document instead of from projects.json
+// ProjectCard — used on the home page and /proyectos listing.
+// `category` is the already-localized label; `status` is the stable key
+// ('activo'/'completado') and gets translated here.
 import { Image } from 'astro:assets';
+import { pageLang, localizePath } from '../i18n/ui';
+import { statusLabel } from '../i18n/categories';
 
 interface Props {
   title: string;
@@ -16,10 +18,11 @@ interface Props {
 
 const { title, slug, category, summary, heroImage, status, year } = Astro.props;
 
+const lang = pageLang(Astro.currentLocale);
 const isActive = status === 'activo';
 ---
 
-<a href={`/proyectos/${slug}`} class="card" style="display: flex; flex-direction: column; height: 100%; text-decoration: none; cursor: pointer;">
+<a href={localizePath(lang, `/proyectos/${slug}`)} class="card" style="display: flex; flex-direction: column; height: 100%; text-decoration: none; cursor: pointer;">
   <!-- Hero image -->
   {heroImage ? (
     <Image
@@ -42,7 +45,7 @@ const isActive = status === 'activo';
       <span
         class:list={['status-badge', { 'status-activo': isActive, 'status-completado': !isActive }]}
       >
-        {status}
+        {statusLabel(status, lang)}
       </span>
     </div>
 

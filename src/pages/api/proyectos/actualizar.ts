@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { writeClient } from '../../../lib/sanityWrite';
 import { getSessionEmail, isProjectEditor } from '../../../lib/access';
 import { markdownToPortableText } from '../../../lib/portableText';
+import { CATEGORY_KEYS } from '../../../i18n/categories';
 
 export const prerender = false;
 
@@ -11,7 +12,7 @@ const json = (data: unknown, status: number) =>
     headers: { 'Content-Type': 'application/json' },
   });
 
-const CATEGORIES = ['Paisajes Regenerativos', 'Espacio Público', 'Acompañamiento Comunitario'];
+const CATEGORIES: string[] = [...CATEGORY_KEYS];
 const STATUSES = ['activo', 'completado'];
 
 const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
@@ -60,10 +61,14 @@ export const POST: APIRoute = async ({ request }) => {
   );
   if (!existing?._id) return json({ error: 'No encontramos ese proyecto.' }, 404);
 
-  const title = clean(form.get('title'));
+  const title_es = clean(form.get('title_es'));
+  const title_en = clean(form.get('title_en'));
   const categoria_principal = clean(form.get('categoria_principal'));
-  const summary = clean(form.get('summary'));
-  const descriptionMarkdown = typeof form.get('description') === 'string' ? (form.get('description') as string) : '';
+  const summary_es = clean(form.get('summary_es'));
+  const summary_en = clean(form.get('summary_en'));
+  const md = (name: string) => (typeof form.get(name) === 'string' ? (form.get(name) as string) : '');
+  const description_es = md('description_es');
+  const description_en = md('description_en');
   const neighborhood = clean(form.get('neighborhood'));
   const yearRaw = clean(form.get('year'));
   const status = clean(form.get('status'));
@@ -74,8 +79,8 @@ export const POST: APIRoute = async ({ request }) => {
     .map((s) => s.trim())
     .filter(Boolean);
 
-  // 3. Validate.
-  if (!title) return json({ error: 'El título es obligatorio.' }, 400);
+  // 3. Validate. (English fields are optional — the site falls back to Spanish.)
+  if (!title_es) return json({ error: 'El título en español es obligatorio.' }, 400);
   if (!CATEGORIES.includes(categoria_principal)) {
     return json({ error: 'Selecciona una categoría principal válida.' }, 400);
   }
@@ -90,20 +95,23 @@ export const POST: APIRoute = async ({ request }) => {
     }
   }
 
-  // 4. Build the patch.
+  // 4. Build the patch. Localized fields are stored as {es, en} objects.
   const set: Record<string, unknown> = {
-    title,
+    title: { es: title_es, en: title_en },
     categoria_principal,
     category,
-    description: markdownToPortableText(descriptionMarkdown),
+    description: {
+      es: markdownToPortableText(description_es),
+      en: markdownToPortableText(description_en),
+    },
     status: status || 'activo',
     featured,
   };
   const unset: string[] = [];
-  for (const [key, value] of Object.entries({ summary, neighborhood })) {
-    if (value) set[key] = value;
-    else unset.push(key);
-  }
+  if (summary_es || summary_en) set.summary = { es: summary_es, en: summary_en };
+  else unset.push('summary');
+  if (neighborhood) set.neighborhood = neighborhood;
+  else unset.push('neighborhood');
   if (partners.length) set.partners = partners;
   else unset.push('partners');
   if (year !== undefined) set.year = year;

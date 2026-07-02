@@ -1,28 +1,48 @@
 ---
 /* Diagrama de flor — cuatro ejes temáticos de La Otra Ciudad */
+import { pageLang, localizePath } from '../i18n/ui';
+
+const lang = pageLang(Astro.currentLocale);
+
+const LABELS = {
+  es: {
+    aria: 'Ver nuestros valores',
+    regenerativo: 'Diseño regenerativo',
+    cocreacion: 'Co-creación',
+    bienestar: 'Bienestar sistémico',
+    derecho: 'Derecho a la ciudad',
+  },
+  en: {
+    aria: 'See our values',
+    regenerativo: 'Regenerative design',
+    cocreacion: 'Co-creation',
+    bienestar: 'Systemic well-being',
+    derecho: 'Right to the city',
+  },
+}[lang];
 ---
 
-<a href="/quienes-somos#valores" class="flower-wrap" aria-label="Ver nuestros valores">
+<a href={localizePath(lang, '/quienes-somos#valores')} class="flower-wrap" aria-label={LABELS.aria}>
   <div class="flower">
 
     <!-- Pétalo superior: Diseño regenerativo — aguamarina -->
     <div class="petal petal--top" style="background: rgba(96,157,146,0.30);">
-      <span class="petal-label petal-label--top">Diseño regenerativo</span>
+      <span class="petal-label petal-label--top">{LABELS.regenerativo}</span>
     </div>
 
     <!-- Pétalo derecho: Co-creación — rosado -->
     <div class="petal petal--right" style="background: rgba(230,34,79,0.30);">
-      <span class="petal-label petal-label--right">Co-creación</span>
+      <span class="petal-label petal-label--right">{LABELS.cocreacion}</span>
     </div>
 
     <!-- Pétalo inferior: Bienestar sistémico — violeta -->
     <div class="petal petal--bottom" style="background: rgba(139,92,246,0.28);">
-      <span class="petal-label petal-label--bottom">Bienestar sistémico</span>
+      <span class="petal-label petal-label--bottom">{LABELS.bienestar}</span>
     </div>
 
     <!-- Pétalo izquierdo: Derecho a la ciudad — naranja -->
     <div class="petal petal--left" style="background: rgba(226,97,29,0.30);">
-      <span class="petal-label petal-label--left">Derecho a la ciudad</span>
+      <span class="petal-label petal-label--left">{LABELS.derecho}</span>
     </div>
 
     <!-- Centro -->

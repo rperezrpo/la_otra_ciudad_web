@@ -10,6 +10,7 @@
     "import:projects": "node --env-file=.env scripts/import-wix-projects.mjs",
     "patch:descriptions": "node --env-file=.env scripts/patch-project-descriptions.mjs",
     "fix:project-types": "node --env-file=.env scripts/fix-project-field-types.mjs",
+    "migrate:project-i18n": "node --env-file=.env scripts/migrate-project-i18n.mjs",
     "set:emails": "node --env-file=.env scripts/set-emails.mjs"
   },
   "dependencies": {

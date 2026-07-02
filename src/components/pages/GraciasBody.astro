@@ -1,0 +1,115 @@
+---
+import BaseLayout from '../layout/BaseLayout.astro';
+import { localizePath, type Lang } from '../../i18n/ui';
+import { graciasContent } from '../../i18n/content/gracias';
+
+interface Props {
+  lang: Lang;
+}
+
+// Wompi redirects here after checkout with ?id=<transaction_id>&env=prod|test.
+// We resolve the real status client-side against Wompi's public API so the
+// message can't be faked by editing the URL.
+const { lang } = Astro.props;
+const c = graciasContent[lang];
+const l = (path: string) => localizePath(lang, path);
+---
+
+<BaseLayout
+  title={c.metaTitle}
+  description={c.metaDescription}
+  pageColor="aguamarina"
+>
+  <div class="section" style="min-height: 60vh; display: flex; align-items: center; justify-content: center;">
+    <div style="max-width: 560px; text-align: center;">
+
+      <div id="status-icon" style="font-size: 56px; line-height: 1; margin-bottom: 20px;">⏳</div>
+
+      <span class="eyebrow" id="status-eyebrow">{c.procesandoEyebrow}</span>
+      <h1
+        id="status-title"
+        style="font-family: var(--font-display); font-variation-settings: 'opsz' 144, 'SOFT' 40, 'WONK' 0; font-size: clamp(32px, 5vw, 56px); font-weight: 400; line-height: 1.05; letter-spacing: -1px; margin: 12px 0 16px;"
+      >
+        {c.procesandoTitle}
+      </h1>
+
+      <p id="status-text" style="font-size: 17px; font-weight: 300; line-height: 1.55; color: var(--fg2); max-width: 440px; margin: 0 auto 28px;">
+        {c.procesandoText}
+      </p>
+
+      <div id="status-detail" style="display: none; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.4px; color: var(--fg3); margin-bottom: 28px;"></div>
+
+      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <a href={l('/')} class="btn-accent" style="padding: 14px 28px;">{c.volverInicio}</a>
+        <a href={l('/donar')} class="btn-outline-accent" id="retry-btn" style="padding: 14px 28px; display: none;">{c.intentarDeNuevo}</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Localized status views consumed by the client script -->
+  <script type="application/json" id="gracias-views" set:html={JSON.stringify(c.views)}></script>
+</BaseLayout>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const txId = params.get('id');
+  const env = params.get('env'); // 'prod' | 'test'
+
+  const apiBase = env === 'test'
+    ? 'https://sandbox.wompi.co/v1'
+    : 'https://production.wompi.co/v1';
+
+  const els = {
+    icon: document.getElementById('status-icon')!,
+    eyebrow: document.getElementById('status-eyebrow')!,
+    title: document.getElementById('status-title')!,
+    text: document.getElementById('status-text')!,
+    detail: document.getElementById('status-detail')!,
+    retry: document.getElementById('retry-btn')!,
+  };
+
+  const COP = new Intl.NumberFormat('es-CO', {
+    style: 'currency', currency: 'COP', maximumFractionDigits: 0,
+  });
+
+  type View = { icon: string; eyebrow: string; title: string; text: string; retry?: boolean };
+
+  const VIEWS: Record<string, View> = JSON.parse(
+    document.getElementById('gracias-views')!.textContent || '{}',
+  );
+
+  function render(v: View) {
+    els.icon.textContent = v.icon;
+    els.eyebrow.textContent = v.eyebrow;
+    els.title.textContent = v.title;
+    els.text.textContent = v.text;
+    if (v.retry) (els.retry as HTMLElement).style.display = 'inline-flex';
+  }
+
+  async function check() {
+    if (!txId) {
+      render(VIEWS.NOTX);
+      return;
+    }
+
+    try {
+      const res = await fetch(`${apiBase}/transactions/${txId}`);
+      const { data } = await res.json();
+      const status: string = data?.status ?? 'ERROR';
+
+      render(VIEWS[status] ?? VIEWS.ERROR);
+
+      if (data?.amount_in_cents) {
+        const detail = els.detail as HTMLElement;
+        detail.style.display = 'block';
+        detail.textContent =
+          `${COP.format(data.amount_in_cents / 100)} · Ref: ${data.reference ?? txId}`;
+      }
+    } catch {
+      render(VIEWS.ERROR);
+    }
+  }
+
+  check();
+</script>

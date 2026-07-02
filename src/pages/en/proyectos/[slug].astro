@@ -1,0 +1,12 @@
+---
+import ProyectoDetalleBody from '../../../components/pages/ProyectoDetalleBody.astro';
+import { projectStaticPaths } from '../../../lib/projectPaths';
+
+export async function getStaticPaths() {
+  return projectStaticPaths('en');
+}
+
+const { project } = Astro.props;
+---
+
+<ProyectoDetalleBody project={project} />

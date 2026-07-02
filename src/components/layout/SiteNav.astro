@@ -1,35 +1,46 @@
 ﻿---
+import { pageLang, useTranslations, localizePath, alternatePath, ES_ONLY_PREFIXES } from '../../i18n/ui';
+import { CATEGORY_META } from '../../i18n/categories';
+
 const pathname = Astro.url.pathname;
+const lang = pageLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const l = (path: string) => localizePath(lang, path);
+
+// Editor-only routes exist in Spanish only — no language switcher there.
+const esOnly = ES_ONLY_PREFIXES.some((p) => pathname.startsWith(p));
+const otherLangHref = alternatePath(pathname, lang);
+const otherLangLabel = lang === 'es' ? 'EN' : 'ES';
 
 // To add or rename nav links, edit this array.
 // Links with `children` render as a hover-dropdown on desktop and as
 // indented sub-links in the mobile drawer.
 const links = [
-  { href: '/quienes-somos', label: 'Quiénes Somos', color: 'orange', activeClass: 'active-orange' },
-  { href: '/proyectos',     label: 'Proyectos',      color: 'rosado',   activeClass: 'active-rosado'   },
-  { href: '/metodologia',   label: 'Metodología',    color: 'cobalto', activeClass: 'active-cobalto' },
+  { href: l('/quienes-somos'), label: t('nav.quienesSomos'), color: 'orange', activeClass: 'active-orange' },
+  { href: l('/proyectos'),     label: t('nav.proyectos'),      color: 'rosado',   activeClass: 'active-rosado'   },
+  { href: l('/metodologia'),   label: t('nav.metodologia'),    color: 'cobalto', activeClass: 'active-cobalto' },
   {
-    href: '/servicios',
-    label: 'Servicios',
+    href: l('/servicios'),
+    label: t('nav.servicios'),
     color: 'violeta',
     activeClass: 'active-violeta',
     children: [
-      { href: '/servicios/paisajes-regenerativos',      label: 'Paisajes Regenerativos'      },
-      { href: '/servicios/espacio-publico',             label: 'Espacio Público'             },
-      { href: '/servicios/acompanamiento-comunitario',  label: 'Acompañamiento Comunitario'  },
+      { href: l('/servicios/paisajes-regenerativos'),      label: CATEGORY_META['paisajes-regenerativos'][lang]      },
+      { href: l('/servicios/espacio-publico'),             label: CATEGORY_META['espacio-publico'][lang]             },
+      { href: l('/servicios/acompanamiento-comunitario'),  label: CATEGORY_META['acompanamiento-comunitario'][lang]  },
     ],
   },
-  { href: '/contacto',      label: 'Contacto',       color: 'aguamarina',   activeClass: 'active-aguamarina'   },
+  { href: l('/contacto'),      label: t('nav.contacto'),       color: 'aguamarina',   activeClass: 'active-aguamarina'   },
 ];
 
 function isActive(href: string) {
-  if (href === '/') return pathname === '/';
+  if (href === '/' || href === '/en/') return pathname === href;
   return pathname.startsWith(href);
 }
 ---
 
 <nav class="site-nav">
-  <a href="/" class="nav-brand">
+  <a href={l('/')} class="nav-brand">
     <img
       src="/images/logo/logo_sinBordes_horizontal_color_letraNegra.svg"
       alt="La Otra Ciudad"
@@ -77,11 +88,22 @@ function isActive(href: string) {
     )}
   </div>
 
-  <a href="/donar" class="nav-cta">Donar ↗</a>
+  {!esOnly && (
+    <a href={otherLangHref} class="nav-lang" aria-label={t('nav.cambiarIdioma')}>{otherLangLabel}</a>
+  )}
 
-  <a href="/donar" class="nav-donar-btn" aria-label="Donar">$</a>
+  <a href={l('/donar')} class="nav-cta">{t('nav.donar')}</a>
 
-  <button class="nav-hamburger" id="nav-hamburger" aria-label="Abrir menú" aria-expanded="false">
+  <a href={l('/donar')} class="nav-donar-btn" aria-label={t('nav.donarAria')}>$</a>
+
+  <button
+    class="nav-hamburger"
+    id="nav-hamburger"
+    aria-label={t('nav.abrirMenu')}
+    aria-expanded="false"
+    data-label-open={t('nav.abrirMenu')}
+    data-label-close={t('nav.cerrarMenu')}
+  >
     <span></span>
     <span></span>
     <span></span>
@@ -110,7 +132,12 @@ function isActive(href: string) {
         ))}
       </>
     ))}
-    <a href="/donar" class="nav-cta nav-drawer-cta">Donar ↗</a>
+    {!esOnly && (
+      <a href={otherLangHref} class="nav-drawer-lang">
+        {lang === 'es' ? 'English version' : 'Versión en español'}
+      </a>
+    )}
+    <a href={l('/donar')} class="nav-cta nav-drawer-cta">{t('nav.donar')}</a>
   </div>
 </div>
 <div class="nav-overlay" id="nav-overlay"></div>
@@ -328,6 +355,46 @@ function isActive(href: string) {
     opacity: 1;
   }
 
+  /* ─── LANGUAGE SWITCHER ────────────────────────────────────────────────── */
+  .nav-lang {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.6px;
+    font-weight: 600;
+    color: var(--c-black);
+    text-decoration: none;
+    border: 1.5px solid rgba(26, 20, 16, 0.22);
+    border-radius: 20px;
+    padding: 5px 12px;
+    margin-left: 8px;
+    transition: background 130ms, color 130ms, border-color 130ms;
+    flex-shrink: 0;
+  }
+  .nav-lang:hover {
+    background: var(--c-black);
+    border-color: var(--c-black);
+    color: #fff;
+  }
+
+  .nav-drawer-lang {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: rgba(26, 20, 16, 0.6);
+    text-decoration: none;
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-top: 4px;
+    transition: background 120ms, color 120ms;
+  }
+  .nav-drawer-lang:hover { background: var(--c-glass-dark); color: var(--c-black); }
+
+  @media (max-width: 560px) {
+    .nav-lang { display: none; }
+  }
+
   /* ─── DONATE CIRCLE BUTTON ─────────────────────────────────────────────── */
   .nav-donar-btn {
     display: none;
@@ -363,7 +430,7 @@ function isActive(href: string) {
   function openMenu() {
     hamburger.classList.add('is-open');
     hamburger.setAttribute('aria-expanded', 'true');
-    hamburger.setAttribute('aria-label', 'Cerrar menú');
+    hamburger.setAttribute('aria-label', hamburger.dataset.labelClose ?? 'Cerrar menú');
     drawer.classList.add('is-open');
     drawer.setAttribute('aria-hidden', 'false');
     overlay.classList.add('is-open');
@@ -373,7 +440,7 @@ function isActive(href: string) {
   function closeMenu() {
     hamburger.classList.remove('is-open');
     hamburger.setAttribute('aria-expanded', 'false');
-    hamburger.setAttribute('aria-label', 'Abrir menú');
+    hamburger.setAttribute('aria-label', hamburger.dataset.labelOpen ?? 'Abrir menú');
     drawer.classList.remove('is-open');
     drawer.setAttribute('aria-hidden', 'true');
     overlay.classList.remove('is-open');

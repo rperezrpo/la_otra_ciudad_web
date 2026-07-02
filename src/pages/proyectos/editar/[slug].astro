@@ -4,13 +4,12 @@ export const prerender = false;
 import BaseLayout from '../../../components/layout/BaseLayout.astro';
 import { getSessionEmail, isProjectEditor } from '../../../lib/access';
 import { getProjectForEdit } from '../../../lib/sanity';
+import { CATEGORY_KEYS, CATEGORY_META } from '../../../i18n/categories';
 
 const { slug } = Astro.params;
 const email = await getSessionEmail(Astro.request);
 const isEditor = await isProjectEditor(email);
 const project = isEditor && slug ? await getProjectForEdit(slug) : null;
-
-const CATEGORIES = ['Paisajes Regenerativos', 'Espacio Público', 'Acompañamiento Comunitario'];
 ---
 
 <BaseLayout title="Editar proyecto" description="Edición de proyecto." pageColor="cobalto">
@@ -44,22 +43,28 @@ const CATEGORIES = ['Paisajes Regenerativos', 'Espacio Público', 'Acompañamien
     {email && isEditor && project && (
       <div>
         <span class="eyebrow">Proyecto</span>
-        <h1 class="section-title" style="font-size: clamp(26px, 2.6vw, 38px);">{project.title}</h1>
+        <h1 class="section-title" style="font-size: clamp(26px, 2.6vw, 38px);">{project.title.es}</h1>
         <p style="font-size: 13px; color: var(--fg3); margin-top: 4px;">URL: /proyectos/{project.slug} (no editable)</p>
 
         <form id="project-form" enctype="multipart/form-data" style="margin-top: 28px;">
           <input type="hidden" name="slug" value={project.slug} />
 
           <div class="form-group">
-            <label class="form-label" for="title">Título</label>
-            <input class="form-input" type="text" id="title" name="title" value={project.title} required />
+            <label class="form-label" for="title_es">Título (español)</label>
+            <input class="form-input" type="text" id="title_es" name="title_es" value={project.title.es} required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="title_en">Título (inglés)</label>
+            <input class="form-input" type="text" id="title_en" name="title_en" value={project.title.en} />
+            <p style="font-size: 13px; color: var(--fg3); margin-top: 6px;">Los campos en inglés son opcionales: si quedan vacíos, la web en inglés muestra el texto en español.</p>
           </div>
 
           <div class="form-group">
             <label class="form-label" for="categoria_principal">Categoría principal</label>
             <select class="form-select" id="categoria_principal" name="categoria_principal" required>
-              {CATEGORIES.map((c) => (
-                <option value={c} selected={c === project.categoria_principal}>{c}</option>
+              {CATEGORY_KEYS.map((key) => (
+                <option value={key} selected={key === project.categoria_principal}>{CATEGORY_META[key].es}</option>
               ))}
             </select>
           </div>
@@ -67,22 +72,27 @@ const CATEGORIES = ['Paisajes Regenerativos', 'Espacio Público', 'Acompañamien
           <div class="form-group">
             <label class="form-label">Categorías (todas las que apliquen)</label>
             <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 6px;">
-              {CATEGORIES.map((c) => (
+              {CATEGORY_KEYS.map((key) => (
                 <label style="display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 400;">
-                  <input type="checkbox" name="category" value={c} checked={project.category.includes(c)} />
-                  {c}
+                  <input type="checkbox" name="category" value={key} checked={project.category.includes(key)} />
+                  {CATEGORY_META[key].es}
                 </label>
               ))}
             </div>
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="summary">Resumen (para las tarjetas)</label>
-            <textarea class="form-textarea" id="summary" name="summary" rows="3">{project.summary}</textarea>
+            <label class="form-label" for="summary_es">Resumen (para las tarjetas, español)</label>
+            <textarea class="form-textarea" id="summary_es" name="summary_es" rows="3">{project.summary.es}</textarea>
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="description">Descripción</label>
+            <label class="form-label" for="summary_en">Resumen (inglés)</label>
+            <textarea class="form-textarea" id="summary_en" name="summary_en" rows="3">{project.summary.en}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="description_es">Descripción (español)</label>
             <details style="margin-bottom: 8px;">
               <summary style="cursor: pointer; font-size: 13px; color: var(--fg3);">¿Cómo dar formato? (Markdown)</summary>
               <div style="font-size: 13px; color: var(--fg2); margin-top: 8px; line-height: 1.6;">
@@ -90,7 +100,12 @@ const CATEGORIES = ['Paisajes Regenerativos', 'Espacio Público', 'Acompañamien
                 <code>*cursiva*</code> · <code>[texto](https://enlace)</code> · listas con <code>- </code> al inicio de la línea.
               </div>
             </details>
-            <textarea class="form-textarea" id="description" name="description" rows="14" style="font-family: var(--font-mono); font-size: 14px;">{project.descriptionMarkdown}</textarea>
+            <textarea class="form-textarea" id="description_es" name="description_es" rows="14" style="font-family: var(--font-mono); font-size: 14px;">{project.descriptionMarkdown.es}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="description_en">Descripción (inglés)</label>
+            <textarea class="form-textarea" id="description_en" name="description_en" rows="14" style="font-family: var(--font-mono); font-size: 14px;">{project.descriptionMarkdown.en}</textarea>
           </div>
 
           <div class="form-group">

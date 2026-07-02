@@ -1,0 +1,382 @@
+---
+import BaseLayout from '../layout/BaseLayout.astro';
+import ProjectCard from '../ProjectCard.astro';
+import FlowerDiagram from '../FlowerDiagram.astro';
+import { getFeaturedProjects } from '../../lib/sanity';
+import { useTranslations, localizePath, type Lang } from '../../i18n/ui';
+import { homeContent } from '../../i18n/content/home';
+import { Image } from 'astro:assets';
+import sanRafael2 from '../../../public/images/projects/fotos_intervenciones/san_rafael_2.jpg';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const l = (path: string) => localizePath(lang, path);
+const c = homeContent[lang];
+
+const featured = await getFeaturedProjects(5, lang);
+
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'NGO',
+  name: 'Corporación La Otra Ciudad',
+  url: 'https://laotraciudad.org',
+  logo: 'https://laotraciudad.org/images/logo.svg',
+  description: c.jsonLdDescription,
+  foundingDate: '2021',
+  areaServed: { '@type': 'City', name: 'Medellín', containedInPlace: { '@type': 'Country', name: 'Colombia' } },
+  contactPoint: { '@type': 'ContactPoint', email: 'info@laotraciudad.org', contactType: 'customer service' },
+  sameAs: [],
+};
+---
+
+<BaseLayout
+  title={c.metaTitle}
+  description={c.metaDescription}
+  jsonLd={orgSchema}
+  pageColor="cobalto"
+>
+
+  <!-- ─── HERO ──────────────────────────────────────────────────────── -->
+  <section class="hero">
+    <span class="hero-eyebrow">{c.heroEyebrow}</span>
+    <h1 class="hero-title">{c.heroTitle}</h1>
+    <p class="hero-sub">{c.heroSub}</p>
+    <button class="hero-scroll-btn" onclick="document.getElementById('hero-next').scrollIntoView({behavior:'smooth'})" aria-label={c.heroScrollAria}>
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </button>
+  </section>
+
+  <!-- ─── MISSION INTRO ─────────────────────────────────────────────── -->
+  <div id="hero-next" class="section">
+    <div class="two-col">
+      <div>
+        <span class="eyebrow">{c.misionEyebrow}</span>
+        <h2 class="section-title">{c.misionTitle}</h2>
+        <p class="section-body">
+          {c.misionBody}
+        </p>
+        <div style="margin-top: 28px; display: flex; gap: 12px; flex-wrap: wrap;">
+          <a href={l('/quienes-somos')} class="btn-accent">{c.misionBtnQuienes}</a>
+          <a href={l('/metodologia')} class="btn-outline">{c.misionBtnMetodologia}</a>
+        </div>
+      </div>
+      <div>
+        <Image
+          src={sanRafael2}
+          alt={c.misionImgAlt}
+          width={600}
+          height={400}
+          style="width: 100%; aspect-ratio: 3/2; object-fit: cover; border-radius: 12px; display: block;"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── STATS ─────────────────────────────────────────────────────── -->
+  <!-- EDIT: update numbers as the organization grows (in src/i18n/content/home.ts) -->
+  {(() => {
+    const A = 'M 10,60 C 5,36 28,12 68,9 C 108,6 158,20 178,40 C 196,58 186,78 158,84 C 130,90 72,88 38,78 C 14,70 14,80 10,60 Z';
+    const B = 'M 22,14 C 52,4 126,8 162,26 C 190,40 192,64 170,76 C 148,88 96,90 56,84 C 20,78 4,60 6,42 C 8,22 8,22 22,14 Z';
+    const meta: [string, string, string][] = [
+      ['var(--c-orange)',     A, ''],
+      ['var(--c-aguamarina)', B, ''],
+      ['var(--c-cobalto)',    A, 'scale(-1 1) translate(-200 0)'],
+      ['var(--c-rosado)',     B, 'rotate(180 100 50)'],
+    ];
+    return (
+      <div class="stats-strip" style="background-image: linear-gradient(135deg, rgba(26,20,16,0.84) 0%, rgba(42,26,10,0.76) 55%, rgba(59,26,26,0.70) 100%), url('/images/projects/alto_flores/alto_flores3.jpg'); background-size: cover; background-position: center;">
+        {c.stats.map(([num, label], i) => (
+          <div class="stat-item">
+            <svg class="stat-blob" viewBox="0 0 200 100" aria-hidden="true">
+              <path fill={meta[i][0]} fill-opacity="0.22" d={meta[i][1]} transform={meta[i][2] || undefined} />
+            </svg>
+            <div class="stat-num" style={`color: ${meta[i][0]};`}>{num}</div>
+            <div class="stat-label">{label}</div>
+          </div>
+        ))}
+      </div>
+    );
+  })()}
+
+  <!-- ─── METHODOLOGY PREVIEW ───────────────────────────────────────── -->
+  <div class="section">
+    <span class="eyebrow">{c.metodEyebrow}</span>
+    <h2 class="section-title">{c.metodTitle}</h2>
+
+    <div class="two-col" style="gap: 72px; align-items: center; margin-top: 32px;">
+
+      <!-- Columna izquierda: diagrama -->
+      <div>
+        <FlowerDiagram />
+      </div>
+
+      <!-- Columna derecha: párrafo -->
+      <div>
+        <p class="section-body" style="margin-top: 0;">
+          {c.metodP1}
+        </p>
+        <p class="section-body">
+          {c.metodP2}
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─── QUOTE BANNER ──────────────────────────────────────────────── -->
+  <div style="background: var(--c-grad-hero); padding: 96px 48px;">
+    <div style="max-width: 900px; margin: 0 auto; text-align: center;">
+      <span class="eyebrow-light">{c.quoteEyebrow}</span>
+      <p style="font-family: var(--font-display); font-variation-settings: 'opsz' 144, 'SOFT' 30, 'WONK' 0; font-size: clamp(32px, 4vw, 52px); font-weight: 400; line-height: 1.15; letter-spacing: -1px; color: #fff; margin: 0 0 40px;">
+        {c.quoteText}
+      </p>
+      <a href={l('/donar')} class="btn-hero-primary" style="font-size: 16px;">{c.quoteCta}</a>
+    </div>
+  </div>
+
+  <!-- ─── FEATURED PROJECTS ─────────────────────────────────────────── -->
+  <div class="section-full section-warm" style="padding: 80px 0;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 48px; display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; flex-wrap: wrap; gap: 16px;">
+      <div>
+        <span class="eyebrow">{c.featuredEyebrow}</span>
+        <h2 class="section-title">{c.featuredTitle}</h2>
+      </div>
+      <a href={l('/proyectos')} class="btn-outline">{c.featuredVerTodos}</a>
+    </div>
+
+    <div class="carousel-outer" id="proj-carousel">
+      <div class="carousel-track" id="proj-track">
+        {[...featured, ...featured].map((project, i) => (
+          <div class="carousel-item" aria-hidden={i >= featured.length ? 'true' : undefined}>
+            <ProjectCard
+              title={project.title}
+              slug={project.slug}
+              category={project.categoryLabel}
+              summary={project.summary}
+              heroImage={project.heroImage}
+              status={project.status}
+              year={project.year}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .carousel-outer {
+      overflow: hidden;
+      cursor: grab;
+      user-select: none;
+      -webkit-user-select: none;
+      padding: 4px 0 28px;
+    }
+    .carousel-outer.is-dragging { cursor: grabbing; }
+    .carousel-outer.is-dragging a { pointer-events: none; }
+
+    .carousel-track {
+      display: flex;
+      gap: 24px;
+      padding: 0 48px;
+      will-change: transform;
+    }
+
+    .carousel-item {
+      flex: 0 0 360px;
+      min-width: 0;
+    }
+
+    @media (max-width: 600px) {
+      .carousel-item { flex: 0 0 280px; }
+      .carousel-track { padding: 0 24px; }
+    }
+  </style>
+
+  <script>
+    const outer = document.getElementById('proj-carousel');
+    const track = document.getElementById('proj-track');
+    const items = track.querySelectorAll('.carousel-item');
+    const N = items.length / 2;
+
+    let pos = 0;
+    let dragging = false;
+    let didDrag = false;
+    let startX = 0;
+    let startPos = 0;
+
+    function loopWidth() {
+      const gap = parseFloat(getComputedStyle(track).gap) || 0;
+      return N * (items[0].offsetWidth + gap);
+    }
+
+    function wrap(p) {
+      const lw = loopWidth();
+      return ((p % lw) + lw) % lw;
+    }
+
+    function render() {
+      track.style.transform = `translateX(-${pos}px)`;
+    }
+
+    function stopDrag() {
+      if (!dragging) return;
+      dragging = false;
+      outer.classList.remove('is-dragging');
+    }
+
+    // Prevent the browser from starting a native link/image drag, which would
+    // steal mousemove events and break drag-scrolling over cards.
+    outer.addEventListener('dragstart', e => e.preventDefault());
+
+    outer.addEventListener('mousedown', e => {
+      dragging = true;
+      didDrag = false;
+      startX = e.clientX;
+      startPos = pos;
+      outer.classList.add('is-dragging');
+    });
+
+    window.addEventListener('mousemove', e => {
+      if (!dragging) return;
+      const dx = startX - e.clientX;
+      if (Math.abs(dx) > 5) didDrag = true;
+      pos = wrap(startPos + dx);
+      render();
+    });
+
+    window.addEventListener('mouseup', stopDrag);
+    // Stops drag if cursor leaves the browser window entirely
+    document.addEventListener('mouseleave', stopDrag);
+
+    // Suppress card navigation after a drag (but allow plain clicks)
+    outer.addEventListener('click', e => {
+      if (didDrag) {
+        e.preventDefault();
+        e.stopPropagation();
+        didDrag = false;
+      }
+    }, true);
+
+    outer.addEventListener('touchstart', e => {
+      startX = e.touches[0].clientX;
+      startPos = pos;
+      didDrag = false;
+    }, { passive: true });
+    outer.addEventListener('touchmove', e => {
+      pos = wrap(startPos + (startX - e.touches[0].clientX));
+      render();
+    }, { passive: true });
+
+    // Trackpad horizontal swipe only; ignore vertical so page scroll works normally
+    outer.addEventListener('wheel', e => {
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+      e.preventDefault();
+      pos = wrap(pos + e.deltaX);
+      render();
+    }, { passive: false });
+
+    // Start with the last card peeking ~45% from the left edge so it's
+    // immediately obvious this is a scrollable carousel.
+    pos = wrap(-(items[0].offsetWidth * 0.45));
+    render();
+  </script>
+
+  <!-- ─── DONATE CTA ────────────────────────────────────────────────── -->
+  <div class="section-full section-gradient" style="padding: 96px 48px; text-align: center;">
+    <span class="eyebrow-light">{c.donarEyebrow}</span>
+    <h2 style="font-family: var(--font-display); font-variation-settings: 'opsz' 144, 'SOFT' 30, 'WONK' 0; font-size: clamp(36px, 5vw, 60px); font-weight: 400; line-height: 1.1; letter-spacing: -1.2px; color: #fff; margin: 0 auto 20px;">
+      {c.donarTitle}
+    </h2>
+    <p style="font-size: 18px; font-weight: 300; color: rgba(255,255,255,0.8); max-width: 480px; margin: 0 auto 36px; line-height: 1.5;">
+      {c.donarText}
+    </p>
+    <a href={l('/donar')} class="btn-hero-primary" style="font-size: 16px;">{t('cta.quieroDonar')}</a>
+  </div>
+
+
+<script>
+  (() => {
+    const strip = document.querySelector('.stats-strip');
+    if (!strip) return;
+
+    // Parse numeric value from strings like "1.035+", "393", "21", "2"
+    function parseValue(str: string): { prefix: string; value: number; suffix: string } {
+      const m = str.match(/^([^\d]*)(\d[\d.,]*)(.*)$/);
+      if (!m) return { prefix: '', value: 0, suffix: str };
+      return {
+        prefix: m[1],
+        value: parseFloat(m[2].replace(/[.,]/g, '')),
+        suffix: m[3],
+      };
+    }
+
+    function easeOutExpo(t: number): number {
+      return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+    }
+
+    function countUp(el: HTMLElement, delay: number) {
+      const raw = el.dataset.value ?? el.textContent?.trim() ?? '0';
+      const { prefix, value, suffix } = parseValue(raw);
+      const duration = 1400;
+      let start: number | null = null;
+
+      const sep = raw.includes(',') ? ',' : raw.includes('.') ? '.' : '';
+      const formatted = (n: number) => {
+        const rounded = Math.round(n);
+        if (sep && value >= 1000) {
+          return rounded.toLocaleString('de-DE').replace(/\./g, sep);
+        }
+        return String(rounded);
+      };
+
+      el.textContent = prefix + '0' + suffix;
+
+      setTimeout(() => {
+        const step = (ts: number) => {
+          if (!start) start = ts;
+          const progress = Math.min((ts - start) / duration, 1);
+          el.textContent = prefix + formatted(easeOutExpo(progress) * value) + suffix;
+          if (progress < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      }, delay);
+    }
+
+    // Store original values before any manipulation
+    strip.querySelectorAll<HTMLElement>('.stat-num').forEach(el => {
+      el.dataset.value = el.textContent?.trim() ?? '';
+    });
+
+    // Set initial state for entrance animation
+    strip.querySelectorAll<HTMLElement>('.stat-item').forEach(item => {
+      item.style.opacity = '0';
+      item.style.transform = 'translateY(20px)';
+    });
+
+    const obs = new IntersectionObserver(entries => {
+      if (!entries[0].isIntersecting) return;
+      obs.disconnect();
+
+      strip.querySelectorAll<HTMLElement>('.stat-item').forEach((item, i) => {
+        const delay = i * 120;
+        setTimeout(() => {
+          item.style.transition = 'opacity 500ms ease, transform 500ms ease';
+          item.style.opacity = '1';
+          item.style.transform = 'translateY(0)';
+          const numEl = item.querySelector<HTMLElement>('.stat-num');
+          if (numEl) countUp(numEl, 0);
+        }, delay);
+      });
+    }, { threshold: 0.25 });
+
+    obs.observe(strip);
+  })();
+</script>
+
+</BaseLayout>

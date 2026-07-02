@@ -1,0 +1,245 @@
+---
+import BaseLayout from '../layout/BaseLayout.astro';
+import PageHero from '../layout/PageHero.astro';
+import type { Lang } from '../../i18n/ui';
+import { contactoContent } from '../../i18n/content/contacto';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const c = contactoContent[lang];
+
+// Status messages consumed by the client script below.
+const formI18n = {
+  enviando: c.enviando,
+  msgOk: c.msgOk,
+  msgError: c.msgError,
+  msgConexion: c.msgConexion,
+};
+---
+
+<BaseLayout
+  title={c.metaTitle}
+  description={c.metaDescription}
+  pageColor="orange"
+>
+
+  <!-- ─── PAGE HERO ─────────────────────────────────────────────────── -->
+  <!-- EDIT: drop a photo into /public/images/banners/contacto.jpg to activate the image background -->
+  <PageHero eyebrow={c.heroEyebrow} image="/images/banners/contacto.jpg">
+    <h1 class="page-hero-title">{c.heroTitle}</h1>
+    <p class="page-hero-sub">{c.heroSub}</p>
+  </PageHero>
+
+  <div class="section">
+    <div class="two-col" style="gap: 96px; align-items: start;">
+
+      <!-- ─── CONTACT FORM ───────────────────────────────────────────── -->
+      <!-- Submits to the serverless endpoint at /api/contact (sends email via Resend). -->
+      <div>
+        <span class="eyebrow">{c.formEyebrow}</span>
+        <h2 class="section-title" style="font-size: clamp(24px, 2.5vw, 36px); margin-top: 16px;">{c.formTitle}</h2>
+
+        <form
+          id="contact-form"
+          style="margin-top: 32px;"
+          action="/api/contact"
+          method="POST"
+        >
+          <div class="form-group">
+            <label class="form-label" for="nombre">{c.labelNombre}</label>
+            <input
+              class="form-input"
+              type="text"
+              id="nombre"
+              name="nombre"
+              placeholder={c.placeholderNombre}
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="email">{c.labelEmail}</label>
+            <input
+              class="form-input"
+              type="email"
+              id="email"
+              name="email"
+              placeholder={c.placeholderEmail}
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="asunto">{c.labelAsunto}</label>
+            <select class="form-select" id="asunto" name="asunto" required>
+              <option value="">{c.asuntoPlaceholder}</option>
+              {c.asuntos.map((a) => (
+                <option value={a.value}>{a.label}</option>
+              ))}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="mensaje">{c.labelMensaje}</label>
+            <textarea
+              class="form-textarea"
+              id="mensaje"
+              name="mensaje"
+              placeholder={c.placeholderMensaje}
+              required
+            ></textarea>
+          </div>
+
+          <button
+            type="submit"
+            class="btn-accent"
+            id="contact-submit"
+            style="width: 100%; justify-content: center; padding: 14px;"
+          >
+            {c.btnEnviar}
+          </button>
+
+          <p
+            id="contact-status"
+            role="status"
+            aria-live="polite"
+            style="display: none; margin-top: 16px; font-size: 15px; line-height: 1.5;"
+          ></p>
+        </form>
+      </div>
+
+      <!-- ─── CONTACT INFO ───────────────────────────────────────────── -->
+      <div>
+        <span class="eyebrow">{c.infoEyebrow}</span>
+        <div style="margin-top: 24px; display: flex; flex-direction: column; gap: 0;">
+          {c.info.map(({ label, value }) => (
+            <div style="padding: 20px 0; border-bottom: 1px solid rgba(26,20,16,0.08);">
+              <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--fg3); margin-bottom: 6px;">{label}</div>
+              <div style="font-size: 16px; font-weight: 400; line-height: 1.5; white-space: pre-line;">{value}</div>
+            </div>
+          ))}
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ─── FAQ ──────────────────────────────────────────────────────── -->
+  <div class="section-full section-warm" style="padding: 80px 48px;">
+    <div style="max-width: 800px; margin: 0 auto;">
+      <span class="eyebrow">{c.faqEyebrow}</span>
+      <h2 class="section-title" style="margin-bottom: 48px;">{c.faqTitle}</h2>
+
+      <div id="faq-list">
+        {c.faqs.map((faq, i) => (
+          <div
+            class="faq-item"
+            style="border-top: 1px solid rgba(26,20,16,0.1);"
+          >
+            <button
+              class="faq-trigger"
+              aria-expanded="false"
+              aria-controls={`faq-answer-${i}`}
+              style="width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 28px 0; background: none; border: none; cursor: pointer; text-align: left; font-family: var(--font-sans);"
+            >
+              <span style="font-size: 18px; font-weight: 600; letter-spacing: -0.2px; color: var(--c-black); line-height: 1.3;">
+                {faq.question}
+              </span>
+              <span class="faq-icon" style="flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid rgba(26,20,16,0.2); display: flex; align-items: center; justify-content: center; color: var(--c-black); transition: transform 200ms, background 150ms;">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <line x1="6" y1="1" x2="6" y2="11"/>
+                  <line x1="1" y1="6" x2="11" y2="6" class="faq-hline"/>
+                </svg>
+              </span>
+            </button>
+
+            <div
+              id={`faq-answer-${i}`}
+              class="faq-answer"
+              style="display: none; padding-bottom: 28px;"
+            >
+              {faq.answer.map((paragraph) => (
+                <p style="font-size: 16px; font-weight: 300; line-height: 1.7; color: var(--fg2); margin-bottom: 14px; white-space: pre-line;">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          </div>
+        ))}
+
+        <!-- closing border -->
+        <div style="border-top: 1px solid rgba(26,20,16,0.1);"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Localized form messages consumed by the client script -->
+  <script type="application/json" id="contact-i18n" set:html={JSON.stringify(formI18n)}></script>
+
+</BaseLayout>
+
+<script>
+  // ─── Contact form submit ─────────────────────────────────────────
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const status = document.getElementById('contact-status') as HTMLParagraphElement | null;
+  const submitBtn = document.getElementById('contact-submit') as HTMLButtonElement | null;
+
+  const I18N = JSON.parse(document.getElementById('contact-i18n')?.textContent || '{}');
+
+  if (form && status && submitBtn) {
+    const showStatus = (message: string, ok: boolean) => {
+      status.textContent = message;
+      status.style.display = 'block';
+      status.style.color = ok ? 'var(--fg2)' : '#b3261e';
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      submitBtn.disabled = true;
+      const originalLabel = submitBtn.textContent;
+      submitBtn.textContent = I18N.enviando;
+      status.style.display = 'none';
+
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(Object.fromEntries(new FormData(form) as any)),
+        });
+        const data = await res.json().catch(() => ({}));
+
+        if (res.ok) {
+          form.reset();
+          showStatus(I18N.msgOk, true);
+        } else {
+          showStatus(data.error ?? I18N.msgError, false);
+        }
+      } catch {
+        showStatus(I18N.msgConexion, false);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalLabel;
+      }
+    });
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('.faq-trigger').forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      const expanded = trigger.getAttribute('aria-expanded') === 'true';
+      const answerId = trigger.getAttribute('aria-controls')!;
+      const answer = document.getElementById(answerId)!;
+      const icon = trigger.querySelector<SVGLineElement>('.faq-hline')!;
+
+      trigger.setAttribute('aria-expanded', String(!expanded));
+      answer.style.display = expanded ? 'none' : 'block';
+
+      // Rotate the + into a −
+      icon.style.opacity = expanded ? '1' : '0';
+    });
+  });
+</script>

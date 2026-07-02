@@ -17,6 +17,15 @@ export default defineConfig({
   // (Astro 5+ merged the old `hybrid` mode into `static`.)
   output: 'static',
   adapter: vercel(),
+  // Spanish keeps its unprefixed URLs (already indexed); English lives under /en/.
+  // Note: routes are still filesystem-driven — every /en page has a wrapper file
+  // under src/pages/en/. No `fallback` on purpose: it would emit /en copies of
+  // editor-only pages too.
+  i18n: {
+    locales: ['es', 'en'],
+    defaultLocale: 'es',
+    routing: { prefixDefaultLocale: false },
+  },
   // Tailwind v4 is wired through its Vite plugin (the @astrojs/tailwind
   // integration was dropped in favour of @tailwindcss/vite).
   vite: {
@@ -32,7 +41,9 @@ export default defineConfig({
       studioBasePath: '/admin',
     }),
     react(),
-    sitemap(),
+    sitemap({
+      i18n: { defaultLocale: 'es', locales: { es: 'es', en: 'en' } },
+    }),
     // Google sign-in for team members (Auth.js). Injects /api/auth/* and reads
     // the provider config from ./auth.config.mjs.
     auth(),

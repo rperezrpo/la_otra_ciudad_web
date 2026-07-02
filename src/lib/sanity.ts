@@ -2,6 +2,8 @@ import { sanityClient } from 'sanity:client'
 import imageUrlBuilder from '@sanity/image-url'
 import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
 import { portableTextToMarkdown } from './portableText'
+import type { Lang } from '../i18n/ui'
+import { CATEGORY_META, categoryKey, categoryLabel } from '../i18n/categories'
 
 const builder = imageUrlBuilder(sanityClient)
 
@@ -13,6 +15,33 @@ export function urlFor(source: SanityImageSource) {
 function img(source: SanityImageSource | undefined, width: number): string {
   if (!source || !(source as any).asset) return ''
   return urlFor(source).width(width).auto('format').fit('max').url()
+}
+
+// ─── i18n helpers ────────────────────────────────────────────────────────────
+// Fields migrated to {es, en} objects, with tolerance for the legacy plain
+// value so deploy order doesn't matter (code first, data migration after).
+
+type LocaleField = { es?: string; en?: string } | string | undefined | null
+
+/** {es,en} → localized string with Spanish fallback; legacy plain string passes through. */
+export function pickLocale(field: LocaleField, locale: Lang): string {
+  if (!field) return ''
+  if (typeof field === 'string') return field
+  return field[locale] || field.es || ''
+}
+
+/** Same for Portable Text: {es: blocks, en: blocks} or legacy blocks/string. */
+function pickLocaleBlocks(field: any, locale: Lang): any {
+  if (!field) return field
+  if (Array.isArray(field) || typeof field === 'string') return field // legacy shape
+  const localized = field[locale]
+  return (Array.isArray(localized) && localized.length > 0) ? localized : field.es
+}
+
+/** Values to match in GROQ for a category: the stable key plus the legacy Spanish label. */
+function categoryQueryValues(key: string): string[] {
+  const k = categoryKey(key)
+  return k ? [k, CATEGORY_META[k].es] : [key]
 }
 
 // ─── Projects ──────────────────────────────────────────────────────────────
@@ -32,7 +61,11 @@ const PROJECT_CARD_FIELDS = `
 export interface ProjectCardData {
   title: string
   slug: string
+  /** Stable category key (see CATEGORY_META). */
   category: string
+  /** Localized label for display. */
+  categoryLabel: string
+  /** Stable keys of all categories (used by the client-side filter). */
   categories: string[]
   summary: string
   heroImage: string
@@ -40,62 +73,68 @@ export interface ProjectCardData {
   year: number
 }
 
-function toCard(p: any): ProjectCardData {
+function toCard(p: any, locale: Lang): ProjectCardData {
+  const key = categoryKey(p.category)
   return {
-    title: p.title,
+    title: pickLocale(p.title, locale),
     slug: p.slug,
-    category: p.category ?? '',
-    categories: p.categories ?? [],
-    summary: p.summary ?? '',
+    category: key,
+    categoryLabel: categoryLabel(p.category, locale),
+    categories: (p.categories ?? []).map((c: string) => categoryKey(c)).filter(Boolean),
+    summary: pickLocale(p.summary, locale),
     heroImage: img(p.heroImage, 800),
     status: p.status,
     year: p.year,
   }
 }
 
-export async function getProjectsBySlug(slugs: string[]): Promise<ProjectCardData[]> {
+export async function getProjectsBySlug(slugs: string[], locale: Lang = 'es'): Promise<ProjectCardData[]> {
   const data = await sanityClient.fetch(
     `*[_type == "project" && slug.current in $slugs]{${PROJECT_CARD_FIELDS}}`,
     { slugs }
   )
   // Preserve the order defined in slugs
-  const map = new Map(data.map((p: any) => [p.slug, toCard(p)]))
+  const map = new Map(data.map((p: any) => [p.slug, toCard(p, locale)]))
   return slugs.map(s => map.get(s)).filter(Boolean) as ProjectCardData[]
 }
 
-export async function getProjectsByCategory(category: string): Promise<ProjectCardData[]> {
+export async function getProjectsByCategory(category: string, locale: Lang = 'es'): Promise<ProjectCardData[]> {
   const data = await sanityClient.fetch(
-    `*[_type == "project" && categoria_principal == $category] | order(year desc, title asc){${PROJECT_CARD_FIELDS}}`,
-    { category }
+    `*[_type == "project" && categoria_principal in $values] | order(year desc, title.es asc, title asc){${PROJECT_CARD_FIELDS}}`,
+    { values: categoryQueryValues(category) }
   )
-  return data.map(toCard)
+  return data.map((p: any) => toCard(p, locale))
 }
 
-export async function getProjects(): Promise<ProjectCardData[]> {
+export async function getProjects(locale: Lang = 'es'): Promise<ProjectCardData[]> {
   const data = await sanityClient.fetch(
-    `*[_type == "project" && defined(slug.current)] | order(year desc, title asc){${PROJECT_CARD_FIELDS}}`
+    `*[_type == "project" && defined(slug.current)] | order(year desc, title.es asc, title asc){${PROJECT_CARD_FIELDS}}`
   )
-  return data.map(toCard)
+  return data.map((p: any) => toCard(p, locale))
 }
 
-export async function getFeaturedProjects(limit = 3): Promise<ProjectCardData[]> {
+export async function getFeaturedProjects(limit = 3, locale: Lang = 'es'): Promise<ProjectCardData[]> {
   const featured = await sanityClient.fetch(
-    `*[_type == "project" && featured == true && defined(slug.current)] | order(year desc, title asc)[0...$limit]{${PROJECT_CARD_FIELDS}}`,
+    `*[_type == "project" && featured == true && defined(slug.current)] | order(year desc, title.es asc, title asc)[0...$limit]{${PROJECT_CARD_FIELDS}}`,
     { limit }
   )
-  if (featured.length > 0) return featured.map(toCard)
+  if (featured.length > 0) return featured.map((p: any) => toCard(p, locale))
   // Fall back to the most recent projects if none are explicitly featured.
   const recent = await sanityClient.fetch(
-    `*[_type == "project" && defined(slug.current)] | order(year desc, title asc)[0...$limit]{${PROJECT_CARD_FIELDS}}`,
+    `*[_type == "project" && defined(slug.current)] | order(year desc, title.es asc, title asc)[0...$limit]{${PROJECT_CARD_FIELDS}}`,
     { limit }
   )
-  return recent.map(toCard)
+  return recent.map((p: any) => toCard(p, locale))
 }
 
 export interface ProjectDetailData {
   title: string
   slug: string
+  /** Stable category key (see CATEGORY_META). */
   category: string
+  /** Localized label for display. */
+  categoryLabel: string
+  summary: string
   heroImage: string
   description: any[]   // Portable Text blocks
   neighborhood: string
@@ -128,13 +167,13 @@ export async function getProjectSlugs(): Promise<string[]> {
   )
 }
 
-export async function getProject(slug: string): Promise<ProjectDetailData | null> {
+export async function getProject(slug: string, locale: Lang = 'es'): Promise<ProjectDetailData | null> {
   const p = await sanityClient.fetch(
     `*[_type == "project" && slug.current == $slug][0]{
       title,
       "slug": slug.current,
       "category": categoria_principal,
-      category[],
+      summary,
       heroImage,
       description,
       neighborhood,
@@ -147,11 +186,13 @@ export async function getProject(slug: string): Promise<ProjectDetailData | null
   )
   if (!p) return null
   return {
-    title: p.title,
+    title: pickLocale(p.title, locale),
     slug: p.slug,
-    category: p.category,
+    category: categoryKey(p.category),
+    categoryLabel: categoryLabel(p.category, locale),
+    summary: pickLocale(p.summary, locale),
     heroImage: img(p.heroImage, 1600),
-    description: normalizeDescription(p.description),
+    description: normalizeDescription(pickLocaleBlocks(p.description, locale)),
     neighborhood: p.neighborhood ?? '',
     partners: p.partners ?? [],
     year: p.year,
@@ -161,6 +202,8 @@ export async function getProject(slug: string): Promise<ProjectDetailData | null
 }
 
 // ─── Project editing (self-service form) ─────────────────────────────────────
+// The edit form shows BOTH languages, so these functions do not resolve a
+// locale: they expose {es, en} pairs (normalizing legacy plain values to es).
 
 export interface ProjectListItem {
   slug: string
@@ -172,13 +215,13 @@ export interface ProjectListItem {
 
 export async function getEditableProjects(): Promise<ProjectListItem[]> {
   const data = await sanityClient.fetch(
-    `*[_type == "project" && defined(slug.current)] | order(year desc, title asc){
+    `*[_type == "project" && defined(slug.current)] | order(year desc, title.es asc, title asc){
       title, "slug": slug.current, heroImage, status, year
     }`
   )
   return data.map((p: any) => ({
     slug: p.slug,
-    title: p.title ?? '(sin título)',
+    title: pickLocale(p.title, 'es') || '(sin título)',
     heroImage: img(p.heroImage, 240),
     status: p.status ?? '',
     year: p.year,
@@ -187,11 +230,11 @@ export async function getEditableProjects(): Promise<ProjectListItem[]> {
 
 export interface ProjectEditData {
   slug: string
-  title: string
+  title: { es: string; en: string }
   categoria_principal: string
   category: string[]
-  summary: string
-  descriptionMarkdown: string
+  summary: { es: string; en: string }
+  descriptionMarkdown: { es: string; en: string }
   neighborhood: string
   partners: string[]
   year: number | null
@@ -199,6 +242,18 @@ export interface ProjectEditData {
   featured: boolean
   heroImage: string
   gallery: { key: string; url: string }[]
+}
+
+function localePair(field: LocaleField): { es: string; en: string } {
+  if (!field) return { es: '', en: '' }
+  if (typeof field === 'string') return { es: field, en: '' }
+  return { es: field.es ?? '', en: field.en ?? '' }
+}
+
+function descriptionToMarkdown(desc: any): string {
+  if (Array.isArray(desc)) return portableTextToMarkdown(desc)
+  if (typeof desc === 'string') return desc
+  return ''
 }
 
 export async function getProjectForEdit(slug: string): Promise<ProjectEditData | null> {
@@ -211,18 +266,17 @@ export async function getProjectForEdit(slug: string): Promise<ProjectEditData |
   )
   if (!p) return null
   const desc = p.description
-  const descriptionMarkdown = Array.isArray(desc)
-    ? portableTextToMarkdown(desc)
-    : typeof desc === 'string'
-      ? desc
-      : ''
+  const isLocalizedDesc = desc && !Array.isArray(desc) && typeof desc === 'object'
   return {
     slug: p.slug,
-    title: p.title ?? '',
-    categoria_principal: p.categoria_principal ?? '',
-    category: p.category ?? [],
-    summary: p.summary ?? '',
-    descriptionMarkdown,
+    title: localePair(p.title),
+    categoria_principal: categoryKey(p.categoria_principal),
+    category: (p.category ?? []).map((c: string) => categoryKey(c)).filter(Boolean),
+    summary: localePair(p.summary),
+    descriptionMarkdown: {
+      es: descriptionToMarkdown(isLocalizedDesc ? desc.es : desc),
+      en: descriptionToMarkdown(isLocalizedDesc ? desc.en : undefined),
+    },
     neighborhood: p.neighborhood ?? '',
     partners: p.partners ?? [],
     year: p.year ?? null,

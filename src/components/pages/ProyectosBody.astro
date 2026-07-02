@@ -1,0 +1,116 @@
+---
+import BaseLayout from '../layout/BaseLayout.astro';
+import ProjectCard from '../ProjectCard.astro';
+import PageHero from '../layout/PageHero.astro';
+import { getProjects } from '../../lib/sanity';
+import { useTranslations, localizePath, type Lang } from '../../i18n/ui';
+import { CATEGORY_KEYS, CATEGORY_META } from '../../i18n/categories';
+import { proyectosContent } from '../../i18n/content/proyectos';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const l = (path: string) => localizePath(lang, path);
+const c = proyectosContent[lang];
+
+const projectsData = await getProjects(lang);
+
+const STAT_COLORS = ['var(--c-orange)', 'var(--c-aguamarina)', 'var(--c-cobalto)', 'var(--c-rosado)'];
+---
+
+<BaseLayout
+  title={c.metaTitle}
+  description={c.metaDescription}
+  pageColor="rosado"
+>
+
+  <!-- ─── PAGE HERO ─────────────────────────────────────────────────── -->
+  <!-- EDIT: drop a photo into /public/images/banners/proyectos.jpg to activate the image background -->
+  <PageHero eyebrow={c.heroEyebrow} image="/images/banners/proyectos.jpg">
+    <h1 class="page-hero-title">{c.heroTitle}</h1>
+    <p class="page-hero-sub">{c.heroSub}</p>
+  </PageHero>
+
+  <div class="section">
+
+    <!-- Stats row -->
+    <div style="display: flex; gap: 48px; margin-bottom: 64px; padding-bottom: 40px; border-bottom: 1px solid rgba(26,20,16,0.08); flex-wrap: wrap; justify-content: center; text-align: center;">
+      {c.stats.map(([n, label], i) => (
+        <div>
+          <div style={`font-family: var(--font-sans); font-size: 40px; font-weight: 700; letter-spacing: -1.5px; color: ${STAT_COLORS[i % STAT_COLORS.length]};`}>{n}</div>
+          <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: var(--fg2); margin-top: 4px;">{label}</div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Filter tabs — JS filters the grid client-side by stable category key -->
+    <div class="filter-tabs" id="filter-tabs">
+      <button class="filter-tab" data-active="true" data-filter="__all">{t('project.todos')}</button>
+      {CATEGORY_KEYS.map((key) => (
+        <button class="filter-tab" data-active="false" data-filter={key}>{CATEGORY_META[key][lang]}</button>
+      ))}
+    </div>
+
+    <!-- Projects grid -->
+    <div class="card-grid-3" id="projects-grid">
+      {projectsData.map((project) => (
+        <div
+          data-categories={project.categories.join(',')}
+          style="height: 100%;"
+        >
+          <ProjectCard
+            title={project.title}
+            slug={project.slug}
+            category={project.categoryLabel}
+            summary={project.summary}
+            heroImage={project.heroImage}
+            status={project.status}
+            year={project.year}
+          />
+        </div>
+      ))}
+    </div>
+
+  </div>
+
+  <!-- ─── DONATE CTA ────────────────────────────────────────────────── -->
+  <div class="section-full section-warm" style="padding: 80px 48px; text-align: center;">
+    <span class="eyebrow">{c.ctaEyebrow}</span>
+    <h2 class="section-title" style="margin: 0 auto; text-align: center;">{c.ctaTitle}</h2>
+    <p style="font-size: 17px; font-weight: 300; color: var(--fg2); max-width: 440px; margin: 16px auto 32px; line-height: 1.6;">
+      {c.ctaText}
+    </p>
+    <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+      <a href={l('/donar')} class="btn-accent">{t('cta.quieroDonar')}</a>
+      <a href={l('/contacto')} class="btn-outline">{t('cta.quieroParticipar')}</a>
+    </div>
+  </div>
+
+</BaseLayout>
+
+<!-- Client-side filter — no framework needed. Filters by stable category key. -->
+<script>
+  const tabs = document.querySelectorAll<HTMLButtonElement>('.filter-tab');
+  const cards = document.querySelectorAll<HTMLElement>('#projects-grid [data-categories]');
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const filter = tab.dataset.filter;
+
+      // Update active state
+      tabs.forEach((t) => t.dataset.active = 'false');
+      tab.dataset.active = 'true';
+
+      // Show/hide cards — a card is visible if it has the selected category in its array
+      cards.forEach((card) => {
+        const raw = card.dataset.categories ?? '';
+        const cats = raw ? raw.split(',') : [];
+        const matches = filter === '__all' || cats.includes(filter!);
+        (card as HTMLElement).style.display = matches ? 'block' : 'none';
+      });
+    });
+  });
+</script>

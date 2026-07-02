@@ -1,9 +1,12 @@
 ﻿---
 import PageHero from './layout/PageHero.astro';
 import PortableTextBody from './PortableTextBody.tsx';
+import { pageLang, useTranslations, localizePath } from '../i18n/ui';
+import { statusLabel } from '../i18n/categories';
 
 interface Props {
   title: string;
+  /** Already-localized category label. */
   category: string;
   heroImage: string;
   description: any[];
@@ -16,16 +19,20 @@ interface Props {
 
 const { title, category, heroImage, description, neighborhood, partners, year, status, gallery } = Astro.props;
 
+const lang = pageLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const l = (path: string) => localizePath(lang, path);
+
 const isActive = status === 'activo';
 ---
 
 <!-- Hero with image background, no eyebrow -->
 <PageHero image={heroImage}>
-  <a href="/proyectos" class="hero-back">← Todos los proyectos</a>
+  <a href={l('/proyectos')} class="hero-back">{t('project.volver')}</a>
   <h1 class="page-hero-title">{title}</h1>
   <div class="hero-meta">
     <span class:list={['status-badge', { 'status-activo': isActive, 'status-completado': !isActive }]}>
-      {status}
+      {statusLabel(status, lang)}
     </span>
     <span class="meta-sep">·</span>
     <span class="meta-badge">{category}</span>
@@ -46,19 +53,19 @@ const isActive = status === 'activo';
 
       {neighborhood && (
         <div class="prop-card prop-card--rosado">
-          <div class="prop-label">Territorio</div>
+          <div class="prop-label">{t('project.territorio')}</div>
           <div class="prop-value">{neighborhood}</div>
         </div>
       )}
 
       <div class="prop-card prop-card--cobalto">
-        <div class="prop-label">Año</div>
+        <div class="prop-label">{t('project.ano')}</div>
         <div class="prop-value">{year}</div>
       </div>
 
       {partners.length > 0 && (
         <div class="prop-card prop-card--orange">
-          <div class="prop-label">Aliados</div>
+          <div class="prop-label">{t('project.aliados')}</div>
           <ul class="prop-list">
             {partners.map((p) => <li class="prop-value">{p}</li>)}
           </ul>
@@ -74,7 +81,7 @@ const isActive = status === 'activo';
 <!-- Gallery mosaic — full width, below the two-col -->
 {gallery.length > 0 && (
   <div class="section gallery-section">
-    <span class="eyebrow">Galería</span>
+    <span class="eyebrow">{t('project.galeria')}</span>
     <div class="gallery-mosaic">
       {gallery.map((img, i) => (
         <div class:list={[
@@ -92,10 +99,10 @@ const isActive = status === 'activo';
 <!-- CTA — full-width row, card centered in the page -->
 <div class="cta-section">
   <div class="cta-card">
-    <h2 class="cta-title">¿Te interesa este trabajo?</h2>
+    <h2 class="cta-title">{t('project.ctaTitulo')}</h2>
     <div class="cta-actions">
-      <a href="/donar" class="btn-white">Apoya nuestro trabajo</a>
-      <a href="/contacto" class="cta-link">Hablemos →</a>
+      <a href={l('/donar')} class="btn-white">{t('project.ctaApoya')}</a>
+      <a href={l('/contacto')} class="cta-link">{t('project.ctaHablemos')}</a>
     </div>
   </div>
 </div>

@@ -1,59 +1,12 @@
-﻿---
-import BaseLayout from '../../components/layout/BaseLayout.astro';
-import ProjectDetail from '../../components/ProjectDetail.astro';
-import { getProjectSlugs, getProject } from '../../lib/sanity';
+---
+import ProyectoDetalleBody from '../../components/pages/ProyectoDetalleBody.astro';
+import { projectStaticPaths } from '../../lib/projectPaths';
 
 export async function getStaticPaths() {
-  const slugs = await getProjectSlugs();
-  const projects = await Promise.all(slugs.map((slug) => getProject(slug)));
-  return projects
-    .filter((project) => project !== null)
-    .map((project) => ({
-      params: { slug: project!.slug },
-      props: { project },
-    }));
+  return projectStaticPaths('es');
 }
 
 const { project } = Astro.props;
-
-const CATEGORY_COLOR: Record<string, 'aguamarina' | 'cobalto' | 'violeta'> = {
-  'Paisajes Regenerativos':      'aguamarina',
-  'Espacio Público':             'cobalto',
-  'Acompañamiento Comunitario':  'violeta',
-};
-const projectColor = CATEGORY_COLOR[project.category] ?? 'aguamarina';
-
-const projectSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: project.title,
-  description: project.summary,
-  image: project.heroImage || undefined,
-  publisher: {
-    '@type': 'Organization',
-    name: 'Corporación La Otra Ciudad',
-    url: 'https://laotraciudad.org',
-  },
-};
 ---
 
-<BaseLayout
-  title={project.title}
-  description={project.summary}
-  ogImage={project.heroImage || undefined}
-  ogType="article"
-  jsonLd={projectSchema}
-  pageColor={projectColor}
->
-  <ProjectDetail
-    title={project.title}
-    category={project.category}
-    heroImage={project.heroImage}
-    description={project.description}
-    neighborhood={project.neighborhood}
-    partners={project.partners}
-    year={project.year}
-    status={project.status}
-    gallery={project.gallery}
-  />
-</BaseLayout>
+<ProyectoDetalleBody project={project} />

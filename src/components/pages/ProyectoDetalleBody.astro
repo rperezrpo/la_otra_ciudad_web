@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../layout/BaseLayout.astro';
+import ProjectDetail from '../ProjectDetail.astro';
+import type { ProjectDetailData } from '../../lib/sanity';
+import { CATEGORY_META, categoryKey } from '../../i18n/categories';
+
+interface Props {
+  project: ProjectDetailData;
+}
+
+const { project } = Astro.props;
+
+const key = categoryKey(project.category);
+const projectColor = key ? CATEGORY_META[key].color : 'aguamarina';
+
+const projectSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: project.title,
+  description: project.summary || undefined,
+  image: project.heroImage || undefined,
+  publisher: {
+    '@type': 'Organization',
+    name: 'Corporación La Otra Ciudad',
+    url: 'https://laotraciudad.org',
+  },
+};
+---
+
+<BaseLayout
+  title={project.title}
+  description={project.summary || undefined}
+  ogImage={project.heroImage || undefined}
+  ogType="article"
+  jsonLd={projectSchema}
+  pageColor={projectColor}
+>
+  <ProjectDetail
+    title={project.title}
+    category={project.categoryLabel}
+    heroImage={project.heroImage}
+    description={project.description}
+    neighborhood={project.neighborhood}
+    partners={project.partners}
+    year={project.year}
+    status={project.status}
+    gallery={project.gallery}
+  />
+</BaseLayout>

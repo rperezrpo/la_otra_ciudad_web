@@ -1,19 +1,25 @@
 ---
+import { pageLang, useTranslations, localizePath } from '../../i18n/ui';
+
+const lang = pageLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const l = (path: string) => localizePath(lang, path);
+
 const columns = [
   {
-    heading: 'Organización',
+    heading: t('footer.organizacion'),
     links: [
-      { label: 'Quiénes Somos', href: '/quienes-somos' },
-      { label: 'Proyectos',     href: '/proyectos' },
-      { label: 'Metodología',   href: '/metodologia' },
-      { label: 'Servicios',     href: '/servicios' },
+      { label: t('nav.quienesSomos'), href: l('/quienes-somos') },
+      { label: t('nav.proyectos'),     href: l('/proyectos') },
+      { label: t('nav.metodologia'),   href: l('/metodologia') },
+      { label: t('nav.servicios'),     href: l('/servicios') },
     ],
   },
   {
-    heading: 'Involúcrate',
+    heading: t('footer.involucrate'),
     links: [
-      { label: 'Contacto',     href: '/contacto' },
-      { label: 'Donar',        href: '/donar' },
+      { label: t('nav.contacto'),     href: l('/contacto') },
+      { label: t('nav.donarAria'),    href: l('/donar') },
     ],
   },
 ];
@@ -36,7 +42,7 @@ const columns = [
         />
         <div style="display:none; font-size: 17px; font-weight: 600; letter-spacing: -0.3px; margin-bottom: 16px;">La Otra Ciudad</div>
         <p style="font-size: 15px; font-weight: 300; line-height: 1.6; color: rgba(255,255,255,0.5); max-width: 280px;">
-          Co-creando ciudades más justas, sostenibles y saludables en Colombia.
+          {t('footer.tagline')}
         </p>
 
         <!-- Social links -->
@@ -77,7 +83,7 @@ const columns = [
     <!-- Bottom row: copyright -->
     <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
       <span style="font-size: 13px; color: rgba(255,255,255,0.3);">
-        © 2026 Corporación La Otra Ciudad · Medellín, Colombia
+        {t('footer.copyright')}
       </span>
       <span style="font-family: var(--font-mono); font-size: 11px; color: rgba(255,255,255,0.25); letter-spacing: 0.4px;">
         NIT 901.889.218

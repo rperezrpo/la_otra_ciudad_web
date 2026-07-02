@@ -1,6 +1,7 @@
-﻿---
+---
 import SiteNav from './SiteNav.astro';
 import SiteFooter from './SiteFooter.astro';
+import { pageLang, alternatePath, ES_ONLY_PREFIXES } from '../../i18n/ui';
 import '../../styles/global.css';
 
 type PageColor = 'orange' | 'aguamarina' | 'cobalto' | 'rosado' | 'violeta';
@@ -36,19 +37,37 @@ const pageStyle = palette
   ? `--page-accent: ${palette.accent}; --page-accent-dark: ${palette.dark}; --page-accent-gradient: ${palette.gradient};`
   : undefined;
 
+const lang = pageLang(Astro.currentLocale);
+const pathname = Astro.url.pathname;
+
 const siteUrl = 'https://laotraciudad.org';
-const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
+const canonicalUrl = new URL(pathname, siteUrl).href;
 const ogImageAbsolute = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`;
 const fullTitle = `${title} · La Otra Ciudad`;
+
+// hreflang alternates: same slug in both languages, /en prefix for English.
+// Editor-only routes have no English counterpart, so they get no alternates.
+const esOnly = ES_ONLY_PREFIXES.some((p) => pathname.startsWith(p));
+const esPath = lang === 'es' ? pathname : alternatePath(pathname, 'en');
+const enPath = lang === 'en' ? pathname : alternatePath(pathname, 'es');
+const esUrl = new URL(esPath, siteUrl).href;
+const enUrl = new URL(enPath, siteUrl).href;
 ---
 
 <!DOCTYPE html>
-<html lang="es" style={pageStyle}>
+<html lang={lang} style={pageStyle}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
+    {!esOnly && (
+      <>
+        <link rel="alternate" hreflang="es" href={esUrl} />
+        <link rel="alternate" hreflang="en" href={enUrl} />
+        <link rel="alternate" hreflang="x-default" href={esUrl} />
+      </>
+    )}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <title>{fullTitle}</title>
 
@@ -61,7 +80,7 @@ const fullTitle = `${title} · La Otra Ciudad`;
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:site_name" content="La Otra Ciudad" />
-    <meta property="og:locale" content="es_CO" />
+    <meta property="og:locale" content={lang === 'en' ? 'en_US' : 'es_CO'} />
 
     <!-- Twitter / X Card -->
     <meta name="twitter:card" content="summary_large_image" />
