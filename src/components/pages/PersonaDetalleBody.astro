@@ -459,7 +459,8 @@ const timelineLabel = (
   /* The dot vanishes as if it detached from the line — the falling circle
      below picks up right where it left off, so it reads as the same shape. */
   .timeline-point:hover .timeline-dot,
-  .timeline-point:focus-visible .timeline-dot {
+  .timeline-point:focus-visible .timeline-dot,
+  .timeline-point.is-open .timeline-dot {
     opacity: 0;
     transform: scale(0.4);
   }
@@ -502,8 +503,10 @@ const timelineLabel = (
     transform: translateY(-98px) scale(0.3);
   }
 
-  .timeline-point:hover .timeline-tooltip-circle {
+  .timeline-point:hover .timeline-tooltip-circle,
+  .timeline-point.is-open .timeline-tooltip-circle {
     animation: timeline-circle-fall 550ms cubic-bezier(0.3, 0.98, 0.4, 1) forwards;
+    pointer-events: auto;
   }
 
   .timeline-point:focus-visible .timeline-tooltip-circle {
@@ -551,7 +554,8 @@ const timelineLabel = (
     transition: opacity 150ms ease, transform 150ms ease;
   }
 
-  .timeline-point:hover .timeline-tooltip-pill {
+  .timeline-point:hover .timeline-tooltip-pill,
+  .timeline-point.is-open .timeline-tooltip-pill {
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
@@ -584,6 +588,7 @@ const timelineLabel = (
   /* ── Responsive ──────────────────────────────────────────────────── */
 
   @media (max-width: 768px) {
+    .hero-back-link { display: none; }
     .person-page-grid { grid-template-columns: 1fr; gap: 32px; }
     /* The full-bleed page background doesn't make sense once the columns
        stack — fall back to a simple solid panel behind the aside instead. */
@@ -593,7 +598,9 @@ const timelineLabel = (
       background: var(--c-grad-cobalto);
       border-radius: 8px;
     }
-    .person-photo { max-width: 200px; }
+    .person-role { text-align: center; }
+    .person-photo { max-width: 200px; margin: 0 auto; }
+    .person-name { text-align: center; }
   }
 </style>
 
@@ -641,4 +648,43 @@ const timelineLabel = (
   paintTimelineDots();
   window.addEventListener('resize', paintTimelineDots);
   document.addEventListener('astro:page-load', paintTimelineDots);
+
+  // On mobile there's no hover: the first tap on a point should only reveal
+  // the tooltip (the dot "dropping" into the circle), not navigate. Only a
+  // tap on the settled circle itself should follow the link to the project.
+  function isMobileViewport() {
+    return window.matchMedia('(max-width: 768px)').matches;
+  }
+
+  function closeAllTimelinePoints() {
+    document.querySelectorAll('.timeline-point.is-open').forEach((p) => p.classList.remove('is-open'));
+  }
+
+  function initTimelineMobileTaps() {
+    document.querySelectorAll<HTMLAnchorElement>('.timeline-point').forEach((point) => {
+      point.addEventListener('click', (e) => {
+        if (!isMobileViewport()) return;
+
+        const target = e.target as Element | null;
+        const circle = point.querySelector('.timeline-tooltip-circle');
+        const tappedCircle = !!target && !!circle && (target === circle || circle.contains(target));
+        if (tappedCircle) return; // let the link navigate
+
+        e.preventDefault();
+        const wasOpen = point.classList.contains('is-open');
+        closeAllTimelinePoints();
+        if (!wasOpen) point.classList.add('is-open');
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!isMobileViewport()) return;
+      if (!(e.target instanceof Element) || !e.target.closest('.timeline-point')) {
+        closeAllTimelinePoints();
+      }
+    });
+  }
+
+  initTimelineMobileTaps();
+  document.addEventListener('astro:page-load', initTimelineMobileTaps);
 </script>
