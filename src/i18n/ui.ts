@@ -7,7 +7,7 @@ export type Lang = (typeof LOCALES)[number];
 export const DEFAULT_LANG: Lang = 'es';
 
 /** Rutas que solo existen en español (herramientas internas de editores). */
-export const ES_ONLY_PREFIXES = ['/proyectos/editar', '/equipo/editar', '/admin', '/report-mockups'];
+export const ES_ONLY_PREFIXES = ['/editar', '/admin', '/report-mockups'];
 
 /** `/quienes-somos` → `/en/quienes-somos`; en español devuelve el path tal cual. */
 export function localizePath(lang: Lang, path: string): string {
@@ -56,6 +56,14 @@ export const ui = {
     'project.ctaApoya': 'Apoya nuestro trabajo',
     'project.ctaHablemos': 'Hablemos →',
 
+    'person.volver': '← Equipo',
+    'person.investigacion': 'Áreas de interés',
+    'person.proyectos': 'Proyectos',
+    'person.enlaces': 'Enlaces',
+    'person.cv': 'Descargar CV',
+    'person.timelineSingular': 'Ha participado en {n} proyecto',
+    'person.timelinePlural': 'Ha participado en {n} proyectos',
+
     'cta.quieroDonar': 'Quiero donar',
     'cta.quieroParticipar': 'Quiero participar',
   },
@@ -71,7 +79,7 @@ export const ui = {
     'nav.cerrarMenu': 'Close menu',
     'nav.cambiarIdioma': 'Cambiar a español',
 
-    'footer.organizacion': 'Organization',
+    'footer.organizacion': 'Organisation',
     'footer.involucrate': 'Get involved',
     'footer.tagline': 'Co-creating fairer, more sustainable and healthier cities in Colombia.',
     'footer.copyright': '© 2026 Corporación La Otra Ciudad · Medellín, Colombia',
@@ -85,6 +93,14 @@ export const ui = {
     'project.ctaTitulo': 'Interested in this work?',
     'project.ctaApoya': 'Support our work',
     'project.ctaHablemos': "Let's talk →",
+
+    'person.volver': '← Team',
+    'person.investigacion': 'Areas of interest',
+    'person.proyectos': 'Projects',
+    'person.enlaces': 'Links',
+    'person.cv': 'Download CV',
+    'person.timelineSingular': 'Has worked on {n} project',
+    'person.timelinePlural': 'Has worked on {n} projects',
 
     'cta.quieroDonar': 'Donate',
     'cta.quieroParticipar': 'Get involved',

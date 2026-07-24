@@ -1,20 +1,29 @@
 ﻿---
-// PersonCard — used on /quienes-somos team grid
-// SANITY: when Sanity is connected, this component receives props
-//         from a Sanity "people" document instead of from people.json
+// PersonCard — used on /quienes-somos team grid.
+// The whole card links to the person's individual page (/equipo/[slug]) via
+// a "stretched link" so the nested LinkedIn link keeps working (no nested <a>).
+import { pageLang, localizePath } from '../i18n/ui';
+import type { PersonLink } from '../lib/sanity';
 
 interface Props {
   name: string;
   role: string;
   photo: string;
   bio?: string;
-  linkedin?: string;
+  links?: PersonLink[];
+  slug?: string;
 }
 
-const { name, role, photo, bio, linkedin } = Astro.props;
+const { name, role, photo, bio, links, slug } = Astro.props;
+
+const lang = pageLang(Astro.currentLocale);
+const href = slug ? localizePath(lang, `/equipo/${slug}`) : undefined;
+const linkedinUrl = links?.find((l) => l.type === 'linkedin')?.url;
 ---
 
 <div class="person-card">
+
+  {href && <a href={href} class="person-card-link" aria-label={name}></a>}
 
   <!-- Avatar -->
   <div class="person-avatar">
@@ -28,9 +37,9 @@ const { name, role, photo, bio, linkedin } = Astro.props;
         <span class="popup-role">{role}</span>
       </div>
       <p class="person-bio-text">{bio}</p>
-      {linkedin && (
+      {linkedinUrl && (
         <a
-          href={linkedin}
+          href={linkedinUrl}
           class="person-linkedin"
           target="_blank"
           rel="noopener noreferrer"
@@ -62,6 +71,21 @@ const { name, role, photo, bio, linkedin } = Astro.props;
 
   .person-card:hover {
     z-index: 10;
+  }
+
+  /* Stretched link: covers the whole card, sits above the avatar/name/role
+     (z-index 1) but below the bio popup (z-index 5) so the popup's own
+     LinkedIn link still receives clicks instead of being hijacked. */
+  .person-card-link {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border-radius: 8px;
+  }
+
+  .person-card-link:focus-visible {
+    outline: 2px solid var(--c-aguamarina);
+    outline-offset: 2px;
   }
 
   /* ── Avatar ── */

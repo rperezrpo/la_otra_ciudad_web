@@ -1,0 +1,638 @@
+---
+import BaseLayout from '../layout/BaseLayout.astro';
+import PortableTextBody from '../PortableTextBody.tsx';
+import type { PersonDetailData } from '../../lib/sanity';
+import { pageLang, useTranslations, localizePath } from '../../i18n/ui';
+
+interface Props {
+  person: PersonDetailData;
+}
+
+const { person } = Astro.props;
+
+const lang = pageLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const l = (path: string) => localizePath(lang, path);
+
+// Timeline: related projects grouped by year, each year placed left-to-right
+// along a track. Projects sharing a year sit in a small flex row within that
+// year's group — up to ~6 per year is expected — instead of being spread by
+// an arbitrary percentage offset, which doesn't scale to that many.
+const timelineProjects = person.relatedProjects.filter((p) => p.year);
+
+const yearsMap = new Map<number, typeof timelineProjects>();
+for (const p of timelineProjects) {
+  const list = yearsMap.get(p.year) ?? [];
+  list.push(p);
+  yearsMap.set(p.year, list);
+}
+const timelineYearsList = [...yearsMap.keys()].sort((a, b) => a - b);
+const minYear = timelineYearsList[0] ?? 0;
+const maxYear = timelineYearsList[timelineYearsList.length - 1] ?? 0;
+const yearSpan = maxYear - minYear;
+
+// Position by year; if every project shares the same year, center it.
+function yearPosition(year: number): number {
+  if (yearSpan === 0) return 50;
+  return ((year - minYear) / yearSpan) * 100;
+}
+
+// Every year in the range gets a timestamp above the track, not just the
+// years that happen to have a project.
+const allTimelineYears: number[] = [];
+for (let y = minYear; timelineYearsList.length > 0 && y <= maxYear; y++) allTimelineYears.push(y);
+
+// Same 0/50/100 stops as the track's gradient, at full saturation, so each
+// year's dots pick up the track's colour at their own position.
+const TIMELINE_GRADIENT_STOPS: [number, [number, number, number]][] = [
+  [0, [59, 107, 220]],  // cobalto
+  [50, [230, 34, 79]],  // rosado
+  [100, [226, 97, 29]], // orange
+];
+
+function timelineColorAt(position: number): string {
+  const clamped = Math.min(100, Math.max(0, position));
+  let [lowStop, lowColor] = TIMELINE_GRADIENT_STOPS[0];
+  let [highStop, highColor] = TIMELINE_GRADIENT_STOPS[TIMELINE_GRADIENT_STOPS.length - 1];
+  for (let i = 0; i < TIMELINE_GRADIENT_STOPS.length - 1; i++) {
+    if (clamped >= TIMELINE_GRADIENT_STOPS[i][0] && clamped <= TIMELINE_GRADIENT_STOPS[i + 1][0]) {
+      [lowStop, lowColor] = TIMELINE_GRADIENT_STOPS[i];
+      [highStop, highColor] = TIMELINE_GRADIENT_STOPS[i + 1];
+      break;
+    }
+  }
+  const t = (clamped - lowStop) / (highStop - lowStop || 1);
+  const [r, g, b] = lowColor.map((c, i) => Math.round(c + (highColor[i] - c) * t));
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
+// Must match the .timeline-point width and .timeline-year-group gap in <style>.
+const TIMELINE_DOT_BOX = 48;
+const TIMELINE_DOT_GAP = 4;
+
+const halfWidthByYear = new Map<number, number>();
+const timelineYearGroups = timelineYearsList.map((year) => {
+  const position = yearPosition(year);
+  const count = (yearsMap.get(year) ?? []).length;
+  // Half the group's rendered width, so its `left` can be clamped to stay
+  // fully inside the track even when centered near either edge.
+  const halfWidth = (count * TIMELINE_DOT_BOX + (count - 1) * TIMELINE_DOT_GAP) / 2;
+  halfWidthByYear.set(year, halfWidth);
+  return {
+    year,
+    position,
+    halfWidth,
+    // SSR fallback only — the inline <script> below repaints each dot with
+    // the exact colour at its own rendered position once mounted, since a
+    // single colour per group is wrong the moment a group spans more than
+    // one point (the gradient underneath keeps changing across it).
+    color: timelineColorAt(position),
+    projects: yearsMap.get(year) ?? [],
+  };
+});
+
+// Ticks reuse a project year's halfWidth so they stay aligned with that
+// year's dot cluster; years with no project just clamp against themselves.
+const timelineYearTicks = allTimelineYears.map((year) => ({
+  year,
+  position: yearPosition(year),
+  halfWidth: halfWidthByYear.get(year) ?? 0,
+}));
+
+const timelineLabel = (
+  timelineProjects.length === 1 ? t('person.timelineSingular') : t('person.timelinePlural')
+).replace('{n}', String(timelineProjects.length));
+---
+
+<BaseLayout
+  title={person.name}
+  description={person.role || undefined}
+  ogImage={person.photo || undefined}
+  pageColor="aguamarina"
+>
+  <div class="section person-page">
+    <a href={`${l('/quienes-somos')}#nuestro-equipo`} class="hero-back-link">{t('person.volver')}</a>
+
+    <!-- Full-page-height cobalto background, bled out to the viewport's
+         left edge — not confined to a card, this IS the sticky column's
+         background. -->
+    <div class="lava-bg" aria-hidden="true"></div>
+
+    <div class="person-page-grid">
+
+      <!-- Sticky left column: role, photo, name, links -->
+      <aside class="person-aside">
+        <div class="person-aside-content">
+          {person.role && <p class="person-role">{person.role}</p>}
+
+          <div class="person-photo">
+            {person.photo ? (
+              <img src={person.photo} alt={person.name} />
+            ) : (
+              <div class="img-placeholder" />
+            )}
+          </div>
+
+          <h1 class="person-name">{person.name}</h1>
+
+          {(person.links.length > 0 || person.cv) && (
+            <div class="person-links">
+              {person.links.map((link) => (
+                <a href={link.url} target="_blank" rel="noopener noreferrer" class="social-pill">
+                  {link.label}
+                </a>
+              ))}
+              {person.cv && (
+                <a href={person.cv} target="_blank" rel="noopener noreferrer" class="social-pill social-pill--accent">
+                  {t('person.cv')}
+                </a>
+              )}
+            </div>
+          )}
+        </div>
+      </aside>
+
+      <!-- Main column: timeline, bio, research areas, related projects -->
+      <div class="person-main">
+
+        {timelineProjects.length > 0 && (
+          <div class="person-timeline">
+            <span class="eyebrow">{timelineLabel}</span>
+            <div class="timeline-wrap">
+              <div class="timeline-years">
+                {timelineYearTicks.map(({ year, position, halfWidth }) => (
+                  <span
+                    class="timeline-year-tick"
+                    style={`left: clamp(${halfWidth}px, ${position}%, calc(100% - ${halfWidth}px))`}
+                  >
+                    {year}
+                  </span>
+                ))}
+              </div>
+              <div class="timeline-track">
+                {timelineYearGroups.map(({ position, halfWidth, color, projects }) => (
+                  <div
+                    class="timeline-year-group"
+                    style={`left: clamp(${halfWidth}px, ${position}%, calc(100% - ${halfWidth}px)); --timeline-dot-color: ${color};`}
+                  >
+                    {projects.map((project) => (
+                      <a
+                        href={l(`/proyectos/${project.slug}`)}
+                        class="timeline-point"
+                        aria-label={`${project.title} — ${project.year}`}
+                      >
+                        <span class="timeline-dot"></span>
+                        <span class="timeline-tooltip">
+                          <span class="timeline-tooltip-circle">
+                            {project.heroImage && <img src={project.heroImage} alt="" />}
+                          </span>
+                          <span class="timeline-tooltip-pill">
+                            <span class="timeline-tooltip-title">{project.title}</span>
+                            <span class="timeline-tooltip-dot" aria-hidden="true">·</span>
+                            <span class="timeline-tooltip-year">{project.year}</span>
+                          </span>
+                        </span>
+                      </a>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div class="person-body">
+          <PortableTextBody value={person.longBio} />
+        </div>
+
+        {person.researchAreas.length > 0 && (
+          <div class="prop-card">
+            <div class="prop-label">{t('person.investigacion')}</div>
+            <div class="tag-list">
+              {person.researchAreas.map((area) => <span class="tag">{area}</span>)}
+            </div>
+          </div>
+        )}
+
+      </div>
+
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  /* ── Page / back link ────────────────────────────────────────────── */
+
+  .person-page {
+    position: relative; /* positioning context for .lava-bg */
+    padding-top: 40px;
+    padding-bottom: 64px;
+  }
+
+  .hero-back-link {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--fg2);
+    text-decoration: none;
+    margin-bottom: 24px;
+    display: inline-block;
+    transition: color 150ms;
+  }
+
+  .hero-back-link:hover { color: var(--page-accent); }
+
+  /* ── Two-column layout ───────────────────────────────────────────── */
+
+  .person-page-grid {
+    position: relative;
+    z-index: 1; /* paint above .lava-bg regardless of default stacking order */
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 56px;
+  }
+
+  .person-main { min-width: 0; }
+
+  /* ── Sticky column background ─────────────────────────────────────── */
+  /* Spans the section's full height (i.e. the whole page minus header and
+     footer) and matches the aside column's own bounds exactly — 48px is
+     .section's side padding, 280px the column width. Since the photo sits
+     symmetrically centered in that column (20px padding on both sides via
+     .person-aside-content), this keeps the cobalto's left edge exactly as
+     far from the photo as its right edge is — a mirror around the image. */
+  .lava-bg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 0;
+    left: 48px;
+    width: 280px;
+    background: var(--c-cobalto);
+  }
+
+  /* ── Sticky aside content ─────────────────────────────────────────── */
+
+  .person-aside-content {
+    position: sticky;
+    top: 100px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .person-photo {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--bg2);
+    border: 3px solid var(--c-white-pure);
+    box-sizing: border-box;
+  }
+
+  .person-photo img,
+  .person-photo .img-placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .person-name {
+    font-family: var(--font-display);
+    font-variation-settings: 'opsz' 144, 'SOFT' 30, 'WONK' 0;
+    font-size: clamp(24px, 2.4vw, 32px);
+    font-weight: 560;
+    line-height: 1.15;
+    letter-spacing: -0.6px;
+    color: #fff;
+    margin: 20px 0 0;
+  }
+
+  .person-role {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0 0 12px;
+  }
+
+  .person-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .social-pill {
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    text-decoration: underline;
+    text-decoration-color: rgba(255, 255, 255, 0.5);
+    text-underline-offset: 3px;
+    transition: opacity 150ms ease;
+  }
+
+  .social-pill:hover { opacity: 0.75; }
+
+  .social-pill--accent { font-weight: 700; }
+
+  /* ── Timeline ─────────────────────────────────────────────────────── */
+
+  .person-timeline {
+    margin-bottom: 48px;
+    background: var(--c-white-pure);
+    border-radius: 8px;
+    padding: 28px 32px 32px;
+  }
+
+  .timeline-wrap {
+    position: relative;
+    margin-top: 28px;
+  }
+
+  .timeline-years {
+    position: relative;
+    height: 16px;
+    margin: 0 0 12px;
+  }
+
+  .timeline-year-tick {
+    position: absolute;
+    top: 0;
+    transform: translateX(-50%);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.4px;
+    color: var(--fg3);
+    white-space: nowrap;
+  }
+
+  .timeline-track {
+    position: relative;
+    height: 12px;
+    margin: 0;
+    /* Solid pass over the hero gradient's colours (cobalto → rosado → orange) — no fade. */
+    background: linear-gradient(
+      to right,
+      rgb(59, 107, 220) 0%,
+      rgb(230, 34, 79) 50%,
+      rgb(226, 97, 29) 100%
+    );
+    border-radius: 999px;
+  }
+
+  /* Each year is a small flex row of its own projects, centered on the
+     year's position — this scales cleanly from 1 up to ~6 projects without
+     any manual overlap math. */
+  .timeline-year-group {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .timeline-point {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .timeline-dot {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--timeline-dot-color, var(--c-cobalto));
+    border: 3px solid var(--c-white-pure);
+    transition: opacity 200ms ease, transform 200ms ease;
+  }
+
+  /* The dot vanishes as if it detached from the line — the falling circle
+     below picks up right where it left off, so it reads as the same shape. */
+  .timeline-point:hover .timeline-dot,
+  .timeline-point:focus-visible .timeline-dot {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+
+  .timeline-point:focus-visible {
+    outline: 2px solid var(--c-aguamarina);
+    outline-offset: 3px;
+    border-radius: 50%;
+  }
+
+  /* Static resting layout for the circle + pill; each animates/transitions
+     independently so the circle's fall and the pill's arrival can be timed
+     against each other precisely. */
+  .timeline-tooltip {
+    position: absolute;
+    top: calc(100% + 24px);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    z-index: 2;
+  }
+
+  /* The circle starts at the dot's position and size, then falls, grows and
+     settles into place — the same shape "becoming" the project photo. */
+  .timeline-tooltip-circle {
+    box-sizing: border-box;
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--timeline-dot-color, var(--c-cobalto));
+    border: 3px solid var(--c-white-pure);
+    box-shadow: var(--shadow-md);
+    flex-shrink: 0;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-98px) scale(0.3);
+  }
+
+  .timeline-point:hover .timeline-tooltip-circle {
+    animation: timeline-circle-fall 550ms cubic-bezier(0.3, 0.98, 0.4, 1) forwards;
+  }
+
+  .timeline-point:focus-visible .timeline-tooltip-circle {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+  }
+
+  @keyframes timeline-circle-fall {
+    0% {
+      transform: translateY(-98px) scale(0.3);
+      opacity: 0.85;
+    }
+    55% {
+      transform: translateY(8px) scale(0.92);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+  }
+
+  .timeline-tooltip-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* The pill fades in right as the circle settles, instead of waiting on an
+     unrelated timer. */
+  .timeline-tooltip-pill {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--c-white-pure);
+    border-radius: 20px;
+    padding: 6px 14px;
+    box-shadow: var(--shadow-sm);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(4px);
+    transition: opacity 150ms ease, transform 150ms ease;
+  }
+
+  .timeline-point:hover .timeline-tooltip-pill {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    transition-delay: 400ms; /* catches up right as the circle lands at 550ms */
+  }
+
+  .timeline-point:focus-visible .timeline-tooltip-pill {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .timeline-tooltip-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--c-black);
+  }
+
+  .timeline-tooltip-dot {
+    font-size: 12px;
+    color: var(--fg3);
+  }
+
+  .timeline-tooltip-year {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--fg2);
+  }
+
+  /* ── Research areas ───────────────────────────────────────────────── */
+
+  .prop-card {
+    margin-top: 32px;
+    border-radius: 8px;
+    padding: 18px 20px;
+    border: 1.5px solid var(--c-aguamarina);
+    background: rgba(96, 157, 146, 0.08);
+  }
+
+  .prop-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: var(--c-aguamarina);
+    margin-bottom: 10px;
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag {
+    font-size: 13px;
+    color: var(--c-black);
+    background: var(--c-white-pure);
+    border-radius: 20px;
+    padding: 4px 12px;
+  }
+
+  /* ── Responsive ──────────────────────────────────────────────────── */
+
+  @media (max-width: 768px) {
+    .person-page-grid { grid-template-columns: 1fr; gap: 32px; }
+    /* The full-bleed page background doesn't make sense once the columns
+       stack — fall back to a simple solid panel behind the aside instead. */
+    .lava-bg { display: none; }
+    .person-aside-content {
+      position: static;
+      background: var(--c-cobalto);
+      border-radius: 8px;
+    }
+    .person-photo { max-width: 200px; }
+  }
+</style>
+
+<script>
+  // A single colour per year-group is only an SSR approximation — once a
+  // group holds more than one point, the track's gradient keeps changing
+  // underneath it. Repaint each dot with the exact colour at its own
+  // rendered position so it always matches the line right behind it.
+  const TIMELINE_STOPS: { pct: number; rgb: [number, number, number] }[] = [
+    { pct: 0, rgb: [59, 107, 220] },   // cobalto
+    { pct: 50, rgb: [230, 34, 79] },   // rosado
+    { pct: 100, rgb: [226, 97, 29] },  // orange
+  ];
+
+  function timelineColorAt(pct: number): string {
+    const clamped = Math.min(100, Math.max(0, pct));
+    let lower = TIMELINE_STOPS[0];
+    let upper = TIMELINE_STOPS[TIMELINE_STOPS.length - 1];
+    for (let i = 0; i < TIMELINE_STOPS.length - 1; i++) {
+      if (clamped >= TIMELINE_STOPS[i].pct && clamped <= TIMELINE_STOPS[i + 1].pct) {
+        lower = TIMELINE_STOPS[i];
+        upper = TIMELINE_STOPS[i + 1];
+        break;
+      }
+    }
+    const t = (clamped - lower.pct) / (upper.pct - lower.pct || 1);
+    const rgb = lower.rgb.map((c, i) => Math.round(c + (upper.rgb[i] - c) * t));
+    return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
+  }
+
+  function paintTimelineDots() {
+    const track = document.querySelector<HTMLElement>('.timeline-track');
+    if (!track) return;
+    const trackRect = track.getBoundingClientRect();
+    if (trackRect.width === 0) return;
+
+    track.querySelectorAll<HTMLElement>('.timeline-point').forEach((point) => {
+      const rect = point.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const pct = ((centerX - trackRect.left) / trackRect.width) * 100;
+      point.style.setProperty('--timeline-dot-color', timelineColorAt(pct));
+    });
+  }
+
+  paintTimelineDots();
+  window.addEventListener('resize', paintTimelineDots);
+  document.addEventListener('astro:page-load', paintTimelineDots);
+</script>

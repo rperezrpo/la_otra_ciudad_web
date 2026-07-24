@@ -1,0 +1,165 @@
+---
+export const prerender = false;
+
+import BaseLayout from '../../components/layout/BaseLayout.astro';
+import { getSession } from 'auth-astro/server';
+
+const session = await getSession(Astro.request);
+const email = session?.user?.email ?? null;
+---
+
+<BaseLayout title="Editar" description="Herramientas de edición para el equipo." pageColor="cobalto">
+  <div class="editar-page">
+    <div class="editar-card">
+      {!email && (
+        <div>
+          <h1 class="editar-title">Para editar, inicia sesión</h1>
+          <p class="editar-body">
+            Inicia sesión con tu correo <strong>@laotraciudad.org</strong> para actualizar la
+            información de un proyecto o de tu perfil personal.
+          </p>
+          <button id="login" class="btn-white" style="margin-top: 28px; padding: 14px 28px; font-weight: 700;">
+            Iniciar sesión con Google
+          </button>
+        </div>
+      )}
+
+      {email && (
+        <div>
+          <h1 class="editar-title">¿Qué quieres editar?</h1>
+          <p class="editar-session">
+            Sesión iniciada como {email} ·
+            <button id="logout" class="editar-link" type="button">Cerrar sesión</button>
+          </p>
+
+          <div class="editar-options">
+            <a href="/editar/proyectos" class="editar-option">
+              <span class="editar-option-title">Editar proyectos</span>
+              <span class="editar-option-sub">Actualiza la información de los proyectos de La Otra Ciudad.</span>
+              <span class="editar-option-arrow">→</span>
+            </a>
+
+            <a href="/editar/perfil" class="editar-option">
+              <span class="editar-option-title">Editar mi perfil</span>
+              <span class="editar-option-sub">Actualiza tu información en la página del equipo.</span>
+              <span class="editar-option-arrow">→</span>
+            </a>
+          </div>
+        </div>
+      )}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  /* Fills the viewport below the (64px) nav, so the footer stays out of
+     view until the visitor actually scrolls. */
+  .editar-page {
+    min-height: calc(100vh - 64px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+    box-sizing: border-box;
+  }
+
+  .editar-card {
+    width: 100%;
+    max-width: 540px;
+    background: var(--c-grad-hero);
+    border-radius: 16px;
+    padding: 56px 48px;
+    text-align: center;
+    box-shadow: 0 24px 64px -24px rgba(26, 20, 16, 0.4);
+  }
+
+  .editar-title {
+    font-family: var(--font-display);
+    font-variation-settings: 'opsz' 144, 'SOFT' 30, 'WONK' 0;
+    font-size: clamp(28px, 3.4vw, 40px);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.8px;
+    color: #fff;
+    margin: 16px 0 0;
+  }
+
+  .editar-body {
+    font-size: 16px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.85);
+    max-width: 400px;
+    margin: 16px auto 0;
+  }
+
+  .editar-session {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 10px 0 0;
+  }
+
+  .editar-link {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: #fff;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .editar-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 28px;
+    text-align: left;
+  }
+
+  .editar-option {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    text-decoration: none;
+    color: #fff;
+    transition: background 120ms, border-color 120ms;
+  }
+
+  .editar-option:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+
+  .editar-option-title {
+    font-weight: 600;
+    font-size: 16px;
+  }
+
+  .editar-option-sub {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.75);
+    flex: 1;
+  }
+
+  .editar-option-arrow {
+    color: #fff;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 560px) {
+    .editar-card { padding: 40px 28px; }
+    .editar-option { flex-wrap: wrap; }
+    .editar-option-sub { flex-basis: 100%; }
+  }
+</style>
+
+<script>
+  import { signIn, signOut } from 'auth-astro/client';
+  document.getElementById('login')?.addEventListener('click', () => signIn('google'));
+  document.getElementById('logout')?.addEventListener('click', () => signOut());
+</script>

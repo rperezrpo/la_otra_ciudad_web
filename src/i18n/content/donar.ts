@@ -35,17 +35,17 @@ export const donarContent = {
   },
   en: {
     metaTitle: 'Donate',
-    metaDescription: 'Your contribution transforms territories. 100% of donations go directly to our programs.',
+    metaDescription: 'Your contribution transforms territories. 100% of donations go directly to our programmes.',
     heroEyebrow: 'Donate',
     heroTitle: 'Your contribution transforms territories',
-    heroSub: '100% of donations go directly to our programs. We are transparent: every peso has a destination.',
+    heroSub: '100% of donations go directly to our programmes. We are transparent: every peso has a destination.',
 
     qrAlt: 'QR code to donate',
     qrCaption: 'Scan to donate from your phone',
-    transferencia: 'Transfer to our Bancolombia account from 10,000 COP. If you would like a donation certificate, send us your full name and ID number at',
+    transferencia: 'Transfer to our Bancolombia account from 10,000 COP. If you would like a donation certificate, send us your full name and ID number to',
     infoRows: [
-      { stat: '100%',       desc: 'of donations go to running our organization and executing projects.' },
-      { stat: 'Traceable',  desc: 'Our annual management reports show where every cent invested in LOC went.' },
+      { stat: '100%',       desc: 'of donations go to running our organisation and delivering our projects.' },
+      { stat: 'Traceable',  desc: 'Our annual management reports show where every peso invested in LOC has gone.' },
       { stat: 'Deductible', desc: 'As part of Colombia’s Special Tax Regime, we can certify donations that are deductible from income tax.' },
     ],
 
@@ -62,7 +62,7 @@ export const donarContent = {
       'Pays for planting native species in public space',
       'Supports the refurbishment of a community space',
     ],
-    impactFallback: 'Supports our community programs',
+    impactFallback: 'Supports our community programmes',
     fxNote: '* You will be charged the equivalent in Colombian pesos (COP). The exact COP amount is shown at checkout before confirming.',
     errorConfig: 'Donations are not available right now. Please write to us at info@laotraciudad.org.',
     errorMinimo: 'The minimum donation amount is {min} {cur}.',

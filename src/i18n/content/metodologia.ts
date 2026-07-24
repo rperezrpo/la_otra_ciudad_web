@@ -69,11 +69,11 @@ export const metodologiaContent = {
     pasos: [
       {
         title: 'Entering the territory',
-        desc: 'We begin by getting to know the community context: its leaderships, conflicts, needs and strengths. We do not arrive with predefined solutions, but with open questions.',
+        desc: 'We begin by getting to know the community context: its leaders, conflicts, needs and strengths. We do not arrive with predefined solutions, but with open questions.',
       },
       {
         title: 'Participatory diagnosis',
-        desc: 'Together with the community, we map the physical and symbolic territory. We use tools such as social cartography, collective interviews and neighborhood walks.',
+        desc: 'Together with the community, we map the physical and symbolic territory. We use tools such as social cartography, collective interviews and neighbourhood walks.',
       },
       {
         title: 'Co-design of solutions',
@@ -95,11 +95,11 @@ export const metodologiaContent = {
     enfoques: [
       {
         title: 'Gender approach',
-        desc: 'We recognize that territory carries gender marks, and we work to make those inequalities visible and transform them.',
+        desc: 'We recognise that territory bears the marks of gender, and we work to make those inequalities visible and to transform them.',
       },
       {
         title: 'Ethnic approach',
-        desc: 'The city is diverse. Our processes recognize and respect the cultural identities of Afro-descendant, Indigenous and urban peasant communities.',
+        desc: 'The city is diverse. Our processes recognise and respect the cultural identities of Afro-descendant, Indigenous and urban peasant communities.',
       },
       {
         title: 'Environmental approach',

@@ -6,27 +6,20 @@ import { getSessionEmail, isProjectEditor } from '../../../lib/access';
 import { getEditableProjects } from '../../../lib/sanity';
 
 const email = await getSessionEmail(Astro.request);
+if (!email) return Astro.redirect('/editar');
+
 const isEditor = await isProjectEditor(email);
 const projects = isEditor ? await getEditableProjects() : [];
 ---
 
 <BaseLayout title="Editar proyectos" description="Edición de proyectos del equipo." pageColor="cobalto">
   <div class="section" style="max-width: 880px;">
+    <p style="margin-bottom: 8px;"><a href="/editar" class="link-button">← Editar</a></p>
+
     <span class="eyebrow">Proyectos</span>
     <h1 class="section-title" style="font-size: clamp(28px, 3vw, 42px);">Editar proyectos</h1>
 
-    {!email && (
-      <div style="margin-top: 24px;">
-        <p class="section-body">
-          Inicia sesión con tu correo <strong>@laotraciudad.org</strong> para editar proyectos.
-        </p>
-        <button id="login" class="btn-accent" style="margin-top: 24px; padding: 14px 28px;">
-          Iniciar sesión con Google
-        </button>
-      </div>
-    )}
-
-    {email && !isEditor && (
+    {!isEditor && (
       <div style="margin-top: 24px;">
         <p class="section-body">
           Iniciaste sesión como <strong>{email}</strong>, pero no tienes permisos para editar
@@ -37,7 +30,7 @@ const projects = isEditor ? await getEditableProjects() : [];
       </div>
     )}
 
-    {email && isEditor && (
+    {isEditor && (
       <div style="margin-top: 24px;">
         <p style="font-size: 14px; color: var(--fg3); margin-bottom: 24px;">
           Sesión iniciada como {email} ·
@@ -47,7 +40,7 @@ const projects = isEditor ? await getEditableProjects() : [];
 
         <div class="proj-list">
           {projects.map((p) => (
-            <a href={`/proyectos/editar/${p.slug}`} class="proj-row">
+            <a href={`/editar/proyectos/${p.slug}`} class="proj-row">
               <div class="proj-thumb">
                 {p.heroImage ? <img src={p.heroImage} alt="" /> : <span>—</span>}
               </div>
@@ -88,7 +81,6 @@ const projects = isEditor ? await getEditableProjects() : [];
 </style>
 
 <script>
-  import { signIn, signOut } from 'auth-astro/client';
-  document.getElementById('login')?.addEventListener('click', () => signIn('google'));
+  import { signOut } from 'auth-astro/client';
   document.querySelectorAll('#logout').forEach((b) => b.addEventListener('click', () => signOut()));
 </script>

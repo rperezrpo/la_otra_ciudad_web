@@ -55,13 +55,13 @@ export const graciasContent = {
     views: {
       APPROVED: {
         icon: '✓', eyebrow: 'Donation received',
-        title: 'Thank you for building city!',
-        text: 'Your contribution is on its way to our community programs. We will send the tax-deductible receipt to your email.',
+        title: 'Thank you for helping build the city!',
+        text: 'Your contribution is on its way to our community programmes. We will email you your tax-deductible receipt.',
       },
       PENDING: {
         icon: '⏳', eyebrow: 'Payment pending',
         title: 'Your donation is being processed',
-        text: 'Some payment methods (like PSE) can take a few minutes to confirm. We will let you know by email once it completes.',
+        text: 'Some payment methods (such as PSE) can take a few minutes to confirm. We will let you know by email once it is complete.',
       },
       DECLINED: {
         icon: '✕', eyebrow: 'Payment declined',

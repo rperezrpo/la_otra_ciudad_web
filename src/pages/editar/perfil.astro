@@ -1,0 +1,245 @@
+---
+export const prerender = false;
+
+import BaseLayout from '../../components/layout/BaseLayout.astro';
+import { getSession } from 'auth-astro/server';
+import { getPersonByEmail, getEditableProjects } from '../../lib/sanity';
+
+const session = await getSession(Astro.request);
+const email = session?.user?.email ?? null;
+if (!email) return Astro.redirect('/editar');
+
+const person = await getPersonByEmail(email);
+const projects = person ? await getEditableProjects() : [];
+
+const linkedin = person?.links.find((l) => l.type === 'linkedin')?.url ?? '';
+const orcid = person?.links.find((l) => l.type === 'orcid')?.url ?? '';
+const otrosEnlaces = (person?.links.filter((l) => l.type === 'custom') ?? [])
+  .map((l) => `${l.label}, ${l.url}`)
+  .join('\n');
+---
+
+<BaseLayout
+  title="Editar mi perfil"
+  description="Actualiza tu información del equipo de La Otra Ciudad."
+  pageColor="cobalto"
+>
+  <div class="section" style="max-width: 720px;">
+    <p style="margin-bottom: 8px;"><a href="/editar" class="link-button">← Editar</a></p>
+
+    <span class="eyebrow">Equipo</span>
+    <h1 class="section-title" style="font-size: clamp(28px, 3vw, 42px);">Editar mi perfil</h1>
+
+    {!person && (
+      <div style="margin-top: 24px;">
+        <p class="section-body">
+          Iniciaste sesión como <strong>{email}</strong>, pero aún no existe un
+          perfil del equipo asociado a ese correo. Escribe a Ricardo u otro
+          miembro de la Junta Directiva para que creen uno.
+        </p>
+        <button id="logout" class="btn-outline" style="margin-top: 24px;">
+          Cerrar sesión
+        </button>
+      </div>
+    )}
+
+    {person && (
+      <div style="margin-top: 24px;">
+        <p style="font-size: 14px; color: var(--fg3); margin-bottom: 24px;">
+          Sesión iniciada como {email} ·
+          <button id="logout" class="link-button" type="button">Cerrar sesión</button>
+        </p>
+
+        <form id="profile-form" enctype="multipart/form-data">
+          <div class="form-group">
+            <label class="form-label" for="name">Nombre completo</label>
+            <input class="form-input" type="text" id="name" name="name" value={person.name} required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="role">Rol</label>
+            <input class="form-input" type="text" id="role" name="role" value={person.role} placeholder="Ej. Urbanista" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="bio">Biografía corta</label>
+            <p style="font-size: 13px; color: var(--fg3); margin: -4px 0 8px;">
+              Se muestra en la tarjeta del equipo en "Quiénes somos".
+            </p>
+            <textarea class="form-textarea" id="bio" name="bio" placeholder="Cuéntanos brevemente sobre ti…">{person.bio}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="longBio_es">Biografía extendida (español)</label>
+            <p style="font-size: 13px; color: var(--fg3); margin: -4px 0 8px;">
+              Se muestra en tu página individual (/equipo/…). Si queda vacía, se usa la biografía corta.
+            </p>
+            <details style="margin-bottom: 8px;">
+              <summary style="cursor: pointer; font-size: 13px; color: var(--fg3);">¿Cómo dar formato? (Markdown)</summary>
+              <ul style="font-size: 13px; color: var(--fg2); margin: 8px 0 0; padding-left: 18px; line-height: 1.7;">
+                <li>Para título doble numeral: <code>## Academia</code></li>
+                <li>Para subtítulo triple numeral: <code>### Universidad</code></li>
+                <li>Negrita doble asterisco: <code>**este texto saldrá en negrita**</code></li>
+                <li>Itálicas un sólo asterisco: <code>*este texto saldrá en italicas*</code></li>
+                <li>Para listas, comenzar la línea con un guión</li>
+                <li>Para enlaces, usar: <code>[texto](https://enlace)</code></li>
+              </ul>
+            </details>
+            <textarea class="form-textarea" id="longBio_es" name="longBio_es" rows="10" style="font-family: var(--font-mono); font-size: 14px;">{person.longBioMarkdown.es}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="longBio_en">Biografía extendida (inglés)</label>
+            <textarea class="form-textarea" id="longBio_en" name="longBio_en" rows="10" style="font-family: var(--font-mono); font-size: 14px;">{person.longBioMarkdown.en}</textarea>
+            <p style="font-size: 13px; color: var(--fg3); margin-top: 6px;">Opcional: si queda vacía, la web en inglés muestra el texto en español.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="researchAreas_es">Áreas de interés (español, una por línea)</label>
+            <textarea class="form-textarea" id="researchAreas_es" name="researchAreas_es" rows="4">{person.researchAreas.es.join('\n')}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="researchAreas_en">Áreas de interés (inglés, una por línea)</label>
+            <textarea class="form-textarea" id="researchAreas_en" name="researchAreas_en" rows="4">{person.researchAreas.en.join('\n')}</textarea>
+            <p style="font-size: 13px; color: var(--fg3); margin-top: 6px;">Opcional: si quedan vacías, la web en inglés muestra las de español.</p>
+          </div>
+
+          {projects.length > 0 && (
+            <div class="form-group">
+              <label class="form-label">Proyectos en los que has participado</label>
+              <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 6px; max-height: 260px; overflow-y: auto;">
+                {projects.map((proj) => (
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 400;">
+                    <input
+                      type="checkbox"
+                      name="relatedProjects"
+                      value={proj.slug}
+                      checked={person.relatedProjectSlugs.includes(proj.slug)}
+                    />
+                    {proj.title} {proj.year ? `(${proj.year})` : ''}
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div class="form-group">
+            <label class="form-label" for="linkedin">LinkedIn</label>
+            <input class="form-input" type="url" id="linkedin" name="linkedin" value={linkedin} placeholder="https://www.linkedin.com/in/…" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="orcid">ORCID</label>
+            <input class="form-input" type="url" id="orcid" name="orcid" value={orcid} placeholder="https://orcid.org/0000-0000-0000-0000" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="otrosEnlaces">Otros enlaces (uno por línea, formato "Etiqueta, URL")</label>
+            <textarea
+              class="form-textarea"
+              id="otrosEnlaces"
+              name="otrosEnlaces"
+              rows="3"
+              placeholder="Sitio personal, https://…"
+            >{otrosEnlaces}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="cv">CV (PDF)</label>
+            {person.cv && (
+              <p style="margin-bottom: 8px;">
+                <a href={person.cv} target="_blank" rel="noopener noreferrer" class="link-button">Ver CV actual</a>
+              </p>
+            )}
+            <input class="form-input" type="file" id="cv" name="cv" accept="application/pdf" />
+            <p style="font-size: 13px; color: var(--fg3); margin-top: 6px;">
+              PDF, máximo 8 MB. Déjalo vacío para conservar el actual.
+            </p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="photo">Foto</label>
+            {person.photo && (
+              <img
+                src={person.photo}
+                alt="Foto actual"
+                style="width: 96px; height: 96px; object-fit: cover; border-radius: 8px; display: block; margin-bottom: 12px;"
+              />
+            )}
+            <input class="form-input" type="file" id="photo" name="photo" accept="image/jpeg,image/png,image/webp" />
+            <p style="font-size: 13px; color: var(--fg3); margin-top: 6px;">
+              JPG, PNG o WebP, máximo 5 MB. Déjalo vacío para conservar la foto actual.
+            </p>
+          </div>
+
+          <button type="submit" class="btn-accent" id="profile-submit" style="padding: 14px 28px;">
+            Guardar cambios
+          </button>
+
+          <p id="profile-status" role="status" aria-live="polite" style="display: none; margin-top: 16px; font-size: 15px; line-height: 1.5;"></p>
+        </form>
+      </div>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .link-button {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: var(--page-accent, var(--c-cobalto));
+    text-decoration: underline;
+    cursor: pointer;
+  }
+</style>
+
+<script>
+  import { signOut } from 'auth-astro/client';
+
+  document.querySelectorAll('#logout').forEach((btn) =>
+    btn.addEventListener('click', () => signOut())
+  );
+
+  const form = document.getElementById('profile-form') as HTMLFormElement | null;
+  const status = document.getElementById('profile-status') as HTMLParagraphElement | null;
+  const submitBtn = document.getElementById('profile-submit') as HTMLButtonElement | null;
+
+  if (form && status && submitBtn) {
+    const showStatus = (message: string, ok: boolean) => {
+      status.textContent = message;
+      status.style.display = 'block';
+      status.style.color = ok ? 'var(--fg2)' : '#b3261e';
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      submitBtn.disabled = true;
+      const originalLabel = submitBtn.textContent;
+      submitBtn.textContent = 'Guardando…';
+      status.style.display = 'none';
+
+      try {
+        const res = await fetch('/api/equipo/actualizar', {
+          method: 'POST',
+          body: new FormData(form),
+        });
+        const data = await res.json().catch(() => ({}));
+
+        if (res.ok) {
+          showStatus('¡Listo! Tus cambios se guardaron. Aparecerán en la web en el próximo despliegue.', true);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          showStatus(data.error ?? 'No pudimos guardar los cambios. Intenta de nuevo.', false);
+        }
+      } catch {
+        showStatus('Hubo un problema de conexión. Intenta de nuevo.', false);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalLabel;
+      }
+    });
+  }
+</script>

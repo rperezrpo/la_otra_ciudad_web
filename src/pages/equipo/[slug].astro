@@ -1,0 +1,12 @@
+---
+import PersonaDetalleBody from '../../components/pages/PersonaDetalleBody.astro';
+import { personStaticPaths } from '../../lib/personPaths';
+
+export async function getStaticPaths() {
+  return personStaticPaths('es');
+}
+
+const { person } = Astro.props;
+---
+
+<PersonaDetalleBody person={person} />

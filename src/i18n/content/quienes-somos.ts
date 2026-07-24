@@ -42,13 +42,13 @@ export const quienesSomosContent = {
     metaTitle: 'About Us',
     metaDescription: 'Corporación La Otra Ciudad has worked since 2021 for more biodiverse, fair and healthy cities in Medellín.',
     heroEyebrow: 'About Us',
-    heroTitle: 'An organization that believes in the power of the collective',
+    heroTitle: 'An organisation that believes in the power of the collective',
     heroSub: 'Since 2021 we have worked so that communities lead the transformation of their own territories.',
 
     historiaEyebrow: 'Our story',
     historiaTitle: 'Born from communities, for communities',
-    historiaP1: 'La Otra Ciudad (LOC) was born in Medellín in 2021 as a youth collective. From the start, LOC has been led by young urbanists, architects and activists passionate about improving the cities we inhabit. Over these 5 years of work, the organization has committed to a practice that centers the knowledge and needs of the most vulnerable populations.',
-    historiaP2: 'In October 2024 LOC was formally constituted as a non-profit entity. Today it is made up of a team of 13 professionals whose work with institutions, companies and grassroots communities to build greener, fairer and healthier spaces has been recognized nationally and internationally.',
+    historiaP1: 'La Otra Ciudad (LOC) was born in Medellín in 2021 as a youth collective. From the start, LOC has been led by young urbanists, architects and activists passionate about improving the cities we inhabit. Over these five years of work, the organisation has committed to a practice that places the knowledge and needs of the most vulnerable populations at its centre.',
+    historiaP2: 'In October 2024 LOC was formally constituted as a non-profit entity. Today it is made up of a team of 13 professionals whose work with institutions, companies and grassroots communities to build greener, fairer and healthier spaces has been recognised nationally and internationally.',
     historiaImgAlt: 'La Otra Ciudad team on a city walk',
     historiaBtnEquipo: 'Meet the team →',
 

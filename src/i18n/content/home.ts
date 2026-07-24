@@ -42,17 +42,17 @@ export const homeContent = {
   },
   en: {
     metaTitle: 'Home',
-    metaDescription: 'Corporación La Otra Ciudad — we co-create more biodiverse, fair and healthy cities together with communities in Medellín, Colombia.',
-    jsonLdDescription: 'Non-profit organization co-creating fairer, more sustainable and healthier cities in Medellín, Colombia.',
+    metaDescription: 'Corporación La Otra Ciudad: we co-create more biodiverse, fair and healthy cities together with communities in Medellín, Colombia.',
+    jsonLdDescription: 'Non-profit organisation co-creating fairer, more sustainable and healthier cities in Medellín, Colombia.',
 
     heroEyebrow: 'Corporación La Otra Ciudad · Medellín',
     heroTitle: 'We build more biodiverse, fair and healthy cities',
-    heroSub: 'We transform territories from within — with communities, for communities.',
+    heroSub: 'We transform territories from within: with communities, for communities.',
     heroScrollAria: 'Scroll down',
 
     misionEyebrow: 'Our mission',
     misionTitle: 'We build dignified territories for those who need them most',
-    misionBody: 'We are a non-profit organization founded in Medellín in 2021. We work through nature-based solutions, participatory public-space design, artistic interventions and the strengthening of the social fabric — always alongside communities.',
+    misionBody: 'We are a non-profit organisation founded in Medellín in 2021. We work through nature-based solutions, participatory public-space design, artistic interventions and the strengthening of the social fabric, always alongside communities.',
     misionBtnQuienes: 'About us',
     misionBtnMetodologia: 'Our methodology',
     misionImgAlt: 'San Rafael community',
@@ -65,8 +65,8 @@ export const homeContent = {
     ] as [string, string][],
 
     metodEyebrow: 'How we work',
-    metodTitle: 'A community-centered process',
-    metodP1: 'At La Otra Ciudad we believe that transforming a city starts with seeing it for what it is: a living ecosystem where people, neighborhoods and nature are part of the same fabric. That is where we work from — not to impose solutions, but to regenerate that fabric together with the people who inhabit it.',
+    metodTitle: 'A community-centred process',
+    metodP1: 'At La Otra Ciudad we believe that transforming a city starts with seeing it for what it is: a living ecosystem where people, neighbourhoods and nature are part of the same fabric. That is where we work from, not to impose solutions but to regenerate that fabric together with the people who inhabit it.',
     metodP2: 'The four values that guide our design are not loose ideas but pieces of a single way of understanding the city. Click on the diagram to discover more about them.',
 
     quoteEyebrow: 'Our mission',
@@ -78,7 +78,7 @@ export const homeContent = {
     featuredVerTodos: 'See all →',
 
     donarEyebrow: 'Be part of the change',
-    donarTitle: 'Your donation builds city',
-    donarText: 'Every contribution, however small, goes directly to our community programs.',
+    donarTitle: 'Your donation builds the city',
+    donarText: 'Every contribution, however small, goes directly to our community programmes.',
   },
 } as const;

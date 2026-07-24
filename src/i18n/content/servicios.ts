@@ -42,7 +42,7 @@ export const serviciosContent = {
     heroSub: 'We design, build and support territorial transformation processes together with the communities that inhabit them.',
 
     introEyebrow: 'How we work',
-    introTitle: 'Technical rigor rooted in community',
+    introTitle: 'Technical rigour rooted in community',
     introP1: 'Our services grow out of five years of experience implementing participatory methodologies, nature-based solutions and collaborative design. We do not offer generic solutions, but processes grounded in thorough analyses of the potentials and needs of a territory and its communities.',
     introP2: 'LOC focuses on producing top-quality designs through socially sensitive processes. This is how we strengthen local capacities, producing long-term benefits for our allies and clients.',
 
@@ -53,11 +53,11 @@ export const serviciosContent = {
       },
       'espacio-publico': {
         label: 'Design of',
-        desc: 'We design public spaces that invite people to stay: active, safe and enjoyable places with an identity of their own, which people choose to inhabit and which energize the social and economic life around them.',
+        desc: 'We design public spaces that invite people to stay: active, safe and enjoyable places with an identity of their own, which people choose to inhabit and which energise the social and economic life around them.',
       },
       'acompanamiento-comunitario': {
         label: 'Processes of',
-        desc: 'We support organizations and institutions in territorial advocacy processes, guaranteeing sensitive, efficient and rigorous citizen participation and territorial diagnoses.',
+        desc: 'We support organisations and institutions in territorial advocacy processes, guaranteeing sensitive, efficient and rigorous citizen participation and territorial diagnoses.',
       },
     },
     cardCta: 'Learn more →',
@@ -66,7 +66,7 @@ export const serviciosContent = {
 
     ctaEyebrow: 'Have a project?',
     ctaTitle: "Let's talk about your territory",
-    ctaText: 'Tell us where your community or organization stands and we will explore together how to support you.',
+    ctaText: 'Tell us where your community or organisation stands and we will explore together how to support you.',
     ctaBtn: 'Write to us →',
   },
 } as const;

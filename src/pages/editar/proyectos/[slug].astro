@@ -8,23 +8,17 @@ import { CATEGORY_KEYS, CATEGORY_META } from '../../../i18n/categories';
 
 const { slug } = Astro.params;
 const email = await getSessionEmail(Astro.request);
+if (!email) return Astro.redirect('/editar');
+
 const isEditor = await isProjectEditor(email);
 const project = isEditor && slug ? await getProjectForEdit(slug) : null;
 ---
 
 <BaseLayout title="Editar proyecto" description="Edición de proyecto." pageColor="cobalto">
   <div class="section" style="max-width: 720px;">
-    <p style="margin-bottom: 8px;"><a href="/proyectos/editar" class="link-button">← Volver a la lista</a></p>
+    <p style="margin-bottom: 8px;"><a href="/editar/proyectos" class="link-button">← Volver a la lista</a></p>
 
-    {!email && (
-      <div>
-        <h1 class="section-title">Editar proyecto</h1>
-        <p class="section-body" style="margin-top: 16px;">Inicia sesión para continuar.</p>
-        <button id="login" class="btn-accent" style="margin-top: 24px; padding: 14px 28px;">Iniciar sesión con Google</button>
-      </div>
-    )}
-
-    {email && !isEditor && (
+    {!isEditor && (
       <div>
         <h1 class="section-title">Sin permisos</h1>
         <p class="section-body" style="margin-top: 16px;">
@@ -33,14 +27,14 @@ const project = isEditor && slug ? await getProjectForEdit(slug) : null;
       </div>
     )}
 
-    {email && isEditor && !project && (
+    {isEditor && !project && (
       <div>
         <h1 class="section-title">Proyecto no encontrado</h1>
         <p class="section-body" style="margin-top: 16px;">No existe un proyecto con ese identificador.</p>
       </div>
     )}
 
-    {email && isEditor && project && (
+    {isEditor && project && (
       <div>
         <span class="eyebrow">Proyecto</span>
         <h1 class="section-title" style="font-size: clamp(26px, 2.6vw, 38px);">{project.title.es}</h1>
@@ -95,10 +89,14 @@ const project = isEditor && slug ? await getProjectForEdit(slug) : null;
             <label class="form-label" for="description_es">Descripción (español)</label>
             <details style="margin-bottom: 8px;">
               <summary style="cursor: pointer; font-size: 13px; color: var(--fg3);">¿Cómo dar formato? (Markdown)</summary>
-              <div style="font-size: 13px; color: var(--fg2); margin-top: 8px; line-height: 1.6;">
-                <code>## Título</code> y <code>### Subtítulo</code> · <code>**negrita**</code> ·
-                <code>*cursiva*</code> · <code>[texto](https://enlace)</code> · listas con <code>- </code> al inicio de la línea.
-              </div>
+              <ul style="font-size: 13px; color: var(--fg2); margin: 8px 0 0; padding-left: 18px; line-height: 1.7;">
+                <li>Para título doble numeral: <code>## Academia</code></li>
+                <li>Para subtítulo triple numeral: <code>### Universidad</code></li>
+                <li>Negrita doble asterisco: <code>**este texto saldrá en negrita**</code></li>
+                <li>Itálicas un sólo asterisco: <code>*este texto saldrá en italicas*</code></li>
+                <li>Para listas, comenzar la línea con un guión</li>
+                <li>Para enlaces, usar: <code>[texto](https://enlace)</code></li>
+              </ul>
             </details>
             <textarea class="form-textarea" id="description_es" name="description_es" rows="14" style="font-family: var(--font-mono); font-size: 14px;">{project.descriptionMarkdown.es}</textarea>
           </div>
@@ -189,9 +187,6 @@ const project = isEditor && slug ? await getProjectForEdit(slug) : null;
 </style>
 
 <script>
-  import { signIn, signOut } from 'auth-astro/client';
-  document.getElementById('login')?.addEventListener('click', () => signIn('google'));
-
   const form = document.getElementById('project-form') as HTMLFormElement | null;
   const status = document.getElementById('project-status') as HTMLParagraphElement | null;
   const submitBtn = document.getElementById('project-submit') as HTMLButtonElement | null;

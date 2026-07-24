@@ -1,0 +1,530 @@
+---
+// Visual reference sheet — report layouts in the LOC design system.
+// Standalone gallery (not linked from nav). Delete when done, or keep as a living reference.
+import '../styles/global.css';
+
+const body =
+  'El proceso de co-diseño articuló saberes comunitarios y técnicos para transformar el espacio público desde las prioridades del territorio. Cada intervención parte de un diagnóstico participativo y se sostiene en el tiempo mediante acuerdos de cuidado colectivo entre vecinos, entidades y aliados.';
+const bodyShort =
+  'Partimos del territorio: caminamos el barrio, escuchamos a quienes lo habitan y traducimos esas voces en decisiones de diseño concretas y verificables.';
+
+const cards = [
+  ['Diagnóstico', 'Lectura del territorio', 'Cartografía social, recorridos y entrevistas para entender usos, conflictos y oportunidades del lugar.'],
+  ['Co-diseño', 'Taller con la comunidad', 'Sesiones participativas donde vecinos y equipo técnico deciden juntos el programa y la forma.'],
+  ['Prototipo', 'Prueba a escala 1:1', 'Maquetas urbanas temporales que validan la propuesta antes de la obra definitiva.'],
+  ['Obra', 'Implementación', 'Construcción con mano de obra local y materiales apropiados al clima y al mantenimiento.'],
+  ['Cuidado', 'Acuerdos colectivos', 'Pactos de uso y mantenimiento que sostienen lo construido en el tiempo.'],
+  ['Medición', 'Indicadores', 'Seguimiento de uso, percepción de seguridad y apropiación del espacio.'],
+];
+
+const stats = [
+  ['1.240', 'Personas participantes'],
+  ['8', 'Barrios intervenidos'],
+  ['15', 'Talleres de co-diseño'],
+  ['3.500', 'm² de espacio público'],
+];
+
+const bars = [
+  ['Apropiación', 82],
+  ['Seguridad percibida', 71],
+  ['Uso diario', 64],
+  ['Mantenimiento', 58],
+];
+
+const toc = [
+  ['01', 'Presentación', '04'],
+  ['02', 'Diagnóstico territorial', '08'],
+  ['03', 'Proceso participativo', '16'],
+  ['04', 'Diseño y obra', '24'],
+  ['05', 'Resultados e indicadores', '34'],
+  ['06', 'Aprendizajes', '42'],
+];
+
+const steps = [
+  ['Diagnóstico', 'Lectura del territorio y sus prioridades.'],
+  ['Co-diseño', 'Decisiones compartidas con la comunidad.'],
+  ['Prototipo', 'Validación a escala real, in situ.'],
+  ['Implementación', 'Obra con mano de obra local.'],
+];
+
+const meta = [
+  ['Cliente', 'Alcaldía de Medellín'],
+  ['Lugar', 'Quebrada La Iguaná'],
+  ['Año', '2025'],
+  ['Servicio', 'Espacio público'],
+  ['NIT', '901.889.218'],
+  ['Versión', '1.0 — Final'],
+];
+---
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Referencias de diagramación · LOC</title>
+  </head>
+  <body class="gal">
+    <header class="gal-head">
+      <span class="eyebrow">La Otra Ciudad · Sistema de informes</span>
+      <h1 class="gal-title">Referencias de diagramación</h1>
+      <p class="gal-sub">4 portadas · 4 páginas de título · 8 diagramaciones interiores. Tipografías y color reales del sistema.</p>
+    </header>
+
+    <!-- ════════ PORTADAS ════════ -->
+    <h2 class="gal-sec">Portadas</h2>
+    <div class="grid">
+
+      <!-- C1 — Gradiente de marca -->
+      <figure>
+        <div class="page" style="padding:0">
+          <div class="cv cv-grad">
+            <div class="cv-top"><span class="mono lt">Informe Anual</span><span class="mono lt">2025</span></div>
+            <div class="cv-mid">
+              <h3 class="display">Informe<br/>Anual</h3>
+              <p class="mono lt cv-year">Corporación La Otra Ciudad · Medellín</p>
+            </div>
+            <div class="cv-foot"><span class="brand-lt">La Otra Ciudad</span><span class="mono lt">Co-creando ciudades más justas</span></div>
+          </div>
+        </div>
+        <figcaption class="mono cap">Portada 01 · Gradiente de marca</figcaption>
+      </figure>
+
+      <!-- C2 — Oscuro + fotografía -->
+      <figure>
+        <div class="page" style="padding:0">
+          <div class="cv cv-photo" style="--acc:var(--c-cobalto)">
+            <div class="cv-photo-grad"></div>
+            <span class="ph-lbl mono">Fotografía a sangre</span>
+            <div class="cv-photo-body">
+              <span class="mono lt eb">Memoria de proyecto</span>
+              <h3 class="title-serif lt">Quebrada<br/>La Iguaná</h3>
+              <p class="mono lt">Recuperación del corredor — 2023·2025</p>
+            </div>
+          </div>
+        </div>
+        <figcaption class="mono cap">Portada 02 · Oscuro + fotografía</figcaption>
+      </figure>
+
+      <!-- C3 — Editorial claro -->
+      <figure>
+        <div class="page" style="--acc:var(--c-rosado)">
+          <div class="blob"></div>
+          <span class="eyebrow" style="position:relative">Documento metodológico</span>
+          <h3 class="title-serif" style="position:relative;margin-top:8px">Paisajes<br/>regenerativos</h3>
+          <p class="lead" style="position:relative;margin-top:14px;max-width:78%">Un marco de diseño para regenerar el territorio desde el agua, el suelo y la comunidad.</p>
+          <div class="cv-foot-l">
+            <span class="brand">La Otra Ciudad</span>
+            <span class="mono">Edición 2025</span>
+          </div>
+        </div>
+        <figcaption class="mono cap">Portada 03 · Editorial claro</figcaption>
+      </figure>
+
+      <!-- C4 — Bloque de color -->
+      <figure>
+        <div class="page" style="padding:0;--acc:var(--c-aguamarina)">
+          <div class="cv-block">
+            <div class="cv-block-top">
+              <span class="mono lt eb">Acompañamiento comunitario</span>
+              <p class="mono lt" style="margin-top:auto">Serie territorios · 03</p>
+            </div>
+            <div class="cv-block-bot">
+              <h3 class="title-serif">Tejer<br/>barrio</h3>
+              <div class="meta-row">
+                <div><span class="mono dim">Lugar</span><br/>Comuna 13</div>
+                <div><span class="mono dim">Año</span><br/>2025</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption class="mono cap">Portada 04 · Bloque de color</figcaption>
+      </figure>
+    </div>
+
+    <!-- ════════ PÁGINAS DE TÍTULO ════════ -->
+    <h2 class="gal-sec">Páginas de título</h2>
+    <div class="grid">
+
+      <!-- T1 — Divisor de sección -->
+      <figure>
+        <div class="page tp" style="--acc:var(--c-aguamarina)">
+          <span class="sec-num display">02</span>
+          <span class="eyebrow">Capítulo</span>
+          <h3 class="title-serif">Diagnóstico<br/>territorial</h3>
+          <span class="acc-rule"></span>
+          <p class="lead" style="max-width:80%">Cómo leímos el lugar: cartografía social, recorridos y escucha activa con quienes habitan el barrio.</p>
+          <div class="rp-foot"><span class="mono">La Otra Ciudad</span><span class="mono">08</span></div>
+        </div>
+        <figcaption class="mono cap">Título 01 · Divisor de sección</figcaption>
+      </figure>
+
+      <!-- T2 — Índice / contenido -->
+      <figure>
+        <div class="page tp" style="--acc:var(--c-cobalto)">
+          <span class="eyebrow">Contenido</span>
+          <h3 class="h1" style="margin-bottom:18px">En este informe</h3>
+          <ul class="toc">
+            {toc.map(([n, t, p]) => (
+              <li><span class="mono toc-n">{n}</span><span class="toc-t">{t}</span><span class="toc-dots"></span><span class="mono toc-p">{p}</span></li>
+            ))}
+          </ul>
+          <div class="rp-foot"><span class="mono">La Otra Ciudad</span><span class="mono">03</span></div>
+        </div>
+        <figcaption class="mono cap">Título 02 · Índice</figcaption>
+      </figure>
+
+      <!-- T3 — Colofón / metadatos -->
+      <figure>
+        <div class="page tp" style="--acc:var(--c-orange)">
+          <span class="eyebrow">Ficha del documento</span>
+          <h3 class="title-serif" style="margin-bottom:24px">Memoria<br/>de proyecto</h3>
+          <div class="meta-grid">
+            {meta.map(([k, v]) => (
+              <div class="meta-cell"><span class="mono dim">{k}</span><span class="meta-v">{v}</span></div>
+            ))}
+          </div>
+          <div class="rp-foot"><span class="mono">La Otra Ciudad</span><span class="mono">02</span></div>
+        </div>
+        <figcaption class="mono cap">Título 03 · Colofón / metadatos</figcaption>
+      </figure>
+
+      <!-- T4 — Declaración / cita -->
+      <figure>
+        <div class="page tp tp-quote" style="--acc:var(--c-rosado)">
+          <span class="eyebrow">Nuestra apuesta</span>
+          <blockquote class="big-quote">“La ciudad se hace con quienes la habitan, no solo para ellos.”</blockquote>
+          <p class="mono attr">— Principio rector · La Otra Ciudad</p>
+          <div class="rp-foot"><span class="mono">La Otra Ciudad</span><span class="mono">05</span></div>
+        </div>
+        <figcaption class="mono cap">Título 04 · Declaración</figcaption>
+      </figure>
+    </div>
+
+    <!-- ════════ DIAGRAMACIÓN INTERIOR ════════ -->
+    <h2 class="gal-sec">Diagramación interior</h2>
+    <div class="grid">
+
+      <!-- L1 — Texto editorial -->
+      <figure>
+        <div class="page" style="--acc:var(--c-aguamarina)">
+          <span class="eyebrow">Presentación</span>
+          <h3 class="h1">Volver al territorio</h3>
+          <p class="lead">{bodyShort}</p>
+          <div class="cols2" style="margin-top:14px">
+            <p class="body">{body}</p>
+            <p class="body">{body}</p>
+          </div>
+          <blockquote class="pull">“El diseño no impone: traduce las prioridades del barrio en forma construida.”</blockquote>
+          <p class="body">{bodyShort}</p>
+          <div class="rp-foot"><span class="mono">La Otra Ciudad</span><span class="mono">04</span></div>
+        </div>
+        <figcaption class="mono cap">Interior 01 · Texto editorial</figcaption>
+      </figure>
+
+      <!-- L2 — Texto + barra lateral -->
+      <figure>
+        <div class="page" style="--acc:var(--c-cobalto)">
+          <span class="eyebrow">Diagnóstico</span>
+          <h3 class="h1" style="margin-bottom:12px">Leer el lugar</h3>
+          <div class="side-layout">
+            <div>
+              <p class="body">{body}</p>
+              <p class="body" style="margin-top:8px">{body}</p>
+              <p class="body" style="margin-top:8px">{bodyShort}</p>
+            </div>
+            <aside class="side">
+              <div class="ph ph-s"><span class="ph-lbl mono">Mapa</span></div>
+              <div class="prop">
+                <span class="mono prop-l">Área</span>
+                <span class="prop-v">3.500 m²</span>
+              </div>
+              <div class="prop">
+                <span class="mono prop-l">Población</span>
+                <span class="prop-v">12.400 hab.</span>
+              </div>
+            </aside>
+          </div>
+          <div class="rp-foot"><span class="mono">La Otra Ciudad</span><span class="mono">09</span></div>
+        </div>
+        <figcaption class="mono cap">Interior 02 · Texto + barra lateral</figcaption>
+      </figure>
+
+      <!-- L3 — Imagen protagonista -->
+      <figure>
+        <div class="page" style="padding:0;--acc:var(--c-rosado)">
+          <div class="hero-img"><span class="ph-lbl mono">Imagen a sangre · 3:2</span></div>
+          <div class="hero-img-pad">
+            <span class="mono cap-img">Taller de co-diseño · Comuna 13, 2024</span>
+            <h3 class="h2" style="margin-top:10px">Un proceso hecho a varias manos</h3>
+            <div class="cols2" style="margin-top:8px">
+              <p class="body">{body}</p>
+              <p class="body">{bodyShort}</p>
+            </div>
+          </div>
+          <div class="rp-foot" style="padding:0 40px 22px"><span class="mono">La Otra Ciudad</span><span class="mono">17</span></div>
+        </div>
+        <figcaption class="mono cap">Interior 03 · Imagen protagonista</figcaption>
+      </figure>
+
+      <!-- L4 — Galería mosaico -->
+      <figure>
+        <div class="page" style="--acc:var(--c-violeta)">
+          <span class="eyebrow">Registro</span>
+          <h3 class="h1" style="margin-bottom:12px">El antes y el después</h3>
+          <div class="mosaic">
+            <div class="ph m-wide"><span class="ph-lbl mono">Panorámica</span></div>
+            <div class="ph"></div>
+            <div class="ph m-tall"><span class="ph-lbl mono">Vertical</span></div>
+            <div class="ph"></div>
+            <div class="ph"></div>
+            <div class="ph"></div>
+          </div>
+          <span class="mono cap-img" style="margin-top:10px;display:block">Intervención del corredor · 2023–2025</span>
+          <div class="rp-foot"><span class="mono">La Otra Ciudad</span><span class="mono">22</span></div>
+        </div>
+        <figcaption class="mono cap">Interior 04 · Galería mosaico</figcaption>
+      </figure>
+
+      <!-- L5 — Estructurada con tarjetas -->
+      <figure>
+        <div class="page" style="--acc:var(--c-orange)">
+          <span class="eyebrow">Metodología</span>
+          <h3 class="h1" style="margin-bottom:6px">Seis pasos, un método</h3>
+          <p class="body" style="max-width:88%;margin-bottom:14px">{bodyShort}</p>
+          <div class="cardgrid">
+            {cards.map(([tag, t, d]) => (
+              <article class="rcard">
+                <span class="mono rcard-tag">{tag}</span>
+                <span class="rcard-t">{t}</span>
+                <span class="rcard-d">{d}</span>
+              </article>
+            ))}
+          </div>
+          <div class="rp-foot"><span class="mono">La Otra Ciudad</span><span class="mono">12</span></div>
+        </div>
+        <figcaption class="mono cap">Interior 05 · Estructurada con tarjetas</figcaption>
+      </figure>
+
+      <!-- L6 — Callouts / cajas destacadas -->
+      <figure>
+        <div class="page" style="--acc:var(--c-aguamarina)">
+          <span class="eyebrow">Aprendizajes</span>
+          <h3 class="h1" style="margin-bottom:10px">Lo que nos dejó</h3>
+          <p class="body">{body}</p>
+          <div class="callout">
+            <span class="mono call-l">Clave</span>
+            <p class="call-t">El mantenimiento se diseña desde el primer día: sin acuerdos de cuidado, ninguna obra perdura.</p>
+          </div>
+          <div class="badge-row">
+            <span class="status-badge status-activo">En curso</span>
+            <span class="status-badge status-completado">Completado</span>
+          </div>
+          <p class="body" style="margin-top:10px">{bodyShort}</p>
+          <blockquote class="pull">“Un buen proyecto deja capacidad instalada, no dependencia.”</blockquote>
+          <div class="rp-foot"><span class="mono">La Otra Ciudad</span><span class="mono">40</span></div>
+        </div>
+        <figcaption class="mono cap">Interior 06 · Cajas destacadas</figcaption>
+      </figure>
+
+      <!-- L7 — Datos / cifras -->
+      <figure>
+        <div class="page" style="--acc:var(--c-cobalto)">
+          <span class="eyebrow">Resultados</span>
+          <h3 class="h1" style="margin-bottom:14px">El proyecto en cifras</h3>
+          <div class="statgrid">
+            {stats.map(([n, l]) => (
+              <div class="stat"><span class="stat-n">{n}</span><span class="mono stat-l">{l}</span></div>
+            ))}
+          </div>
+          <span class="mono call-l" style="margin:18px 0 8px;display:block">Percepción de la comunidad (%)</span>
+          <div class="bars">
+            {bars.map(([l, v]) => (
+              <div class="bar-row"><span class="bar-l">{l}</span><span class="bar-track"><span class="bar-fill" style={`width:${v}%`}></span></span><span class="mono bar-v">{v}</span></div>
+            ))}
+          </div>
+          <span class="mono src">Fuente: encuesta post-ocupación, n=1.240</span>
+          <div class="rp-foot"><span class="mono">La Otra Ciudad</span><span class="mono">34</span></div>
+        </div>
+        <figcaption class="mono cap">Interior 07 · Datos y cifras</figcaption>
+      </figure>
+
+      <!-- L8 — Proceso / línea de tiempo -->
+      <figure>
+        <div class="page" style="--acc:var(--c-violeta)">
+          <span class="eyebrow">Cómo trabajamos</span>
+          <h3 class="h1" style="margin-bottom:18px">El proceso, paso a paso</h3>
+          <div class="timeline">
+            {steps.map(([t, d], i) => (
+              <div class="tl-step">
+                <span class="tl-circle">{i + 1}</span>
+                <div class="tl-body"><span class="tl-t">{t}</span><span class="tl-d">{d}</span></div>
+              </div>
+            ))}
+          </div>
+          <div class="callout" style="margin-top:18px">
+            <span class="mono call-l">Transversal</span>
+            <p class="call-t">La participación atraviesa las cuatro etapas: nunca es una consulta puntual.</p>
+          </div>
+          <div class="rp-foot"><span class="mono">La Otra Ciudad</span><span class="mono">06</span></div>
+        </div>
+        <figcaption class="mono cap">Interior 08 · Proceso / línea de tiempo</figcaption>
+      </figure>
+    </div>
+
+    <style>
+      /* ── Gallery shell ── */
+      .gal { background:#e8e3dc; padding:40px 40px 80px; }
+      .gal-head { max-width:1180px; margin:0 auto 8px; }
+      .gal-title { font-family:var(--font-display); font-size:46px; font-weight:400; letter-spacing:-1.5px; color:var(--c-black); margin:6px 0 6px; }
+      .gal-sub { font-family:var(--font-sans); font-weight:300; color:var(--fg2); }
+      .gal-sec { font-family:var(--font-mono); text-transform:uppercase; letter-spacing:1px; font-size:13px; color:var(--fg2);
+                 max-width:1180px; margin:46px auto 18px; padding-bottom:8px; border-bottom:1px solid rgba(26,20,16,.18); }
+      .grid { max-width:1180px; margin:0 auto; display:grid; grid-template-columns:repeat(2,1fr); gap:40px 40px; }
+      figure { margin:0; }
+      .cap { display:block; text-transform:uppercase; letter-spacing:.6px; font-size:11px; color:var(--fg2); margin-top:12px; }
+
+      /* ── Page sheet (A4 ratio) ── */
+      .page { position:relative; width:100%; aspect-ratio:210/297; background:var(--bg1);
+              box-shadow:0 12px 40px rgba(0,0,0,.16), 0 4px 12px rgba(0,0,0,.10);
+              padding:40px; overflow:hidden; color:var(--fg1); }
+
+      /* ── Type scale (print, scaled to sheet) ── */
+      .display { font-family:var(--font-display); font-variation-settings:'opsz' 144,'SOFT' 40; font-weight:400;
+                 font-size:58px; line-height:.95; letter-spacing:-2px; color:#fff; }
+      .title-serif { font-family:var(--font-display); font-variation-settings:'opsz' 120,'SOFT' 30; font-weight:400;
+                     font-size:40px; line-height:.98; letter-spacing:-1.3px; color:var(--c-black); }
+      .title-serif.lt { color:#fff; }
+      .h1 { font-family:var(--font-sans); font-weight:400; font-size:24px; line-height:1.08; letter-spacing:-.8px; color:var(--c-black); }
+      .h2 { font-family:var(--font-sans); font-weight:600; font-size:16px; line-height:1.25; letter-spacing:-.3px; color:var(--c-black); }
+      .lead { font-family:var(--font-sans); font-weight:300; font-size:13px; line-height:1.45; letter-spacing:-.1px; color:var(--fg2); margin-top:8px; }
+      .body { font-family:var(--font-sans); font-weight:300; font-size:9.5px; line-height:1.5; letter-spacing:-.05px; color:var(--fg1); }
+      .mono { font-family:var(--font-mono); text-transform:uppercase; font-size:8px; letter-spacing:.7px; font-weight:600; }
+      .mono.lt { color:rgba(255,255,255,.85); }
+      .brand { font-family:var(--font-sans); font-weight:600; font-size:13px; letter-spacing:-.3px; color:var(--c-black); }
+      .brand-lt { font-family:var(--font-sans); font-weight:600; font-size:13px; letter-spacing:-.3px; color:#fff; }
+      .dim { color:var(--fg3); }
+      .eb { display:block; margin-bottom:8px; color:rgba(255,255,255,.7); }
+
+      .cols2 { columns:2; column-gap:18px; }
+      .cols2 .body { margin-bottom:6px; }
+
+      /* ── Eyebrow uses global .eyebrow; accent rule + pull quote ── */
+      .acc-rule { display:block; width:54px; height:3px; background:var(--acc); margin:16px 0; }
+      .pull { font-family:var(--font-display); font-variation-settings:'opsz' 72,'SOFT' 20; font-size:17px; line-height:1.35;
+              letter-spacing:-.4px; color:var(--c-black); border-left:3px solid var(--acc); padding:4px 0 4px 14px; margin:14px 0; }
+
+      .rp-foot { position:absolute; left:40px; right:40px; bottom:22px; display:flex; justify-content:space-between;
+                 border-top:1px solid rgba(26,20,16,.12); padding-top:8px; }
+      .rp-foot .mono { color:var(--fg3); font-weight:600; }
+
+      /* ── Placeholders ── */
+      .ph { background:var(--bg2); border-radius:8px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+      .ph-lbl { color:var(--fg3); }
+      .ph-s { height:90px; margin-bottom:10px; }
+
+      /* ════ COVERS ════ */
+      .cv { width:100%; height:100%; display:flex; flex-direction:column; padding:40px; }
+      .cv-grad { background:var(--c-grad-hero); }
+      .cv-top { display:flex; justify-content:space-between; }
+      .cv-mid { margin-top:auto; margin-bottom:auto; }
+      .cv-year { margin-top:18px; }
+      .cv-foot { display:flex; flex-direction:column; gap:4px; }
+
+      .cv-photo { position:relative; background:#2a2018; justify-content:flex-end; }
+      .cv-photo .ph-lbl { position:absolute; top:14px; left:0; right:0; text-align:center; color:rgba(255,255,255,.3); }
+      .cv-photo-grad { position:absolute; inset:0; background:linear-gradient(180deg, rgba(26,20,16,.2) 0%, rgba(26,20,16,.85) 78%); }
+      .cv-photo::after { content:''; position:absolute; left:0; right:0; bottom:0; height:5px; background:var(--acc); }
+      .cv-photo-body { position:relative; }
+      .cv-photo-body .title-serif { margin:6px 0 10px; }
+
+      .blob { position:absolute; top:-40px; right:-40px; width:200px; height:200px; border-radius:50%;
+              background:var(--acc); opacity:.16; filter:blur(2px); }
+      .cv-foot-l { position:absolute; left:40px; bottom:36px; display:flex; flex-direction:column; gap:4px; }
+      .cv-foot-l .mono { color:var(--fg3); }
+
+      .cv-block { height:100%; display:flex; flex-direction:column; }
+      .cv-block-top { background:var(--acc); height:46%; padding:40px; display:flex; flex-direction:column; }
+      .cv-block-bot { padding:34px 40px; display:flex; flex-direction:column; gap:20px; }
+      .cv-block-bot .title-serif { color:var(--c-black); }
+      .meta-row { display:flex; gap:36px; font-family:var(--font-sans); font-weight:400; font-size:12px; color:var(--c-black); }
+      .meta-row .mono { font-weight:600; }
+
+      /* ════ TITLE PAGES ════ */
+      .tp { display:flex; flex-direction:column; justify-content:center; }
+      .sec-num { color:var(--acc); font-size:96px; line-height:.8; letter-spacing:-3px; margin-bottom:10px; opacity:.9; }
+      .tp .title-serif { margin-top:6px; }
+
+      .toc { list-style:none; padding:0; margin:0; }
+      .toc li { display:flex; align-items:baseline; gap:8px; padding:9px 0; border-bottom:1px solid rgba(26,20,16,.1); }
+      .toc-n { color:var(--acc); font-weight:700; }
+      .toc-t { font-family:var(--font-sans); font-weight:400; font-size:13px; color:var(--c-black); }
+      .toc-dots { flex:1; border-bottom:1px dotted rgba(26,20,16,.3); transform:translateY(-3px); }
+      .toc-p { color:var(--fg2); font-weight:600; }
+
+      .meta-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px 24px; }
+      .meta-cell { display:flex; flex-direction:column; gap:5px; border-top:2px solid var(--acc); padding-top:8px; }
+      .meta-v { font-family:var(--font-sans); font-weight:400; font-size:13px; color:var(--c-black); }
+
+      .tp-quote { justify-content:center; }
+      .big-quote { font-family:var(--font-display); font-variation-settings:'opsz' 96,'SOFT' 30; font-weight:400;
+                   font-size:30px; line-height:1.2; letter-spacing:-.8px; color:var(--c-black);
+                   border-left:4px solid var(--acc); padding-left:20px; margin:14px 0; }
+      .attr { color:var(--fg2); margin-left:24px; }
+
+      /* ════ INTERIOR LAYOUTS ════ */
+      .side-layout { display:grid; grid-template-columns:1.7fr 1fr; gap:18px; }
+      .side { display:flex; flex-direction:column; }
+      .prop { border:1.5px solid var(--acc); background:color-mix(in srgb, var(--acc) 8%, transparent); border-radius:8px;
+              padding:10px 12px; margin-bottom:8px; display:flex; flex-direction:column; gap:3px; }
+      .prop-l { color:var(--acc); }
+      .prop-v { font-family:var(--font-sans); font-weight:600; font-size:15px; color:var(--c-black); }
+
+      .hero-img { height:46%; background:var(--bg2); display:flex; align-items:center; justify-content:center;
+                  background-image:linear-gradient(135deg, color-mix(in srgb, var(--acc) 22%, var(--bg2)), var(--bg2)); }
+      .hero-img-pad { padding:18px 40px 0; }
+      .cap-img { color:var(--fg3); }
+
+      .mosaic { display:grid; grid-template-columns:repeat(3,1fr); grid-auto-rows:78px; gap:7px; }
+      .mosaic .ph { border-radius:6px; }
+      .m-wide { grid-column:span 2; }
+      .m-tall { grid-row:span 2; }
+
+      .cardgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+      .rcard { background:var(--c-white-pure); border-radius:8px; box-shadow:var(--shadow-sm); padding:12px;
+               display:flex; flex-direction:column; gap:5px; }
+      .rcard-tag { color:var(--acc); font-family:var(--font-mono); text-transform:uppercase; font-size:7.5px; letter-spacing:.6px; font-weight:700; }
+      .rcard-t { font-family:var(--font-sans); font-weight:600; font-size:11px; color:var(--c-black); }
+      .rcard-d { font-family:var(--font-sans); font-weight:300; font-size:8.5px; line-height:1.45; color:var(--fg2); }
+
+      .callout { background:color-mix(in srgb, var(--acc) 9%, transparent); border-left:3px solid var(--acc);
+                 border-radius:0 8px 8px 0; padding:12px 14px; margin:14px 0; }
+      .call-l { color:var(--acc); display:block; margin-bottom:5px; }
+      .call-t { font-family:var(--font-sans); font-weight:400; font-size:11px; line-height:1.4; color:var(--c-black); }
+      .badge-row { display:flex; gap:8px; margin-top:6px; }
+
+      .statgrid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+      .stat { border-top:2px solid var(--acc); padding-top:8px; display:flex; flex-direction:column; gap:3px; }
+      .stat-n { font-family:var(--font-sans); font-weight:700; font-size:34px; line-height:1; letter-spacing:-1.5px; color:var(--c-black); }
+      .stat-l { color:var(--fg2); }
+      .bars { display:flex; flex-direction:column; gap:7px; }
+      .bar-row { display:flex; align-items:center; gap:8px; }
+      .bar-l { font-family:var(--font-sans); font-weight:400; font-size:9px; color:var(--fg1); width:96px; flex-shrink:0; }
+      .bar-track { flex:1; height:8px; background:var(--bg2); border-radius:50px; overflow:hidden; }
+      .bar-fill { display:block; height:100%; background:var(--acc); border-radius:50px; }
+      .bar-v { color:var(--fg2); width:18px; text-align:right; }
+      .src { color:var(--fg3); display:block; margin-top:12px; }
+
+      .timeline { display:flex; flex-direction:column; gap:0; }
+      .tl-step { display:flex; gap:14px; padding-bottom:16px; position:relative; }
+      .tl-step:not(:last-child)::before { content:''; position:absolute; left:15px; top:32px; bottom:0; width:2px; background:color-mix(in srgb, var(--acc) 35%, transparent); }
+      .tl-circle { width:32px; height:32px; flex-shrink:0; border-radius:50%; background:var(--acc); color:#fff;
+                   display:flex; align-items:center; justify-content:center; font-family:var(--font-sans); font-weight:700; font-size:14px; }
+      .tl-body { display:flex; flex-direction:column; gap:3px; padding-top:3px; }
+      .tl-t { font-family:var(--font-sans); font-weight:600; font-size:13px; color:var(--c-black); }
+      .tl-d { font-family:var(--font-sans); font-weight:300; font-size:9.5px; line-height:1.45; color:var(--fg2); }
+
+      @media (max-width:900px){ .grid { grid-template-columns:1fr; } }
+    </style>
+  </body>
+</html>

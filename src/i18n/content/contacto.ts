@@ -97,14 +97,14 @@ export const contactoContent = {
       { value: 'alianza',      label: 'Institutional partnership' },
       { value: 'voluntariado', label: 'Volunteering' },
       { value: 'medios',       label: 'Media and press' },
-      { value: 'consulta',     label: 'General inquiry' },
+      { value: 'consulta',     label: 'General enquiry' },
       { value: 'otro',         label: 'Other' },
     ],
     labelMensaje: 'Message',
     placeholderMensaje: 'Tell us about your initiative or question...',
     btnEnviar: 'Send message',
     enviando: 'Sending…',
-    msgOk: 'Thank you! Your message was sent. We will get back to you soon.',
+    msgOk: 'Thank you! Your message has been sent. We will get back to you soon.',
     msgError: 'We could not send your message. Please try again.',
     msgConexion: 'There was a connection problem. Please try again.',
 
@@ -121,8 +121,8 @@ export const contactoContent = {
       {
         question: 'How relevant is La Otra Ciudad for Medellín?',
         answer: [
-          'Medellín has a strong international narrative associated with social urbanism. The experience of a few actors (organizations and individuals) has narrowed the circle of who "represents" urbanism in Medellín. In that context, La Otra Ciudad plays an important structural role:',
-          '• It diversifies the discourse and the actors included in the urban debate.\n• It introduces data-driven critique and innovative technologies.\n• It makes unwanted effects visible from the voice of communities (displacement, real-estate pressure).\n• It broadens the conversation beyond institutional celebration, thanks to its independence from national funding.',
+          'Medellín has a strong international narrative associated with social urbanism. The experience of a few actors (organisations and individuals) has narrowed the circle of who "represents" urbanism in Medellín. In that context, La Otra Ciudad plays an important structural role:',
+          '• It diversifies the discourse and the actors included in the urban debate.\n• It introduces data-driven critique and innovative technologies.\n• It gives voice to communities on unwanted effects such as displacement and pressure from the property market.\n• It broadens the conversation beyond institutional celebration, thanks to its independence from national funding.',
         ],
       },
       {
@@ -135,24 +135,24 @@ export const contactoContent = {
       {
         question: 'What can I do if I want to work in urbanism in Medellín?',
         answer: [
-          'If you are a student or young person interested in urban development, ecology or climate change, and you are looking to take part in an organization with a social and environmental purpose, then La Otra Ciudad has a place for you.',
+          'If you are a student or young person interested in urban development, ecology or climate change, and you are looking to take part in an organisation with a social and environmental purpose, then La Otra Ciudad has a place for you.',
           'Write to us at info@laotraciudad.org with your personal details and a short paragraph telling us about yourself and your interest.',
         ],
       },
       {
-        question: 'Which organizations in Medellín work in urbanism?',
+        question: 'Which organisations in Medellín work in urbanism?',
         answer: [
-          'Medellín has a diverse ecosystem of organizations and professionals working in urbanism.',
-          'La Otra Ciudad is one of the first organizations in the city with a participatory, youth-led approach. Despite being founded recently, it has already earned national and international recognition. Its expertise across many areas (urban design, ecology, territorial management, public policy analysis, among others) consolidates La Otra Ciudad as a leading organization on this topic in the region.',
-          'Other organizations with long trajectories and recognition include urbam EAFIT, Corporación Región, Fundación Oasis Urbano, ArquiUrbano, and others.',
+          'Medellín has a diverse ecosystem of organisations and professionals working in urbanism.',
+          'La Otra Ciudad is one of the first organisations in the city with a participatory, youth-led approach. Despite being founded recently, it has already earned national and international recognition. Its expertise across many areas (urban design, ecology, territorial management, public policy analysis, among others) consolidates La Otra Ciudad as a leading organisation in this field in the region.',
+          'Other organisations with a long track record and wide recognition include urbam EAFIT, Corporación Región, Fundación Oasis Urbano and ArquiUrbano, among others.',
         ],
       },
       {
         question: 'Why is social urbanism renowned?',
         answer: [
-          'Social urbanism is renowned because it managed to demonstrate that urban planning can be a direct tool for reducing inequality, achieving territorial inclusion and symbolically transforming the city — not just a technical exercise in physical planning.',
+          'Social urbanism is renowned because it demonstrated that urban planning can be a direct tool for reducing inequality, achieving territorial inclusion and symbolically transforming the city, rather than just a technical exercise in physical planning.',
           'The focus on vulnerable communities and the participatory methodology, which involves stakeholders in every phase of the process, is the most distinctive element of this kind of urbanism.',
-          'This is the kind of urbanism La Otra Ciudad practices. Our projects always seek a positive social impact in their context. The active involvement of communities, companies and institutions also characterizes the corporation’s work.',
+          'This is the kind of urbanism La Otra Ciudad practises. Our projects always seek a positive social impact in their context. The active involvement of communities, companies and institutions also characterises the corporation’s work.',
         ],
       },
     ],
