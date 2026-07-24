@@ -149,6 +149,15 @@ const timelineLabel = (
               )}
             </div>
           )}
+
+          {person.researchAreas.length > 0 && (
+            <div class="person-interests">
+              <p class="person-subtitle">{t('person.investigacion')}</p>
+              <ul class="person-interests-list">
+                {person.researchAreas.map((area) => <li>{area}</li>)}
+              </ul>
+            </div>
+          )}
         </div>
       </aside>
 
@@ -205,15 +214,6 @@ const timelineLabel = (
           <PortableTextBody value={person.longBio} />
         </div>
 
-        {person.researchAreas.length > 0 && (
-          <div class="prop-card">
-            <div class="prop-label">{t('person.investigacion')}</div>
-            <div class="tag-list">
-              {person.researchAreas.map((area) => <span class="tag">{area}</span>)}
-            </div>
-          </div>
-        )}
-
       </div>
 
     </div>
@@ -269,7 +269,9 @@ const timelineLabel = (
     z-index: 0;
     left: 48px;
     width: 280px;
-    background: var(--c-cobalto);
+    /* Diagonal (not the shared --c-grad-cobalto, which runs top-to-bottom and
+       is used elsewhere) — top-left to bottom-right. */
+    background: linear-gradient(135deg, #3b6bdc 0%, #162557 100%);
   }
 
   /* ── Sticky aside content ─────────────────────────────────────────── */
@@ -340,6 +342,43 @@ const timelineLabel = (
   .social-pill:hover { opacity: 0.75; }
 
   .social-pill--accent { font-weight: 700; }
+
+  /* ── Areas of interest (sticky aside) ────────────────────────────── */
+
+  .person-interests { margin-top: 28px; }
+
+  .person-subtitle {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0 0 10px;
+  }
+
+  .person-interests-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .person-interests-list li {
+    font-size: 11px;
+    line-height: 1.4;
+    color: #fff;
+    padding-left: 14px;
+    position: relative;
+  }
+
+  .person-interests-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: rgba(255, 255, 255, 0.5);
+  }
 
   /* ── Timeline ─────────────────────────────────────────────────────── */
 
@@ -542,39 +581,6 @@ const timelineLabel = (
     color: var(--fg2);
   }
 
-  /* ── Research areas ───────────────────────────────────────────────── */
-
-  .prop-card {
-    margin-top: 32px;
-    border-radius: 8px;
-    padding: 18px 20px;
-    border: 1.5px solid var(--c-aguamarina);
-    background: rgba(96, 157, 146, 0.08);
-  }
-
-  .prop-label {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 0.6px;
-    text-transform: uppercase;
-    color: var(--c-aguamarina);
-    margin-bottom: 10px;
-  }
-
-  .tag-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .tag {
-    font-size: 13px;
-    color: var(--c-black);
-    background: var(--c-white-pure);
-    border-radius: 20px;
-    padding: 4px 12px;
-  }
-
   /* ── Responsive ──────────────────────────────────────────────────── */
 
   @media (max-width: 768px) {
@@ -584,7 +590,7 @@ const timelineLabel = (
     .lava-bg { display: none; }
     .person-aside-content {
       position: static;
-      background: var(--c-cobalto);
+      background: var(--c-grad-cobalto);
       border-radius: 8px;
     }
     .person-photo { max-width: 200px; }

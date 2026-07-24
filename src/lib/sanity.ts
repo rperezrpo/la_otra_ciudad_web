@@ -338,6 +338,9 @@ export interface PersonData {
   photo: string
   links: PersonLink[]
   state: string
+  /** True if either language of `longBio` has content — the individual page
+   * (/equipo/[slug]) has something to show beyond the short `bio`. */
+  hasLongBio: boolean
 }
 
 export interface EditablePersonLink {
@@ -415,7 +418,8 @@ export async function getPeople(): Promise<PersonData[]> {
       photo,
       linkedin,
       links,
-      state
+      state,
+      "hasLongBio": count(longBio.es) > 0 || count(longBio.en) > 0
     }`
   )
   return data.map((p: any) => ({
@@ -426,6 +430,7 @@ export async function getPeople(): Promise<PersonData[]> {
     photo: img(p.photo, 600),
     links: resolvePersonLinks(p.links, p.linkedin),
     state: p.state ?? 'active',
+    hasLongBio: !!p.hasLongBio,
   }))
 }
 
