@@ -12,7 +12,8 @@
     "fix:project-types": "node --env-file=.env scripts/fix-project-field-types.mjs",
     "migrate:project-i18n": "node --env-file=.env scripts/migrate-project-i18n.mjs",
     "translate:projects-en": "node --env-file=.env scripts/translate-projects-en.mjs",
-    "set:emails": "node --env-file=.env scripts/set-emails.mjs"
+    "set:emails": "node --env-file=.env scripts/set-emails.mjs",
+    "check:env": "node scripts/check-env.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.7",

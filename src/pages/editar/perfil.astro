@@ -154,7 +154,7 @@ const otrosEnlaces = (person?.links.filter((l) => l.type === 'custom') ?? [])
             )}
             <input class="form-input" type="file" id="cv" name="cv" accept="application/pdf" />
             <p style="font-size: 13px; color: var(--fg3); margin-top: 6px;">
-              PDF, máximo 8 MB. Déjalo vacío para conservar el actual.
+              PDF, máximo 4 MB. Déjalo vacío para conservar el actual.
             </p>
           </div>
 
@@ -169,7 +169,7 @@ const otrosEnlaces = (person?.links.filter((l) => l.type === 'custom') ?? [])
             )}
             <input class="form-input" type="file" id="photo" name="photo" accept="image/jpeg,image/png,image/webp" />
             <p style="font-size: 13px; color: var(--fg3); margin-top: 6px;">
-              JPG, PNG o WebP, máximo 5 MB. Déjalo vacío para conservar la foto actual.
+              JPG, PNG o WebP, máximo 4 MB. Déjalo vacío para conservar la foto actual.
             </p>
           </div>
 
@@ -198,6 +198,7 @@ const otrosEnlaces = (person?.links.filter((l) => l.type === 'custom') ?? [])
 
 <script>
   import { signOut } from 'auth-astro/client';
+  import { checkUploadSize } from '../../lib/uploadLimits';
 
   document.querySelectorAll('#logout').forEach((btn) =>
     btn.addEventListener('click', () => signOut())
@@ -216,6 +217,19 @@ const otrosEnlaces = (person?.links.filter((l) => l.type === 'custom') ?? [])
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
+
+      // Vercel rejects oversized requests before they reach the API, so the
+      // only way to explain the problem is to catch it here.
+      const payload = new FormData(form);
+      const tooLarge = checkUploadSize([
+        payload.get('photo') as File | null,
+        payload.get('cv') as File | null,
+      ]);
+      if (tooLarge) {
+        showStatus(tooLarge, false);
+        return;
+      }
+
       submitBtn.disabled = true;
       const originalLabel = submitBtn.textContent;
       submitBtn.textContent = 'Guardando…';
@@ -224,7 +238,7 @@ const otrosEnlaces = (person?.links.filter((l) => l.type === 'custom') ?? [])
       try {
         const res = await fetch('/api/equipo/actualizar', {
           method: 'POST',
-          body: new FormData(form),
+          body: payload,
         });
         const data = await res.json().catch(() => ({}));
 

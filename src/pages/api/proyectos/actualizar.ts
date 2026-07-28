@@ -3,6 +3,7 @@ import { writeClient, SANITY_WRITE_TOKEN } from '../../../lib/sanityWrite';
 import { getSessionEmail, isProjectEditor } from '../../../lib/access';
 import { markdownToPortableText } from '../../../lib/portableText';
 import { CATEGORY_KEYS } from '../../../i18n/categories';
+import { MAX_FILE_BYTES, formatMB } from '../../../lib/uploadLimits';
 
 export const prerender = false;
 
@@ -15,7 +16,6 @@ const json = (data: unknown, status: number) =>
 const CATEGORIES: string[] = [...CATEGORY_KEYS];
 const STATUSES = ['activo', 'completado'];
 
-const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 const clean = (v: FormDataEntryValue | null) => (typeof v === 'string' ? v.trim() : '');
@@ -25,8 +25,8 @@ async function uploadImage(file: File) {
   if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
     throw new Response('Las imágenes deben ser JPG, PNG o WebP.', { status: 400 });
   }
-  if (file.size > MAX_IMAGE_BYTES) {
-    throw new Response('Cada imagen debe pesar menos de 8 MB.', { status: 400 });
+  if (file.size > MAX_FILE_BYTES) {
+    throw new Response(`Cada imagen debe pesar menos de ${formatMB(MAX_FILE_BYTES)}.`, { status: 400 });
   }
   const asset = await writeClient.assets.upload('image', Buffer.from(await file.arrayBuffer()), {
     filename: file.name,

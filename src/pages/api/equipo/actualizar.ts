@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { getSession } from 'auth-astro/server';
 import { writeClient, SANITY_WRITE_TOKEN } from '../../../lib/sanityWrite';
 import { markdownToPortableText } from '../../../lib/portableText';
+import { MAX_FILE_BYTES, formatMB } from '../../../lib/uploadLimits';
 
 // Runs as a Vercel serverless function, not a static page.
 export const prerender = false;
@@ -12,10 +13,8 @@ const json = (data: unknown, status: number) =>
     headers: { 'Content-Type': 'application/json' },
   });
 
-// Limit uploads to sensible sizes and to real file types.
-const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
+// Upload sizes are capped by Vercel's request limit — see lib/uploadLimits.ts.
 const ALLOWED_PHOTO_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
-const MAX_CV_BYTES = 8 * 1024 * 1024;
 
 const clean = (value: FormDataEntryValue | null) =>
   typeof value === 'string' ? value.trim() : '';
@@ -161,8 +160,8 @@ export const POST: APIRoute = async ({ request }) => {
       if (!ALLOWED_PHOTO_TYPES.includes(photo.type)) {
         return json({ error: 'La foto debe ser JPG, PNG o WebP.' }, 400);
       }
-      if (photo.size > MAX_PHOTO_BYTES) {
-        return json({ error: 'La foto no puede pesar más de 5 MB.' }, 400);
+      if (photo.size > MAX_FILE_BYTES) {
+        return json({ error: `La foto no puede pesar más de ${formatMB(MAX_FILE_BYTES)}.` }, 400);
       }
       const asset = await writeClient.assets.upload('image', Buffer.from(await photo.arrayBuffer()), {
         filename: photo.name,
@@ -176,8 +175,8 @@ export const POST: APIRoute = async ({ request }) => {
       if (cv.type !== 'application/pdf') {
         return json({ error: 'El CV debe ser un archivo PDF.' }, 400);
       }
-      if (cv.size > MAX_CV_BYTES) {
-        return json({ error: 'El CV no puede pesar más de 8 MB.' }, 400);
+      if (cv.size > MAX_FILE_BYTES) {
+        return json({ error: `El CV no puede pesar más de ${formatMB(MAX_FILE_BYTES)}.` }, 400);
       }
       const asset = await writeClient.assets.upload('file', Buffer.from(await cv.arrayBuffer()), {
         filename: cv.name,

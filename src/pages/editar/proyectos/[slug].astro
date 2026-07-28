@@ -146,7 +146,7 @@ const project = isEditor && slug ? await getProjectForEdit(slug) : null;
               <img src={project.heroImage} alt="Imagen actual" style="width: 100%; max-width: 320px; height: 180px; object-fit: cover; border-radius: 8px; display: block; margin-bottom: 10px;" />
             )}
             <input class="form-input" type="file" name="heroImage" accept="image/jpeg,image/png,image/webp" />
-            <p style="font-size: 13px; color: var(--fg3); margin-top: 6px;">Déjalo vacío para conservar la imagen actual.</p>
+            <p style="font-size: 13px; color: var(--fg3); margin-top: 6px;">JPG, PNG o WebP, máximo 4 MB. Déjalo vacío para conservar la imagen actual.</p>
           </div>
 
           <div class="form-group">
@@ -168,6 +168,7 @@ const project = isEditor && slug ? await getProjectForEdit(slug) : null;
             <input class="form-input" type="file" name="galleryNew" accept="image/jpeg,image/png,image/webp" multiple />
             <p style="font-size: 13px; color: var(--fg3); margin-top: 6px;">
               Desmarca "Mantener" para quitar una imagen. Selecciona archivos para agregar nuevas.
+              Cada guardado admite hasta 4 MB en total: si subes varias fotos, hazlo en tandas.
             </p>
           </div>
 
@@ -187,6 +188,8 @@ const project = isEditor && slug ? await getProjectForEdit(slug) : null;
 </style>
 
 <script>
+  import { checkUploadSize } from '../../../lib/uploadLimits';
+
   const form = document.getElementById('project-form') as HTMLFormElement | null;
   const status = document.getElementById('project-status') as HTMLParagraphElement | null;
   const submitBtn = document.getElementById('project-submit') as HTMLButtonElement | null;
@@ -200,13 +203,26 @@ const project = isEditor && slug ? await getProjectForEdit(slug) : null;
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
+
+      // Vercel rejects oversized requests before they reach the API, so the
+      // only way to explain the problem is to catch it here.
+      const payload = new FormData(form);
+      const tooLarge = checkUploadSize([
+        payload.get('heroImage') as File | null,
+        ...(payload.getAll('galleryNew') as File[]),
+      ]);
+      if (tooLarge) {
+        show(tooLarge, false);
+        return;
+      }
+
       submitBtn.disabled = true;
       const label = submitBtn.textContent;
       submitBtn.textContent = 'Guardando…';
       status.style.display = 'none';
 
       try {
-        const res = await fetch('/api/proyectos/actualizar', { method: 'POST', body: new FormData(form) });
+        const res = await fetch('/api/proyectos/actualizar', { method: 'POST', body: payload });
         const data = await res.json().catch(() => ({}));
         if (res.ok) {
           show('¡Listo! Los cambios se guardaron. Aparecerán en la web en el próximo despliegue.', true);
