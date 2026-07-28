@@ -64,7 +64,7 @@ export const contactoContent = {
         question: '¿Qué organizaciones en Medellín trabajan en urbanismo?',
         answer: [
           'Medellín es una ciudad que cuenta con un ecosistema diverso de organizaciones y profesionales trabajando en urbanismo.',
-          'La Otra Ciudad es una de las primeras organizaciones con enfoque participativo y juvenil que tiene la ciudad. A pesar de haberse fundado recientemente, ya ha obtenido reconocimiento nacional e internacional. Su experticia en diversos temas (diseño urbano, ecología, gestión territorial, análisis de políticas públicas, entre otras) consolida a La Otra Ciudad como una organización líder en este tema en la región.',
+          'La Otra Ciudad es la primera corporación en Colombia liderada por jóvenes dedicada al urbanismo y a la regeneración del paisaje. A pesar de haberse fundado recientemente, ya ha obtenido reconocimiento nacional e internacional. Su experticia en diversos temas (diseño urbano, ecología, gestión territorial, análisis de políticas públicas, entre otras) consolida a La Otra Ciudad como una organización líder en este tema en la región.',
           'Otras organizaciones con amplia trayectoria y reconocimiento son urbam EAFIT, Corporación Región, la Fundación Oasis Urbano, ArquiUrbano, etc.',
         ],
       },
@@ -143,7 +143,7 @@ export const contactoContent = {
         question: 'Which organisations in Medellín work in urbanism?',
         answer: [
           'Medellín has a diverse ecosystem of organisations and professionals working in urbanism.',
-          'La Otra Ciudad is one of the first organisations in the city with a participatory, youth-led approach. Despite being founded recently, it has already earned national and international recognition. Its expertise across many areas (urban design, ecology, territorial management, public policy analysis, among others) consolidates La Otra Ciudad as a leading organisation in this field in the region.',
+          'La Otra Ciudad is the first youth-led corporation in Colombia dedicated to urbanism and landscape regeneration. Despite being founded recently, it has already earned national and international recognition. Its expertise across many areas (urban design, ecology, territorial management, public policy analysis, among others) consolidates La Otra Ciudad as a leading organisation in this field in the region.',
           'Other organisations with a long track record and wide recognition include urbam EAFIT, Corporación Región, Fundación Oasis Urbano and ArquiUrbano, among others.',
         ],
       },

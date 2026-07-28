@@ -6,8 +6,9 @@ export const proyectosContent = {
     heroTitle: 'Un recorrido por nuestro trabajo en el territorio',
     heroSub: 'Desde el hábitat hasta la cultura, nuestros proyectos son procesos de larga duración construidos con y para las comunidades.',
     stats: [
-      ['1.035+', 'm² de espacio público'],
-      ['393',    'Plantas nativas sembradas'],
+      // Mismos agregados que home.ts — ver la derivación comentada allí.
+      ['1.265+', 'm² de espacio público'],
+      ['641',    'Plantas nativas sembradas'],
       ['21',     'Talleres con comunidades'],
       ['2021',   'Año de fundación'],
     ] as [string, string][],
@@ -22,8 +23,8 @@ export const proyectosContent = {
     heroTitle: 'A tour of our work in the territory',
     heroSub: 'From habitat to culture, our projects are long-term processes built with and for communities.',
     stats: [
-      ['1,035+', 'm² of public space'],
-      ['393',    'Native plants planted'],
+      ['1,265+', 'm² of public space'],
+      ['641',    'Native plants planted'],
       ['21',     'Workshops with communities'],
       ['2021',   'Year founded'],
     ] as [string, string][],

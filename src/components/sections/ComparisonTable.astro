@@ -1,0 +1,93 @@
+---
+// Sección "problema": párrafos + tabla comparativa de dos columnas.
+// Componente tonto: recibe strings ya resueltos por idioma, no sabe qué idioma es.
+//
+// Es una <table> de verdad y no un grid de <div>: son datos tabulares con dos
+// encabezados de columna, y <th scope="col"> le da al lector de pantalla la
+// asociación celda↔columna gratis.
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  body: string[];
+  colALabel: string;
+  colBLabel: string;
+  rows: [string, string][];
+}
+
+const { eyebrow, title, body, colALabel, colBLabel, rows } = Astro.props;
+---
+
+<div class="section-full section-dark-warm">
+  <div class="cmp-wrap">
+    {eyebrow && <span class="eyebrow-light">{eyebrow}</span>}
+    <h2 class="section-title-light">{title}</h2>
+    {body.map(p => <p class="section-body-light cmp-p">{p}</p>)}
+
+    <table class="cmp">
+      <thead>
+        <tr>
+          <th scope="col">{colALabel}</th>
+          <th scope="col">{colBLabel}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map(([a, b]) => (
+          <tr>
+            <td>{a}</td>
+            <td>{b}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<style>
+  .cmp-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* .section-body-light topa en 560px; aquí queremos la medida de lectura larga. */
+  .cmp-p { max-width: 640px; }
+
+  .cmp {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    margin-top: 48px;
+  }
+
+  .cmp th {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.55);
+    text-align: left;
+    padding: 0 16px 14px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+  }
+
+  .cmp td {
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.45;
+    padding: 16px 16px 16px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    vertical-align: top;
+  }
+
+  /* Las dos columnas se distinguen por peso y opacidad, NO por color:
+     rojo/verde falla para daltónicos. */
+  .cmp td:first-child { color: rgba(255, 255, 255, 0.62); }
+  .cmp td:last-child  { color: #fff; font-weight: 400; }
+
+  @media (max-width: 560px) {
+    .cmp { margin-top: 32px; }
+    .cmp th { font-size: 10px; }
+    .cmp td { font-size: 14px; padding: 12px 12px 12px 0; }
+  }
+</style>

@@ -1,0 +1,84 @@
+---
+// Sección "oferta": rejilla de entregables + cierre "para quién".
+// Reusa .card / .card-body / .card-title / .card-desc de global.css.
+//
+// NO usa .card-grid-3: esa utilidad global colapsa a 1 columna a ≤768px
+// (global.css:1039) y seis tarjetas apiladas son ~1.100px de scroll. Como estas
+// tarjetas no llevan foto y su texto son 8-12 palabras, aguantan 2 columnas
+// hasta 560px. Rejilla propia en vez de sobrescribir la global, para no crear
+// acción a distancia sobre una clase que usa todo el sitio.
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  intro?: string;
+  items: { title: string; desc: string }[];
+  closingTitle?: string;
+  closing?: string;
+}
+
+const { eyebrow, title, intro, items, closingTitle, closing } = Astro.props;
+---
+
+<div class="section">
+  {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+  <h2 class="section-title">{title}</h2>
+  {intro && <p class="section-body offer-intro">{intro}</p>}
+
+  <ul class="offer-grid">
+    {items.map(item => (
+      <li class="card">
+        <div class="card-body">
+          <h3 class="card-title">{item.title}</h3>
+          <p class="card-desc">{item.desc}</p>
+        </div>
+      </li>
+    ))}
+  </ul>
+
+  {closing && (
+    <div class="offer-closing">
+      {closingTitle && <h3 class="offer-closing-title">{closingTitle}</h3>}
+      <p class="section-body offer-closing-body">{closing}</p>
+    </div>
+  )}
+</div>
+
+<style>
+  .offer-intro { max-width: 640px; }
+
+  .offer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 40px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .offer-closing {
+    margin-top: 56px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(26, 20, 16, 0.1);
+  }
+
+  .offer-closing-title {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    color: var(--c-black);
+  }
+
+  .offer-closing-body {
+    max-width: 720px;
+    margin-top: 12px;
+  }
+
+  @media (max-width: 768px) {
+    .offer-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 560px) {
+    .offer-grid { grid-template-columns: 1fr; }
+  }
+</style>

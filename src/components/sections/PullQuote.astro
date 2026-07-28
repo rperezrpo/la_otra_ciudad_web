@@ -1,0 +1,73 @@
+---
+// Sección "manifiesto": cita a sangre.
+//
+// NO usa .quote-block (global.css:793-803): esa clase es una cita con borde
+// izquierdo aguamarina y texto negro, pensada para ir DENTRO de una columna.
+// Aquí porta la composición de la banda de cita de la home (HomeBody.astro:133-141),
+// que existe como estilos en línea y no como clase.
+//
+// DEGRADACIÓN DE IMAGEN: la foto va como capa de background-image bajo un
+// gradiente opaco. Si el archivo no existe (o todavía no se ha subido), el
+// navegador descarta la capa y queda el gradiente de la página: la sección se ve
+// deliberada, no rota. Con <img> se vería el icono de imagen rota; con un import
+// estático de astro:assets el BUILD FALLARÍA y no saldría nada a producción.
+// Por eso `image` es una ruta pública opcional y nunca un import.
+//
+// Efecto colateral asumido: un background-image no puede llevar loading="lazy".
+// Es el precio de que la página no dependa de archivos que aún no existen.
+
+interface Props {
+  eyebrow?: string;
+  text: string;
+  image?: string;
+}
+
+const { eyebrow, text, image } = Astro.props;
+
+// El velo oscuro va en los dos casos. Sobre foto garantiza contraste pase lo que
+// pase con la imagen que se suba; sobre el gradiente de página sube el blanco de
+// 3,12:1 (aguamarina plano, que solo pasaría AA para texto grande) a ~5,75:1.
+const bg = image
+  ? `background-image: linear-gradient(rgba(26,20,16,0.55), rgba(26,20,16,0.55)), url('${image}'); background-size: cover; background-position: center;`
+  : 'background-image: linear-gradient(rgba(26,20,16,0.35), rgba(26,20,16,0.35)), var(--page-accent-gradient);';
+---
+
+<div class="pull-quote" style={bg}>
+  <div class="pull-quote-inner">
+    {eyebrow && <span class="eyebrow-light">{eyebrow}</span>}
+    <blockquote>
+      <p>{text}</p>
+    </blockquote>
+  </div>
+</div>
+
+<style>
+  .pull-quote { padding: 96px 48px; }
+
+  .pull-quote-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  /* .eyebrow-light es blanco al 55% — sobre este fondo se queda en ~2,95:1.
+     A blanco pleno da 5,75:1. */
+  .pull-quote :global(.eyebrow-light) { color: #fff; }
+
+  .pull-quote blockquote { margin: 0; }
+
+  .pull-quote p {
+    font-family: var(--font-display);
+    font-variation-settings: 'opsz' 144, 'SOFT' 30, 'WONK' 0;
+    font-size: clamp(30px, 4vw, 52px);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -1px;
+    color: #fff;
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    .pull-quote { padding: 72px 24px; }
+  }
+</style>

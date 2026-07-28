@@ -3,6 +3,14 @@
 import BaseLayout from '../layout/BaseLayout.astro';
 import PageHero from '../layout/PageHero.astro';
 import ProjectCard from '../ProjectCard.astro';
+// Bloques opcionales. El componente compartido decide SI un bloque existe (guard
+// por dato, nunca por servicio); cada componente de sección decide CÓMO se ve.
+import ComparisonTable from '../sections/ComparisonTable.astro';
+import OfferGrid from '../sections/OfferGrid.astro';
+import PrincipleCards from '../sections/PrincipleCards.astro';
+import StatsStrip from '../sections/StatsStrip.astro';
+import ExpertiseBand from '../sections/ExpertiseBand.astro';
+import PullQuote from '../sections/PullQuote.astro';
 import { getProjectsByCategory } from '../../lib/sanity';
 import { localizePath, type Lang } from '../../i18n/ui';
 import { CATEGORY_META, type CategoryKey } from '../../i18n/categories';
@@ -39,7 +47,15 @@ const projects = await getProjectsByCategory(service, lang);
     <p class="page-hero-sub">
       {c.heroSub}
     </p>
+    {c.heroBtn && (
+      <a href={l(c.heroBtn.href)} class="btn-hero-primary" style="margin-top: 28px;">
+        {c.heroBtn.label}
+      </a>
+    )}
   </PageHero>
+
+  <!-- ─── EL PROBLEMA (opcional) ────────────────────────────────────────── -->
+  {c.problema && <ComparisonTable {...c.problema} />}
 
   <!-- ─── DESCRIPCIÓN ───────────────────────────────────────────────────── -->
   <div class="section">
@@ -58,6 +74,19 @@ const projects = await getProjectsByCategory(service, lang);
       </div>
     </div>
   </div>
+
+  <!-- ─── OFERTA / PARA QUIÉN (opcional) ─────────────────────────────────── -->
+  {c.oferta && <OfferGrid {...c.oferta} />}
+
+  <!-- ─── PRINCIPIOS (opcional) ──────────────────────────────────────────── -->
+  {c.principios && (
+    <PrincipleCards
+      eyebrow={c.principios.eyebrow}
+      title={c.principios.title}
+      items={c.principios.items}
+      link={c.principios.link && { label: c.principios.link.label, href: l(c.principios.link.href) }}
+    />
+  )}
 
   <!-- ─── PROYECTOS ──────────────────────────────────────────────────────── -->
   {projects.length > 0 && (
@@ -78,9 +107,24 @@ const projects = await getProjectsByCategory(service, lang);
             />
           ))}
         </div>
+        {c.cifras && <StatsStrip items={c.cifras} />}
       </div>
     </div>
   )}
+
+  <!-- ─── EXPERTICIA (opcional) ──────────────────────────────────────────── -->
+  {c.disciplinas && (
+    <ExpertiseBand
+      eyebrow={c.disciplinas.eyebrow}
+      title={c.disciplinas.title}
+      body={c.disciplinas.body}
+      items={c.disciplinas.items}
+      link={c.disciplinas.link && { label: c.disciplinas.link.label, href: l(c.disciplinas.link.href) }}
+    />
+  )}
+
+  <!-- ─── MANIFIESTO (opcional) ──────────────────────────────────────────── -->
+  {c.manifiesto && <PullQuote {...c.manifiesto} />}
 
   <!-- ─── CTA ────────────────────────────────────────────────────────────── -->
   <div class="section-full" style={`background: ${meta.ctaBg}; padding: 72px 48px; text-align: center;`}>
@@ -90,6 +134,11 @@ const projects = await getProjectsByCategory(service, lang);
     <h2 style="font-family: var(--font-display); font-variation-settings: 'opsz' 144, 'SOFT' 30, 'WONK' 0; font-size: clamp(28px, 4vw, 48px); font-weight: 400; letter-spacing: -1px; line-height: 1.1; color: #fff; max-width: 560px; margin: 16px auto 24px;">
       {c.ctaTitle}
     </h2>
+    {c.ctaText && (
+      <p style="font-size: 17px; font-weight: 300; line-height: 1.6; letter-spacing: -0.1px; color: rgba(255,255,255,0.92); max-width: 600px; margin: 0 auto 28px;">
+        {c.ctaText}
+      </p>
+    )}
     <a href={l('/contacto')} class="btn-hero-primary" style={`background: #fff; color: ${meta.ctaBg};`}>{c.ctaBtn}</a>
   </div>
 

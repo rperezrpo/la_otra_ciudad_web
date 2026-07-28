@@ -1,0 +1,69 @@
+---
+// Sección "principios": tira de principios de diseño.
+// Reuso puro de .feature-band / .feature-item / .feature-title / .feature-desc
+// (global.css:766-788). Cero CSS de layout y cero media queries: flex-wrap con
+// min-width:180px ya degrada 4→2→1 solo con el ancho disponible.
+//
+// Deliberadamente NO es un timeline numerado: /metodologia ya publica el proceso
+// de La Otra Ciudad en 5 pasos y dos numeraciones del proceso propio se
+// contradicen. De ahí el enlace a esa página.
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  items: { title: string; desc: string }[];
+  link?: { label: string; href: string };
+}
+
+const { eyebrow, title, items, link } = Astro.props;
+---
+
+<div class="section">
+  {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+  <h2 class="section-title">{title}</h2>
+
+  <div class="feature-band">
+    {items.map(item => (
+      <div class="feature-item">
+        <h3 class="feature-title">{item.title}</h3>
+        <p class="feature-desc">{item.desc}</p>
+      </div>
+    ))}
+  </div>
+
+  {link && <a href={link.href} class="principles-link">{link.label}</a>}
+</div>
+
+<style>
+  /* .feature-band es flex con `flex: 1; min-width: 180px`. Con 3 ítems (su único
+     uso previo, en /metodologia) nunca envuelve; con 4 sí, y en anchos
+     intermedios deja 3 arriba y el cuarto estirado a todo el ancho. Fijamos una
+     base del 50% para que envuelva parejo: 4 → 2+2 → 1. */
+  @media (max-width: 1000px) {
+    .feature-band .feature-item { flex: 1 1 calc(50% - 20px); }
+  }
+
+  @media (max-width: 560px) {
+    .feature-band .feature-item { flex: 1 1 100%; }
+  }
+
+  .principles-link {
+    display: inline-block;
+    margin-top: 32px;
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: -0.1px;
+    color: var(--page-accent-dark);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 2px;
+    transition: opacity 150ms;
+  }
+
+  .principles-link:hover { opacity: 0.75; }
+
+  .principles-link:focus-visible {
+    outline: 2px dashed var(--page-accent-dark);
+    outline-offset: 3px;
+  }
+</style>

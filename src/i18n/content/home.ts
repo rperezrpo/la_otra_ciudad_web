@@ -16,9 +16,18 @@ export const homeContent = {
     misionBtnMetodologia: 'Nuestra metodología',
     misionImgAlt: 'Comunidad San Rafael',
 
+    // Agregados de toda la organización. Deben ser SIEMPRE ≥ que la suma de los
+    // proyectos que la propia web enumera; si se añade un proyecto con cifras,
+    // hay que recalcularlos aquí, en proyectos.ts y en la tira de paisajes
+    // (servicios-detalle.ts → 'paisajes-regenerativos'.cifras).
+    //   1.265 m² = 650 Barrios Vivos (San Rafael + Alto Las Flores)
+    //            + 600 Ecos de la Matea + 15 AulaViva
+    //   641 plantas = 45 San Rafael + 146 Alto Las Flores + 450 Ecos de la Matea
+    //   21 talleres: sin cambio — 8 Barrios Vivos + 4 AulaViva + Llanaditas,
+    //                Ecos y Parque El Bosque (estos tres sin cifra publicada).
     stats: [
-      ['1.035+', 'm² de espacio público transformado'],
-      ['393',    'Plantas nativas sembradas'],
+      ['1.265+', 'm² de espacio público transformado'],
+      ['641',    'Plantas nativas sembradas'],
       ['21',     'Talleres con comunidades'],
       ['2',      'Premios internacionales'],
     ] as [string, string][],
@@ -58,8 +67,8 @@ export const homeContent = {
     misionImgAlt: 'San Rafael community',
 
     stats: [
-      ['1,035+', 'm² of public space transformed'],
-      ['393',    'Native plants planted'],
+      ['1,265+', 'm² of public space transformed'],
+      ['641',    'Native plants planted'],
       ['21',     'Workshops with communities'],
       ['2',      'International awards'],
     ] as [string, string][],

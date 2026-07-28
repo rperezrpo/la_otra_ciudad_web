@@ -1,0 +1,76 @@
+---
+// Sección "disciplinas": párrafo de experticia + chips de campo.
+//
+// Los chips copian la geometría de .filter-tab (global.css:868-879) pero NO su
+// clase: .filter-tab trae `cursor: pointer` y un :hover que oscurece el borde, y
+// en un <span> inerte eso es una afordancia falsa — parece clicable y no lo es.
+// Son <span>, nunca <button> ni <a>.
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  body?: string;
+  items: string[];
+  link?: { label: string; href: string };
+}
+
+const { eyebrow, title, body, items, link } = Astro.props;
+---
+
+<div class="section">
+  <div class="two-col">
+    <div>
+      {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+      <h2 class="section-title">{title}</h2>
+    </div>
+    <div>
+      {body && <p class="section-body exp-body">{body}</p>}
+
+      <div class="chip-row">
+        {items.map(item => <span class="chip">{item}</span>)}
+      </div>
+
+      {link && <a href={link.href} class="exp-link">{link.label}</a>}
+    </div>
+  </div>
+</div>
+
+<style>
+  .exp-body { margin-top: 0; max-width: 620px; }
+
+  .chip-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 28px;
+  }
+
+  .chip {
+    font-size: 13px;
+    font-weight: 400;
+    padding: 6px 14px;
+    border-radius: 50px;
+    border: 1px solid rgba(26, 20, 16, 0.15);
+    font-family: var(--font-sans);
+    color: var(--c-black);
+  }
+
+  .exp-link {
+    display: inline-block;
+    margin-top: 28px;
+    font-size: 15px;
+    letter-spacing: -0.1px;
+    color: var(--page-accent-dark);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 2px;
+    transition: opacity 150ms;
+  }
+
+  .exp-link:hover { opacity: 0.75; }
+
+  .exp-link:focus-visible {
+    outline: 2px dashed var(--page-accent-dark);
+    outline-offset: 3px;
+  }
+</style>

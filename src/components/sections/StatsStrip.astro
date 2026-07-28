@@ -1,0 +1,54 @@
+---
+// Tira de cifras. Reusa .stats-strip / .stat-item / .stat-num / .stat-label de
+// global.css (717-762), que ya traen el layout y el colapso responsive.
+//
+// BUG QUE CORRIGE: en global.css, .stats-strip tiene `background: var(--c-white)`
+// (#f7f3ee) y .stat-label tiene `color: rgba(247,243,238,0.75)` — el MISMO color.
+// Texto invisible, contraste ≈ 1:1. En la home no se nota porque HomeBody.astro:93
+// sobrescribe el fondo en línea con una foto oscura, así que la clase depende de
+// que quien la use ponga una imagen encima. Aquí no hay foto, así que reponemos
+// el color del label (y del número) con el scope de este componente.
+//
+// No se arregla en global.css a propósito: cambiar .stat-label allí rompería la
+// home, donde el texto claro SÍ es el correcto sobre la foto oscura.
+//
+// Cero JavaScript: el contador animado vive en el <script> de HomeBody y su
+// `opacity:0` inicial haría que un fallo del script dejara las cifras invisibles.
+
+interface Props {
+  items: { num: string; label: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="stats-strip loc-stats">
+  {items.map(s => (
+    <div class="stat-item">
+      <div class="stat-num">{s.num}</div>
+      <div class="stat-label">{s.label}</div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .loc-stats {
+    background: transparent;
+    border-top: 1px solid rgba(26, 20, 16, 0.12);
+    border-bottom: 1px solid rgba(26, 20, 16, 0.12);
+    margin-top: 56px;
+  }
+
+  /* Los dos arreglos de contraste. --page-accent-dark sobre el fondo claro de la
+     sección da 7,93:1 en aguamarina (AAA); --fg2 da 3,93:1, que es la deuda
+     preexistente de todo el texto corrido del sitio — la empatamos, no la
+     empeoramos. */
+  .loc-stats .stat-num   { color: var(--page-accent-dark); }
+  .loc-stats .stat-label { color: var(--fg2); }
+
+  .loc-stats .stat-item { padding: 36px 56px; }
+
+  @media (max-width: 768px) {
+    .loc-stats .stat-item { padding: 24px 32px; }
+  }
+</style>
