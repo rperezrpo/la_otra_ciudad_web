@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { getSession } from 'auth-astro/server';
-import { writeClient } from '../../../lib/sanityWrite';
+import { writeClient, SANITY_WRITE_TOKEN } from '../../../lib/sanityWrite';
 import { markdownToPortableText } from '../../../lib/portableText';
 
 // Runs as a Vercel serverless function, not a static page.
@@ -38,7 +38,7 @@ export const POST: APIRoute = async ({ request }) => {
     return json({ error: 'Debes iniciar sesión para editar tu perfil.' }, 401);
   }
 
-  if (!import.meta.env.SANITY_WRITE_TOKEN) {
+  if (!SANITY_WRITE_TOKEN) {
     console.error('SANITY_WRITE_TOKEN is not set');
     return json({ error: 'El formulario no está configurado. Intenta más tarde.' }, 500);
   }

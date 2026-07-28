@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { writeClient } from '../../../lib/sanityWrite';
+import { writeClient, SANITY_WRITE_TOKEN } from '../../../lib/sanityWrite';
 import { getSessionEmail, isProjectEditor } from '../../../lib/access';
 import { markdownToPortableText } from '../../../lib/portableText';
 import { CATEGORY_KEYS } from '../../../i18n/categories';
@@ -41,7 +41,7 @@ export const POST: APIRoute = async ({ request }) => {
   if (!(await isProjectEditor(email))) {
     return json({ error: 'No tienes permisos para editar proyectos.' }, 403);
   }
-  if (!import.meta.env.SANITY_WRITE_TOKEN) {
+  if (!SANITY_WRITE_TOKEN) {
     console.error('SANITY_WRITE_TOKEN is not set');
     return json({ error: 'El formulario no está configurado. Intenta más tarde.' }, 500);
   }
