@@ -4,6 +4,7 @@ import PageHero from '../layout/PageHero.astro';
 import { localizePath, type Lang } from '../../i18n/ui';
 import { CATEGORY_META, type CategoryKey } from '../../i18n/categories';
 import { serviciosContent } from '../../i18n/content/servicios';
+import { aliadoPorNombre } from '../../data/aliados';
 
 interface Props {
   lang: Lang;
@@ -31,18 +32,18 @@ const services = (Object.keys(SERVICE_META) as CategoryKey[]).map((key) => ({
 }));
 
 // ─── CLIENTES ─────────────────────────────────────────────────────────────────
-// EDIT: add, remove, or reorder clients; set logo: null for text-only tiles
+// EDIT: add, remove, or reorder clients by name; logos live in src/data/aliados.ts
 const clientes = [
-  { name: 'Parque Explora',         logo: null                                     },
-  { name: 'Everyday Homeless',      logo: '/images/allies/everyday-homeless.png'   },
-  { name: 'Fundación Mi Sangre',    logo: '/images/allies/mi-sangre.png'           },
-  { name: 'Alcaldía de Envigado',   logo: '/images/allies/alcaldia-envigado.png'   },
-  { name: 'Alcaldía de Medellín',   logo: '/images/allies/alcaldia-medellin.jpg'   },
-  { name: 'S2Cities',               logo: '/images/allies/s2cities.png'            },
-  { name: 'ETH Zurich',             logo: '/images/allies/eth-zurich.jpg'          },
-  { name: 'UCL Bartlett (DPU)',     logo: '/images/allies/dpu.jpg'                 },
-  { name: 'Urbam–EAFIT',            logo: '/images/allies/urbam.jpg'               },
-];
+  'Parque Explora',
+  'Everyday Homeless',
+  'Fundación Mi Sangre',
+  'Alcaldía de Envigado',
+  'Alcaldía de Medellín',
+  'S2Cities',
+  'ETH Zurich',
+  'UCL Bartlett (DPU)',
+  'Urbam–EAFIT',
+].map(aliadoPorNombre);
 ---
 
 <BaseLayout
@@ -52,7 +53,7 @@ const clientes = [
 >
 
   <!-- ─── HERO ──────────────────────────────────────────────────────────── -->
-  <PageHero type="banner" eyebrow={c.heroEyebrow} image="/images/banners/servicios.jpg">
+  <PageHero type="banner" image="/images/banners/servicios.jpg">
     <h1 class="page-hero-title">{c.heroTitle}</h1>
     <p class="page-hero-sub">
       {c.heroSub}

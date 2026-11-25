@@ -8,23 +8,22 @@
 // accentColor: override the bottom border colour (any CSS color / variable)
 //
 // Usage:
-//   <PageHero type="banner" eyebrow="Proyectos" image="/images/banners/proyectos.jpg">
+//   <PageHero type="banner" image="/images/banners/proyectos.jpg">
 //     <h1 class="page-hero-title">...</h1>
 //     <p class="page-hero-sub">...</p>
 //   </PageHero>
 //
-//   <PageHero type="light" eyebrow="Recursos">
+//   <PageHero type="light">
 //     <h1 class="page-hero-title">...</h1>
 //   </PageHero>
 
 interface Props {
   type?: 'banner' | 'dark' | 'light';
-  eyebrow?: string;
   image?: string;       // photo overlay — only used with type="banner"
   accentColor?: string; // override bottom border color (e.g. "var(--c-violeta)")
 }
 
-const { type = 'banner', eyebrow, image, accentColor } = Astro.props;
+const { type = 'banner', image, accentColor } = Astro.props;
 
 // Only apply inline bgStyle for banner+image; all other backgrounds come from CSS.
 const bgStyle = [
@@ -37,7 +36,6 @@ const bgStyle = [
 
 <div class={`page-hero page-hero--${type}`} style={bgStyle || undefined}>
   <div class="page-hero-inner">
-    {eyebrow && <span class={type === 'light' ? 'eyebrow' : 'eyebrow-light'}>{eyebrow}</span>}
     <slot />
   </div>
 </div>
