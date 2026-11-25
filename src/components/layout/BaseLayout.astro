@@ -21,6 +21,9 @@ interface Props {
   ogType?: 'website' | 'article';
   jsonLd?: object;
   pageColor?: PageColor;
+  /** Home only: the nav starts transparent over the hero (white links and
+   *  logo) and turns solid once the page scrolls past the hero. */
+  navOverlay?: boolean;
 }
 
 const {
@@ -30,6 +33,7 @@ const {
   ogType = 'website',
   jsonLd,
   pageColor,
+  navOverlay = false,
 } = Astro.props;
 
 const palette = pageColor ? PAGE_COLORS[pageColor] : null;
@@ -91,7 +95,7 @@ const enUrl = new URL(enPath, siteUrl).href;
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </head>
   <body>
-    <SiteNav />
+    <SiteNav overlay={navOverlay} />
     <main>
       <slot />
     </main>

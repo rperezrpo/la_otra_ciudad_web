@@ -1,12 +1,29 @@
 ---
 import BaseLayout from '../layout/BaseLayout.astro';
-import ProjectCard from '../ProjectCard.astro';
+import ProjectTile, { type TileShape } from '../ProjectTile.astro';
 import FlowerDiagram from '../FlowerDiagram.astro';
 import { getFeaturedProjects } from '../../lib/sanity';
 import { useTranslations, localizePath, type Lang } from '../../i18n/ui';
 import { homeContent } from '../../i18n/content/home';
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import sanRafael2 from '../../../public/images/projects/fotos_intervenciones/san_rafael_2.jpg';
+// Hero slideshow — PROTOTYPE: hard-coded picks; later these can come from Sanity.
+import slide1 from '../../../public/images/projects/alto_flores/alto_flores1.jpg';
+import slide2 from '../../../public/images/projects/Fotos Talleres/241005_Integracion-111.jpg';
+import slide3 from '../../../public/images/projects/Fotos Generales/20221126_VisitaRioNorte-04.jpg';
+import slide4 from '../../../public/images/projects/Fotos Talleres/241003_TallerComunicaciones-13.jpg';
+import slide5 from '../../../public/images/projects/Fotos Generales/20220316_Expedición Bello Oriente (37).jpg';
+import slide6 from '../../../public/images/projects/Fotos Generales/20221126_VisitaRioNorte-12.jpg';
+
+const heroSlides = [slide1, slide2, slide3, slide4, slide5, slide6];
+
+// Pinned projects section: shape of each tile, cycled. Tiles alternate
+// flush left / flush right.
+const tileShapes: TileShape[] = ['landscape', 'square', 'wide', 'square', 'landscape'];
+
+// Frosted backdrop of the pinned projects section — blurred, so a small file is enough.
+import pinnedBgSrc from '../../../public/images/projects/alto_flores/alto_flores4.jpg';
+const pinnedBg = await getImage({ src: pinnedBgSrc, width: 960, format: 'webp' });
 
 interface Props {
   lang: Lang;
@@ -38,13 +55,34 @@ const orgSchema = {
   description={c.metaDescription}
   jsonLd={orgSchema}
   pageColor="cobalto"
+  navOverlay
 >
 
   <!-- ─── HERO ──────────────────────────────────────────────────────── -->
-  <section class="hero">
-    <span class="hero-eyebrow">{c.heroEyebrow}</span>
-    <h1 class="hero-title">{c.heroTitle}</h1>
-    <p class="hero-sub">{c.heroSub}</p>
+  <!-- Always fills the first screen (minus the 64px sticky nav), whatever the
+       window's aspect ratio. Photos cycle behind the text; see .hero-slides. -->
+  <section class="hero hero--full hero--under-nav" id="home-hero" data-nav-overlay-until>
+    <div class="hero-slides" aria-hidden="true">
+      {heroSlides.map((src, i) => (
+        <div class:list={['hero-slide', { 'is-active': i === 0 }]}>
+          <Image
+            src={src}
+            alt=""
+            widths={[768, 1280, 1920, 2560]}
+            sizes="100vw"
+            loading={i === 0 ? 'eager' : 'lazy'}
+            fetchpriority={i === 0 ? 'high' : 'auto'}
+            class="hero-slide-img"
+          />
+        </div>
+      ))}
+    </div>
+    <div class="hero-shade" aria-hidden="true"></div>
+
+    <div class="hero-content">
+      <h1 class="hero-title">{c.heroTitle}</h1>
+    </div>
+
     <button class="hero-scroll-btn" onclick="document.getElementById('hero-next').scrollIntoView({behavior:'smooth'})" aria-label={c.heroScrollAria}>
       <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="6 9 12 15 18 9"/>
@@ -53,30 +91,87 @@ const orgSchema = {
   </section>
 
   <!-- ─── MISSION INTRO ─────────────────────────────────────────────── -->
-  <div id="hero-next" class="section">
-    <div class="two-col">
-      <div>
+  <div id="hero-next" class="section mision-section" style="scroll-margin-top: 64px;">
+    <div class="two-col mision-grid">
+      <!-- Eyebrow pinned to the top edge, button to the bottom edge,
+           title + text centred in between. -->
+      <div class="mision-text">
         <span class="eyebrow">{c.misionEyebrow}</span>
-        <h2 class="section-title">{c.misionTitle}</h2>
-        <p class="section-body">
-          {c.misionBody}
-        </p>
-        <div style="margin-top: 28px; display: flex; gap: 12px; flex-wrap: wrap;">
+        <div>
+          <h2 class="section-title">{c.misionTitle}</h2>
+          <p class="section-body">
+            {c.misionBody}
+          </p>
+        </div>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
           <a href={l('/quienes-somos')} class="btn-accent">{c.misionBtnQuienes}</a>
-          <a href={l('/metodologia')} class="btn-outline">{c.misionBtnMetodologia}</a>
         </div>
       </div>
-      <div>
+      <!-- The photo is cropped live to the height of the text column. -->
+      <div class="mision-media">
         <Image
           src={sanRafael2}
           alt={c.misionImgAlt}
-          width={600}
-          height={400}
-          style="width: 100%; aspect-ratio: 3/2; object-fit: cover; border-radius: 12px; display: block;"
+          widths={[600, 900, 1200, 1600]}
+          sizes="(max-width: 768px) 100vw, 50vw"
         />
       </div>
     </div>
   </div>
+
+  <style>
+    /* Responsive photo, modelled on the reference site:
+       - the photo column is always half the window wide (the section spans
+         the full width, no 1200px cap), and
+       - from 1280px up its height is pinned to the screen height,
+       so widening the window turns the frame from portrait to landscape.
+       object-fit: cover crops around --mision-focus, the point to keep in view. */
+    .mision-section {
+      --mision-focus: 50% 40%;
+      max-width: none;
+      padding: 20px 20px 20px 48px;   /* tighter on the photo side */
+    }
+    .mision-grid {
+      align-items: stretch;
+      min-height: clamp(460px, 64svh, 640px);
+    }
+    .mision-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .mision-text .eyebrow { align-self: flex-start; }
+    .mision-text > div:nth-child(2) { max-width: 600px; }
+    .mision-media {
+      position: relative;
+      min-height: 320px;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .mision-media :global(img) {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: var(--mision-focus);
+      display: block;
+    }
+    @media (min-width: 1280px) {
+      .mision-grid {
+        min-height: 0;
+        /* one screen under the nav, minus the section padding */
+        height: max(560px, calc(100svh - 64px - 40px));
+      }
+    }
+    /* Stacked on small screens: square photo under the text. */
+    @media (max-width: 768px) {
+      .mision-section { padding: 32px 24px; }
+      .mision-grid { min-height: 0; }
+      .mision-media { min-height: 0; aspect-ratio: 1 / 1; }
+    }
+  </style>
 
   <!-- ─── STATS ─────────────────────────────────────────────────────── -->
   <!-- EDIT: update numbers as the organization grows (in src/i18n/content/home.ts) -->
@@ -90,7 +185,7 @@ const orgSchema = {
       ['var(--c-rosado)',     B, 'rotate(180 100 50)'],
     ];
     return (
-      <div class="stats-strip" style="background-image: linear-gradient(135deg, rgba(26,20,16,0.84) 0%, rgba(42,26,10,0.76) 55%, rgba(59,26,26,0.70) 100%), url('/images/projects/alto_flores/alto_flores3.jpg'); background-size: cover; background-position: center;">
+      <div class="stats-strip stats-strip--home" style="background-image: linear-gradient(135deg, rgba(26,20,16,0.84) 0%, rgba(42,26,10,0.76) 55%, rgba(59,26,26,0.70) 100%), url('/images/projects/alto_flores/alto_flores3.jpg'); background-size: cover; background-position: center;">
         {c.stats.map(([num, label], i) => (
           <div class="stat-item">
             <svg class="stat-blob" viewBox="0 0 200 100" aria-hidden="true">
@@ -103,6 +198,46 @@ const orgSchema = {
       </div>
     );
   })()}
+
+  <style>
+    /* Home impact numbers: taller band, big numbers, labels set like a
+       section title (sans, not the mono eyebrow) and narrow enough to wrap
+       to two lines. Scoped here so the shared .stats-strip elsewhere is untouched. */
+    .stats-strip--home {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 280px));
+      justify-content: center;
+      padding: 56px 24px;
+    }
+    .stats-strip--home .stat-item { padding: 56px 16px; }
+    .stats-strip--home .stat-num {
+      font-size: clamp(52px, 5.6vw, 84px);
+      letter-spacing: -2.5px;
+    }
+    .stats-strip--home .stat-blob {
+      width: 280px;
+      height: 128px;
+      transform: translate(-50%, -62%);
+    }
+    .stats-strip--home .stat-label {
+      font-family: var(--font-sans);
+      font-size: clamp(18px, 1.7vw, 24px);
+      font-weight: 400;
+      letter-spacing: -0.4px;
+      line-height: 1.2;
+      text-transform: none;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 16ch;
+      margin: 14px auto 0;
+    }
+    @media (max-width: 900px) {
+      .stats-strip--home { grid-template-columns: repeat(2, minmax(0, 280px)); padding: 32px 16px; }
+      .stats-strip--home .stat-item { padding: 32px 16px; }
+    }
+    @media (max-width: 560px) {
+      .stats-strip--home { grid-template-columns: minmax(0, 320px); }
+    }
+  </style>
 
   <!-- ─── METHODOLOGY PREVIEW ───────────────────────────────────────── -->
   <div class="section">
@@ -129,178 +264,220 @@ const orgSchema = {
     </div>
   </div>
 
-  <!-- ─── QUOTE BANNER ──────────────────────────────────────────────── -->
-  <div style="background: var(--c-grad-hero); padding: 96px 48px;">
-    <div style="max-width: 900px; margin: 0 auto; text-align: center;">
-      <span class="eyebrow-light">{c.quoteEyebrow}</span>
-      <p style="font-family: var(--font-display); font-variation-settings: var(--font-display-axes); font-size: clamp(32px, 4vw, 52px); font-weight: var(--font-display-weight); line-height: 1.15; letter-spacing: -1px; color: #fff; margin: 0 0 40px;">
-        {c.quoteText}
-      </p>
-      <a href={l('/donar')} class="btn-hero-primary" style="font-size: 16px;">{c.quoteCta}</a>
-    </div>
-  </div>
-
-  <!-- ─── FEATURED PROJECTS ─────────────────────────────────────────── -->
-  <div class="section-full section-warm" style="padding: 80px 0;">
-    <div style="max-width: 1200px; margin: 0 auto; padding: 0 48px; display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; flex-wrap: wrap; gap: 16px;">
-      <div>
-        <span class="eyebrow">{c.featuredEyebrow}</span>
-        <h2 class="section-title">{c.featuredTitle}</h2>
-      </div>
-      <a href={l('/proyectos')} class="btn-outline">{c.featuredVerTodos}</a>
+  <!-- ─── FEATURED PROJECTS (pinned background) ─────────────────────────
+       Scroll sequence: title + button alone → cards rise over the title one
+       by one → title + button alone again → section scrolls away.
+       Three layers, bottom to top:
+         1. .pinned-bg      sticky, one screen tall: frosted photo + centred title
+         2. .pinned-cards   the cards, in normal flow
+         3. .pinned-front   sticky layer holding the button (bottom centre),
+                            so the button stays above the cards
+       (A sticky element is its own stacking context, so the button can't live
+       in a lower layer and still sit above the cards.) -->
+  <section class="pinned" aria-labelledby="featured-title" style={`--pinned-img: url('${pinnedBg.src}');`}>
+    <div class="pinned-bg">
+      <h2 id="featured-title" class="pinned-title">{c.featuredTitle}</h2>
     </div>
 
-    <div class="carousel-outer" id="proj-carousel">
-      <div class="carousel-track" id="proj-track">
-        {[...featured, ...featured].map((project, i) => (
-          <div class="carousel-item" aria-hidden={i >= featured.length ? 'true' : undefined}>
-            <ProjectCard
+    <div class="pinned-cards">
+      {featured.map((project, i) => {
+        return (
+          <div class:list={['pinned-card', i % 2 ? 'is-right' : 'is-left']}>
+            <ProjectTile
               title={project.title}
               slug={project.slug}
               category={project.categoryLabel}
               summary={project.summary}
               heroImage={project.heroImage}
-              status={project.status}
               year={project.year}
+              shape={tileShapes[i % tileShapes.length]}
             />
           </div>
-        ))}
+        );
+      })}
+    </div>
+
+    <div class="pinned-front">
+      <div class="pinned-front-inner">
+        <a href={l('/proyectos')} class="btn-accent pinned-cta">{c.featuredVerTodos}</a>
       </div>
     </div>
-  </div>
+  </section>
 
   <style>
-    .carousel-outer {
-      overflow: hidden;
-      cursor: grab;
-      user-select: none;
-      -webkit-user-select: none;
-      padding: 4px 0 28px;
+    .pinned {
+      --pinned-h: calc(100svh - 64px);          /* one screen under the sticky nav */
+      /* Title-only scroll before the first card / after the last one. */
+      --pinned-pause: 6svh;
+      position: relative;
+      background: var(--c-white);
     }
-    .carousel-outer.is-dragging { cursor: grabbing; }
-    .carousel-outer.is-dragging a { pointer-events: none; }
 
-    .carousel-track {
+    /* Layer 1: frosted backdrop with the title centred, one screen tall,
+       stuck under the nav. */
+    .pinned-bg {
+      position: sticky;
+      top: 64px;
+      height: var(--pinned-h);
       display: flex;
-      gap: 24px;
-      padding: 0 48px;
-      will-change: transform;
+      align-items: center;
+      justify-content: center;
+      padding: 0 24px;
+      overflow: hidden;
+      isolation: isolate;
+    }
+    /* Frosted glass: the photo, blurred and washed out... */
+    .pinned-bg::before {
+      content: '';
+      position: absolute;
+      inset: -40px;               /* hide the blur's soft edges */
+      z-index: -2;
+      background: var(--pinned-img) center / cover no-repeat;
+      filter: blur(18px) saturate(1.15);
+    }
+    /* ...under a translucent milky pane with a faint highlight. */
+    .pinned-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(160deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 45%),
+        rgba(250, 247, 242, 0.62);
     }
 
-    .carousel-item {
-      flex: 0 0 360px;
-      min-width: 0;
+    .pinned-title {
+      font-family: var(--font-display);
+      font-variation-settings: var(--font-display-axes);
+      font-weight: var(--font-display-weight);
+      font-size: clamp(36px, 9vw, 128px);
+      line-height: 0.95;
+      letter-spacing: -2px;
+      color: var(--c-black);
+      text-align: center;
+      max-width: 11ch;
+      margin: 0 auto;
     }
 
-    @media (max-width: 600px) {
-      .carousel-item { flex: 0 0 280px; }
-      .carousel-track { padding: 0 24px; }
+    /* Layer 2: the cards. They start one screen (+ a short pause) below the
+       section top, so the title shows alone first; the same after the last. */
+    .pinned-cards {
+      position: relative;
+      z-index: 1;
+      margin: calc(-1 * var(--pinned-h)) auto 0;   /* overlap layer 1 */
+      max-width: 1400px;
+      padding:
+        calc(var(--pinned-h) + var(--pinned-pause))
+        48px
+        calc(var(--pinned-h) + var(--pinned-pause));
+      display: flex;
+      flex-direction: column;
+      gap: 4svh;
+      pointer-events: none;
+    }
+
+    .pinned-card { pointer-events: auto; }
+    .pinned-card.is-left  { align-self: flex-start; }
+    .pinned-card.is-right { align-self: flex-end; }
+
+    /* Layer 3: spans the section so its sticky child travels with it. */
+    .pinned-front {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .pinned-front-inner {
+      position: sticky;
+      top: 64px;
+      height: var(--pinned-h);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 24px 40px;       /* same inset as the hero's scroll button */
+    }
+    .pinned-cta { height: 46px; pointer-events: auto; }
+
+    /* Right-hand cards drift slightly against the scroll. Kept small so the
+       nearly continuous column never overlaps. */
+    @supports (animation-timeline: view()) {
+      @media (prefers-reduced-motion: no-preference) {
+        .pinned-card.is-right {
+          animation: pinned-drift linear both;
+          animation-timeline: view();
+        }
+        @keyframes pinned-drift {
+          from { transform: translateY(4vh); }
+          to   { transform: translateY(-4vh); }
+        }
+      }
+    }
+
+    @media (max-width: 768px) {
+      .pinned-cards { padding-left: 24px; padding-right: 24px; gap: 6svh; }
+      .pinned-card.is-left,
+      .pinned-card.is-right { align-self: stretch; margin: 0; }
     }
   </style>
 
-  <script>
-    const outer = document.getElementById('proj-carousel');
-    const track = document.getElementById('proj-track');
-    const items = track.querySelectorAll('.carousel-item');
-    const N = items.length / 2;
-
-    let pos = 0;
-    let dragging = false;
-    let didDrag = false;
-    let startX = 0;
-    let startPos = 0;
-
-    function loopWidth() {
-      const gap = parseFloat(getComputedStyle(track).gap) || 0;
-      return N * (items[0].offsetWidth + gap);
-    }
-
-    function wrap(p) {
-      const lw = loopWidth();
-      return ((p % lw) + lw) % lw;
-    }
-
-    function render() {
-      track.style.transform = `translateX(-${pos}px)`;
-    }
-
-    function stopDrag() {
-      if (!dragging) return;
-      dragging = false;
-      outer.classList.remove('is-dragging');
-    }
-
-    // Prevent the browser from starting a native link/image drag, which would
-    // steal mousemove events and break drag-scrolling over cards.
-    outer.addEventListener('dragstart', e => e.preventDefault());
-
-    outer.addEventListener('mousedown', e => {
-      dragging = true;
-      didDrag = false;
-      startX = e.clientX;
-      startPos = pos;
-      outer.classList.add('is-dragging');
-    });
-
-    window.addEventListener('mousemove', e => {
-      if (!dragging) return;
-      const dx = startX - e.clientX;
-      if (Math.abs(dx) > 5) didDrag = true;
-      pos = wrap(startPos + dx);
-      render();
-    });
-
-    window.addEventListener('mouseup', stopDrag);
-    // Stops drag if cursor leaves the browser window entirely
-    document.addEventListener('mouseleave', stopDrag);
-
-    // Suppress card navigation after a drag (but allow plain clicks)
-    outer.addEventListener('click', e => {
-      if (didDrag) {
-        e.preventDefault();
-        e.stopPropagation();
-        didDrag = false;
-      }
-    }, true);
-
-    outer.addEventListener('touchstart', e => {
-      startX = e.touches[0].clientX;
-      startPos = pos;
-      didDrag = false;
-    }, { passive: true });
-    outer.addEventListener('touchmove', e => {
-      pos = wrap(startPos + (startX - e.touches[0].clientX));
-      render();
-    }, { passive: true });
-
-    // Trackpad horizontal swipe only; ignore vertical so page scroll works normally
-    outer.addEventListener('wheel', e => {
-      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
-      e.preventDefault();
-      pos = wrap(pos + e.deltaX);
-      render();
-    }, { passive: false });
-
-    // Start with the last card peeking ~45% from the left edge so it's
-    // immediately obvious this is a scrollable carousel.
-    pos = wrap(-(items[0].offsetWidth * 0.45));
-    render();
-  </script>
-
   <!-- ─── DONATE CTA ────────────────────────────────────────────────── -->
-  <div class="section-full section-gradient" style="padding: 96px 48px; text-align: center;">
-    <span class="eyebrow-light">{c.donarEyebrow}</span>
-    <h2 style="font-family: var(--font-display); font-variation-settings: var(--font-display-axes); font-size: clamp(36px, 5vw, 60px); font-weight: var(--font-display-weight); line-height: 1.1; letter-spacing: -1.2px; color: #fff; margin: 0 auto 20px;">
+  <div class="section-full" style="padding: 96px 48px; text-align: center;">
+    <h2 style="font-family: var(--font-display); font-variation-settings: var(--font-display-axes); font-size: clamp(36px, 5vw, 60px); font-weight: var(--font-display-weight); line-height: 1.1; letter-spacing: -1.2px; color: var(--c-black); margin: 0 auto 20px;">
       {c.donarTitle}
     </h2>
-    <p style="font-size: 18px; font-weight: 300; color: rgba(255,255,255,0.8); max-width: 480px; margin: 0 auto 36px; line-height: 1.5;">
+    <p style="font-size: 18px; font-weight: 300; color: var(--fg2); max-width: 480px; margin: 0 auto 36px; line-height: 1.5;">
       {c.donarText}
     </p>
-    <a href={l('/donar')} class="btn-hero-primary" style="font-size: 16px;">{t('cta.quieroDonar')}</a>
+    <a href={l('/donar')} class="btn-accent" style="font-size: 16px;">{t('cta.quieroDonar')}</a>
   </div>
 
 
 <script>
+  // Hero slideshow: advance every few seconds; pause while the hero is off
+  // screen or the tab is hidden. Reduced-motion users get a slower, plain
+  // crossfade (no zoom or wipe — see global.css).
+  (() => {
+    const hero = document.getElementById('home-hero');
+    if (!hero) return;
+    const slides = [...hero.querySelectorAll<HTMLElement>('.hero-slide')];
+    if (slides.length < 2) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const INTERVAL = reduced ? 9000 : 6000;
+    let current = 0;
+    let timer: number | undefined;
+    let visible = true;
+
+    slides[0].classList.add('is-first');
+
+    function go(next: number) {
+      slides.forEach((s) => s.classList.remove('is-leaving', 'is-first'));
+      slides[current].classList.remove('is-active');
+      slides[current].classList.add('is-leaving');
+      current = next;
+      // Restart the CSS animations on the incoming slide.
+      void slides[current].offsetWidth;
+      slides[current].classList.add('is-active');
+    }
+
+    function start() {
+      stop();
+      if (!visible || document.hidden) return;
+      timer = window.setInterval(() => go((current + 1) % slides.length), INTERVAL);
+    }
+    function stop() {
+      if (timer) window.clearInterval(timer);
+      timer = undefined;
+    }
+
+    new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+      visible ? start() : stop();
+    }).observe(hero);
+    document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
+  })();
+
   (() => {
     const strip = document.querySelector('.stats-strip');
     if (!strip) return;

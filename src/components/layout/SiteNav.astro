@@ -2,6 +2,12 @@
 import { pageLang, useTranslations, localizePath, alternatePath, ES_ONLY_PREFIXES } from '../../i18n/ui';
 import { CATEGORY_META } from '../../i18n/categories';
 
+interface Props {
+  /** Transparent over the page hero until the hero scrolls away (see BaseLayout). */
+  overlay?: boolean;
+}
+const { overlay = false } = Astro.props;
+
 const pathname = Astro.url.pathname;
 const lang = pageLang(Astro.currentLocale);
 const t = useTranslations(lang);
@@ -39,11 +45,19 @@ function isActive(href: string) {
 }
 ---
 
-<nav class="site-nav">
+<nav class:list={['site-nav', { 'site-nav--overlay is-transparent': overlay }]} id="site-nav">
   <a href={l('/')} class="nav-brand">
+    {overlay && (
+      <img
+        src="/images/logo/logo_completo_horizontal_color_letraBlanca.svg"
+        alt="La Otra Ciudad"
+        class="nav-logo-light"
+      />
+    )}
     <img
       src="/images/logo/logo_sinBordes_horizontal_color_letraNegra.svg"
       alt="La Otra Ciudad"
+      class="nav-logo-dark"
       style="height: 28px; width: auto;"
       onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';"
     />
@@ -143,6 +157,37 @@ function isActive(href: string) {
 <div class="nav-overlay" id="nav-overlay"></div>
 
 <style>
+  /* ─── OVERLAY MODE (home) ──────────────────────────────────────────────────
+     Transparent over the hero, white links + white-letter logo. The negative
+     margin lets the hero slide up under the nav. .is-transparent is removed by
+     the script below once the hero has scrolled out from under the nav, or
+     while the mobile menu is open. */
+  .site-nav--overlay {
+    margin-bottom: -64px;
+    transition: background-color 250ms ease, border-color 250ms ease, transform 250ms ease;
+  }
+  /* Over the hero the bar floats a little lower, clear of the window edge.
+     (A transform, not padding, so the page layout doesn't shift on switch.) */
+  .site-nav--overlay.is-transparent {
+    background: transparent;
+    border-bottom-color: transparent;
+    transform: translateY(16px);
+  }
+
+  .nav-logo-light { display: none; height: 40px; width: auto; }  /* its artwork has extra margin, hence taller */
+  .is-transparent .nav-logo-light { display: block; }
+  .is-transparent .nav-logo-dark  { display: none; }
+
+  .is-transparent .nav-link:not(.active),
+  .is-transparent .nav-link[data-color]:not(.active):hover { color: #fff; }
+  .is-transparent .nav-link[data-color]:not(.active):hover { background: rgba(255, 255, 255, 0.16); }
+
+  .is-transparent .nav-lang { color: #fff; border-color: rgba(255, 255, 255, 0.5); }
+  .is-transparent .nav-lang:hover { background: #fff; border-color: #fff; color: var(--c-black); }
+
+  .is-transparent .nav-hamburger span { background: #fff; }
+  .is-transparent .nav-hamburger:hover { background: rgba(255, 255, 255, 0.16); }
+
   /* ─── HAMBURGER BUTTON ─────────────────────────────────────────────────── */
   .nav-hamburger {
     display: none;
@@ -432,6 +477,27 @@ function isActive(href: string) {
 </style>
 
 <script>
+  // Overlay mode: transparent while the hero is under the nav, solid after.
+  // The hero marks itself with [data-nav-overlay-until].
+  (() => {
+    const nav = document.getElementById('site-nav');
+    const hero = document.querySelector('[data-nav-overlay-until]');
+    const burger = document.getElementById('nav-hamburger');
+    if (!nav || !nav.classList.contains('site-nav--overlay')) return;
+    if (!hero) { nav.classList.remove('is-transparent'); return; }
+
+    let heroUnderNav = true;
+    const update = () => {
+      const menuOpen = burger?.classList.contains('is-open') ?? false;
+      nav.classList.toggle('is-transparent', heroUnderNav && !menuOpen);
+    };
+    // Shrink the viewport by the nav height: the hero "leaves" when its
+    // bottom edge passes the nav's bottom edge.
+    new IntersectionObserver(([e]) => { heroUnderNav = e.isIntersecting; update(); },
+      { rootMargin: '-64px 0px 0px 0px' }).observe(hero);
+    if (burger) new MutationObserver(update).observe(burger, { attributes: true, attributeFilter: ['class'] });
+  })();
+
   const hamburger = document.getElementById('nav-hamburger')!;
   const drawer    = document.getElementById('nav-drawer')!;
   const overlay   = document.getElementById('nav-overlay')!;
