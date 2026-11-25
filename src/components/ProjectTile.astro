@@ -1,0 +1,132 @@
+---
+// ProjectTile — image-led project card for the home page's pinned
+// "Transformaciones recientes" section. Unlike ProjectCard (white box with
+// text inside), this is a bare photo with the category/year above it and the
+// title and description below. It comes in several shapes, never narrower
+// than square, so a column of them reads as an editorial layout.
+// `category` is the already-localized label.
+import { pageLang, localizePath } from '../i18n/ui';
+
+export type TileShape = 'square' | 'landscape' | 'wide';
+
+interface Props {
+  title: string;
+  slug: string;
+  category: string;
+  summary: string;
+  heroImage: string;
+  year: number;
+  shape?: TileShape;
+}
+
+const { title, slug, category, summary, heroImage, year, shape = 'landscape' } = Astro.props;
+const lang = pageLang(Astro.currentLocale);
+
+// heroImage is a Sanity CDN URL (…?w=800&fit=max&auto=format); the CDN resizes
+// on the fly, so a srcset only needs the width swapped.
+const at = (w: number) =>
+  heroImage.includes('w=') ? heroImage.replace(/([?&])w=\d+/, `$1w=${w}`) : `${heroImage}${heroImage.includes('?') ? '&' : '?'}w=${w}`;
+const srcset = heroImage ? [600, 900, 1200, 1600].map((w) => `${at(w)} ${w}w`).join(', ') : undefined;
+const sizes = {
+  square: '(max-width: 768px) 92vw, 38vw',
+  landscape: '(max-width: 768px) 92vw, 46vw',
+  wide: '(max-width: 768px) 92vw, 54vw',
+}[shape];
+---
+
+<a href={localizePath(lang, `/proyectos/${slug}`)} class:list={['tile', `tile--${shape}`]}>
+  <span class="tile-meta">{category} · {year}</span>
+  <div class="tile-media">
+    {heroImage ? (
+      <img src={at(1200)} srcset={srcset} sizes={sizes} alt={title} loading="lazy" decoding="async" />
+    ) : (
+      <div class="img-placeholder"><span>{category}</span></div>
+    )}
+  </div>
+  <div class="tile-caption">
+    <span class="tile-title">{title}</span>
+    {summary && <p class="tile-desc">{summary}</p>}
+  </div>
+</a>
+
+<style>
+  .tile {
+    display: block;
+    text-decoration: none;
+    color: var(--c-black);
+  }
+  /* Width per shape; height follows from the aspect ratio (min. square). */
+  .tile--square    { width: min(480px, 38vw); }
+  .tile--landscape { width: min(600px, 46vw); }
+  .tile--wide      { width: min(720px, 54vw); }
+
+  .tile-meta {
+    display: block;
+    margin: 0 2px 10px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: rgba(26, 20, 16, 0.85);   /* near-black: must read over the frosted backdrop */
+  }
+
+  .tile-media {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    background: rgba(26, 20, 16, 0.08);
+    box-shadow: 0 18px 40px -18px rgba(26, 20, 16, 0.35);
+  }
+  .tile--square    .tile-media { aspect-ratio: 1 / 1; }
+  .tile--landscape .tile-media { aspect-ratio: 4 / 3; }
+  .tile--wide      .tile-media { aspect-ratio: 16 / 10; }
+
+  .tile-media img,
+  .tile-media .img-placeholder {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .tile:hover .tile-media img,
+  .tile:focus-visible .tile-media img { transform: scale(1.04); }
+
+  .tile-caption {
+    display: grid;
+    gap: 6px;
+    padding: 14px 2px 0;
+  }
+  .tile-title {
+    font-family: var(--font-sans);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+    line-height: 1.25;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 3px;
+    transition: text-decoration-color 200ms;
+  }
+  .tile:hover .tile-title,
+  .tile:focus-visible .tile-title { text-decoration-color: currentColor; }
+
+  .tile-desc {
+    margin: 0;
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: rgba(26, 20, 16, 0.72);
+  }
+
+  @media (max-width: 768px) {
+    .tile--square,
+    .tile--landscape,
+    .tile--wide { width: 100%; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tile-media img { transition: none; }
+  }
+</style>

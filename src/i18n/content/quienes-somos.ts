@@ -14,7 +14,8 @@ export const quienesSomosContent = {
     historiaBtnEquipo: 'Conoce el equipo →',
     historiaBtnInforme: 'Informes de sostenibilidad',
 
-    valoresEyebrow: 'Lo que nos mueve',
+    misionEyebrow: 'Nuestra misión',
+    misionText: 'Promover el desarrollo sostenible de comunidades urbanas vulnerables, mejorando su calidad de vida y dignificando los territorios que habitan',
     valoresTitle: 'Principios que guían nuestro trabajo',
     valores: [
       {
@@ -54,7 +55,8 @@ export const quienesSomosContent = {
     historiaBtnEquipo: 'Meet the team →',
     historiaBtnInforme: 'Sustainability Reports',
 
-    valoresEyebrow: 'What moves us',
+    misionEyebrow: 'Our mission',
+    misionText: 'To promote the sustainable development of vulnerable urban communities, improving their quality of life and dignifying the territories they inhabit',
     valoresTitle: 'Principles that guide our work',
     valores: [
       {

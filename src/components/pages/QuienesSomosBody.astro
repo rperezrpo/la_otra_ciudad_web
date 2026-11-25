@@ -71,7 +71,10 @@ const VALUE_COLORS = ['var(--c-aguamarina)', 'var(--c-rosado)', 'var(--c-violeta
   <!-- ─── VALUES ────────────────────────────────────────────────────── -->
   <div id="valores" class="section-full" style="background: linear-gradient(135deg, #e2611d 0%, #3b6bdc 100%); padding: 80px 48px;">
     <div style="max-width: 1200px; margin: 0 auto;">
-      <span class="eyebrow-light">{c.valoresEyebrow}</span>
+      <span class="eyebrow-light">{c.misionEyebrow}</span>
+      <p style="font-family: var(--font-display); font-variation-settings: var(--font-display-axes); font-size: clamp(28px, 3.6vw, 46px); font-weight: var(--font-display-weight); line-height: 1.15; letter-spacing: -1px; color: #fff; max-width: 900px; margin: 0 0 64px;">
+        {c.misionText}
+      </p>
       <h2 class="section-title" style="color: #fff; max-width: none;">{c.valoresTitle}</h2>
       <div class="card-grid-4" style="margin-top: 40px;">
         {c.valores.map((v, i) => (
