@@ -12,6 +12,7 @@ export const quienesSomosContent = {
     historiaP2: 'En octubre de 2024 LOC se constituyó formalmente como Entidad Sin Ánimo de Lucro. Hoy la integran un equipo de 13 profesionales cuyo trabajo junto a instituciones, empresas y comunidades populares para construir espacios más verdes, justos y saludables ha sido reconocido nacional e internacionalmente.',
     historiaImgAlt: 'Equipo de La Otra Ciudad en recorrido por la ciudad',
     historiaBtnEquipo: 'Conoce el equipo →',
+    historiaBtnInforme: 'Informes de sostenibilidad',
 
     valoresEyebrow: 'Lo que nos mueve',
     valoresTitle: 'Principios que guían nuestro trabajo',
@@ -42,7 +43,7 @@ export const quienesSomosContent = {
     metaTitle: 'About Us',
     metaDescription: 'Corporación La Otra Ciudad has worked since 2021 for more biodiverse, fair and healthy cities in Medellín.',
     heroEyebrow: 'About Us',
-    heroTitle: 'An organisation that believes in the power of the collective',
+    heroTitle: 'An organisation that trusts the power of collective action',
     heroSub: 'Since 2021 we have worked so that communities lead the transformation of their own territories.',
 
     historiaEyebrow: 'Our story',
@@ -51,6 +52,7 @@ export const quienesSomosContent = {
     historiaP2: 'In October 2024 LOC was formally constituted as a non-profit entity. Today it is made up of a team of 13 professionals whose work with institutions, companies and grassroots communities to build greener, fairer and healthier spaces has been recognised nationally and internationally.',
     historiaImgAlt: 'La Otra Ciudad team on a city walk',
     historiaBtnEquipo: 'Meet the team →',
+    historiaBtnInforme: 'Sustainability Reports',
 
     valoresEyebrow: 'What moves us',
     valoresTitle: 'Principles that guide our work',

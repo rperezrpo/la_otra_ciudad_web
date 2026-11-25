@@ -42,7 +42,7 @@ const projects = await getProjectsByCategory(service, lang);
   description={c.metaDescription}
   pageColor={meta.pageColor}
 >
-  <PageHero type="banner" eyebrow={c.heroEyebrow} image={meta.image}>
+  <PageHero type="banner" image={meta.image}>
     <h1 class="page-hero-title">{title}</h1>
     <p class="page-hero-sub">
       {c.heroSub}
