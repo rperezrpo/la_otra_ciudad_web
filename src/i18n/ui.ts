@@ -61,8 +61,8 @@ export const ui = {
     'person.proyectos': 'Proyectos',
     'person.enlaces': 'Enlaces',
     'person.cv': 'Descargar CV',
-    'person.timelineSingular': 'Ha participado en {n} proyecto',
-    'person.timelinePlural': 'Ha participado en {n} proyectos',
+    'person.timelineSingular': 'Párate en el punto para ver el proyecto en el que ha participado {name}',
+    'person.timelinePlural': 'Párate en los puntos para ver los {n} proyectos en los que ha participado {name}',
 
     'cta.quieroDonar': 'Quiero donar',
     'cta.quieroParticipar': 'Quiero participar',
@@ -99,8 +99,8 @@ export const ui = {
     'person.proyectos': 'Projects',
     'person.enlaces': 'Links',
     'person.cv': 'Download CV',
-    'person.timelineSingular': 'Has worked on {n} project',
-    'person.timelinePlural': 'Has worked on {n} projects',
+    'person.timelineSingular': 'Hover over the dot to see the project {name} has worked on',
+    'person.timelinePlural': 'Hover over the dots to see the {n} projects {name} has worked on',
 
     'cta.quieroDonar': 'Donate',
     'cta.quieroParticipar': 'Get involved',

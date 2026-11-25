@@ -76,7 +76,8 @@ const donationConfig = {
   <!-- ─── HERO ──────────────────────────────────────────────────────── -->
   <!-- Note: donar uses its own aguamarina hero, not PageHero — keeping it distinct intentionally -->
   <div style="background: var(--c-aguamarina); padding: 80px 48px; text-align: center;">
-    <h1 style="font-family: var(--font-display); font-variation-settings: 'opsz' 144, 'SOFT' 40, 'WONK' 0; font-size: clamp(40px, 6vw, 72px); font-weight: 400; line-height: 1.0; letter-spacing: -1.5px; color: #fff; max-width: 640px; margin: 0 auto 20px;">
+    <span style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: rgba(255,255,255,0.7); display: block; margin-bottom: 24px;">{c.heroEyebrow}</span>
+    <h1 style="font-family: var(--font-display); font-variation-settings: var(--font-display-axes); font-size: clamp(40px, 6vw, 72px); font-weight: var(--font-display-weight); line-height: 1.0; letter-spacing: -1.5px; color: #fff; max-width: 640px; margin: 0 auto 20px;">
       {c.heroTitle}
     </h1>
     <p style="font-size: 18px; font-weight: 300; color: rgba(255,255,255,0.82); max-width: 480px; margin: 0 auto; line-height: 1.5;">
@@ -112,7 +113,7 @@ const donationConfig = {
         <div style="background: var(--c-white-pure); border-radius: 14px; box-shadow: var(--shadow-sm); overflow: hidden;">
           {c.infoRows.map((row, i) => (
             <div style={`display: flex; gap: 20px; padding: 20px 24px; ${i < c.infoRows.length - 1 ? 'border-bottom: 1px solid rgba(26,20,16,0.06);' : ''} align-items: flex-start;`}>
-              <div style="font-family: var(--font-display); font-variation-settings: 'opsz' 72, 'SOFT' 20, 'WONK' 0; font-size: 28px; font-weight: 400; color: var(--c-aguamarina); white-space: nowrap; flex-shrink: 0; line-height: 1.1;">{row.stat}</div>
+              <div style="font-family: var(--font-display); font-variation-settings: var(--font-display-axes); font-size: 28px; font-weight: var(--font-display-weight); color: var(--c-aguamarina); white-space: nowrap; flex-shrink: 0; line-height: 1.1;">{row.stat}</div>
               <div style="font-size: 14px; font-weight: 300; line-height: 1.6; color: var(--fg2); padding-top: 3px;">{row.desc}</div>
             </div>
           ))}
@@ -249,7 +250,7 @@ const donationConfig = {
       btn.dataset.amount = String(amount);
       btn.textContent = fmt(amount, selectedCurrency);
       btn.style.cssText =
-        'border: 2px solid rgba(26,20,16,0.12); border-radius: 8px; padding: 16px 24px; cursor: pointer; text-align: center; font-size: 20px; font-weight: 400; font-family: var(--font-display); transition: all 150ms; background: var(--c-white-pure); color: var(--c-black);';
+        'border: 2px solid rgba(26,20,16,0.12); border-radius: 8px; padding: 16px 24px; cursor: pointer; text-align: center; font-size: 20px; font-weight: var(--font-display-weight); font-family: var(--font-display); font-variation-settings: var(--font-display-axes); transition: all 150ms; background: var(--c-white-pure); color: var(--c-black);';
       btn.addEventListener('click', () => {
         customInput.value = '';
         selectedAmount = amount;

@@ -99,16 +99,20 @@ const timelineYearTicks = allTimelineYears.map((year) => ({
   halfWidth: halfWidthByYear.get(year) ?? 0,
 }));
 
-const timelineLabel = (
+// Split around {n} so the count can be rendered highlighted in the markup.
+// The singular strings have no {n}, so `timelineLabelAfter` is undefined there.
+const [timelineLabelBefore, timelineLabelAfter] = (
   timelineProjects.length === 1 ? t('person.timelineSingular') : t('person.timelinePlural')
-).replace('{n}', String(timelineProjects.length));
+)
+  .replace('{name}', person.name.split(' ')[0]) // first name reads naturally in a sentence
+  .split('{n}');
 ---
 
 <BaseLayout
   title={person.name}
   description={person.role || undefined}
   ogImage={person.photo || undefined}
-  pageColor="aguamarina"
+  pageColor="cobalto"
 >
   <div class="section person-page">
     <a href={`${l('/quienes-somos')}#nuestro-equipo`} class="hero-back-link">{t('person.volver')}</a>
@@ -166,7 +170,7 @@ const timelineLabel = (
 
         {timelineProjects.length > 0 && (
           <div class="person-timeline">
-            <span class="eyebrow">{timelineLabel}</span>
+            <span class="eyebrow">{timelineLabelBefore}{timelineLabelAfter !== undefined && <><strong class="timeline-count">{timelineProjects.length}</strong>{timelineLabelAfter}</>}</span>
             <div class="timeline-wrap">
               <div class="timeline-years">
                 {timelineYearTicks.map(({ year, position, halfWidth }) => (
@@ -304,9 +308,9 @@ const timelineLabel = (
 
   .person-name {
     font-family: var(--font-display);
-    font-variation-settings: 'opsz' 144, 'SOFT' 30, 'WONK' 0;
+    font-variation-settings: var(--font-display-axes);
     font-size: clamp(24px, 2.4vw, 32px);
-    font-weight: 560;
+    font-weight: var(--font-display-weight);
     line-height: 1.15;
     letter-spacing: -0.6px;
     color: #fff;
@@ -389,6 +393,15 @@ const timelineLabel = (
     padding: 28px 32px 32px;
   }
 
+  .timeline-count {
+    /* 700 is Ubuntu Sans Mono's heaviest weight — anything higher renders
+       the same, so size does the rest of the work. */
+    font-weight: 700;
+    font-size: 1.2em;
+    line-height: 1;
+    color: var(--page-accent);
+  }
+
   .timeline-wrap {
     position: relative;
     margin-top: 28px;
@@ -466,7 +479,7 @@ const timelineLabel = (
   }
 
   .timeline-point:focus-visible {
-    outline: 2px solid var(--c-aguamarina);
+    outline: 2px solid var(--page-accent);
     outline-offset: 3px;
     border-radius: 50%;
   }
@@ -484,6 +497,28 @@ const timelineLabel = (
     align-items: center;
     gap: 8px;
     z-index: 2;
+    /* Invisible until opened, but its box (circle + pill) still sits under
+       the dot — without this, sweeping the mouse below the timeline would
+       pop a project. Only the dot itself starts the hover; once open, the
+       tooltip takes the pointer (rule below) so you can move down onto it. */
+    pointer-events: none;
+  }
+
+  /* Invisible bridge over the 24px gap between dot and photo, so the hover
+     doesn't drop while the mouse travels down. Only live while open, since
+     it inherits pointer-events from the tooltip. */
+  .timeline-tooltip::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 100%;
+    height: 24px;
+  }
+
+  .timeline-point:hover .timeline-tooltip,
+  .timeline-point.is-open .timeline-tooltip {
+    pointer-events: auto;
   }
 
   /* The circle starts at the dot's position and size, then falls, grows and
@@ -506,12 +541,14 @@ const timelineLabel = (
   .timeline-point:hover .timeline-tooltip-circle,
   .timeline-point.is-open .timeline-tooltip-circle {
     animation: timeline-circle-fall 550ms cubic-bezier(0.3, 0.98, 0.4, 1) forwards;
-    pointer-events: auto;
   }
+
+  /* Once open, the photo is the link (desktop click, or the second tap on mobile). */
+  .timeline-point:hover .timeline-tooltip-circle,
+  .timeline-point.is-open .timeline-tooltip-circle { pointer-events: auto; }
 
   .timeline-point:focus-visible .timeline-tooltip-circle {
     opacity: 1;
-    pointer-events: auto;
     transform: translateY(0) scale(1);
   }
 
@@ -565,7 +602,6 @@ const timelineLabel = (
   .timeline-point:focus-visible .timeline-tooltip-pill {
     opacity: 1;
     transform: translateY(0);
-    pointer-events: auto;
   }
 
   .timeline-tooltip-title {

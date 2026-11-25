@@ -376,7 +376,8 @@ const meta = [
       /* ── Gallery shell ── */
       .gal { background:#e8e3dc; padding:40px 40px 80px; }
       .gal-head { max-width:1180px; margin:0 auto 8px; }
-      .gal-title { font-family:var(--font-display); font-size:46px; font-weight:400; letter-spacing:-1.5px; color:var(--c-black); margin:6px 0 6px; }
+      .gal-title { font-family:var(--font-display);
+ font-variation-settings: var(--font-display-axes); font-size:46px; font-weight: var(--font-display-weight); letter-spacing:-1.5px; color:var(--c-black); margin:6px 0 6px; }
       .gal-sub { font-family:var(--font-sans); font-weight:300; color:var(--fg2); }
       .gal-sec { font-family:var(--font-mono); text-transform:uppercase; letter-spacing:1px; font-size:13px; color:var(--fg2);
                  max-width:1180px; margin:46px auto 18px; padding-bottom:8px; border-bottom:1px solid rgba(26,20,16,.18); }
@@ -390,9 +391,9 @@ const meta = [
               padding:40px; overflow:hidden; color:var(--fg1); }
 
       /* ── Type scale (print, scaled to sheet) ── */
-      .display { font-family:var(--font-display); font-variation-settings:'opsz' 144,'SOFT' 40; font-weight:400;
+      .display { font-family:var(--font-display); font-variation-settings: var(--font-display-axes); font-weight: var(--font-display-weight);
                  font-size:58px; line-height:.95; letter-spacing:-2px; color:#fff; }
-      .title-serif { font-family:var(--font-display); font-variation-settings:'opsz' 120,'SOFT' 30; font-weight:400;
+      .title-serif { font-family:var(--font-display); font-variation-settings: var(--font-display-axes); font-weight: var(--font-display-weight);
                      font-size:40px; line-height:.98; letter-spacing:-1.3px; color:var(--c-black); }
       .title-serif.lt { color:#fff; }
       .h1 { font-family:var(--font-sans); font-weight:400; font-size:24px; line-height:1.08; letter-spacing:-.8px; color:var(--c-black); }
@@ -411,7 +412,8 @@ const meta = [
 
       /* ── Eyebrow uses global .eyebrow; accent rule + pull quote ── */
       .acc-rule { display:block; width:54px; height:3px; background:var(--acc); margin:16px 0; }
-      .pull { font-family:var(--font-display); font-variation-settings:'opsz' 72,'SOFT' 20; font-size:17px; line-height:1.35;
+      .pull { font-family:var(--font-display); font-variation-settings: var(--font-display-axes);
+ font-weight: var(--font-display-weight); font-size:17px; line-height:1.35;
               letter-spacing:-.4px; color:var(--c-black); border-left:3px solid var(--acc); padding:4px 0 4px 14px; margin:14px 0; }
 
       .rp-foot { position:absolute; left:40px; right:40px; bottom:22px; display:flex; justify-content:space-between;
@@ -467,7 +469,7 @@ const meta = [
       .meta-v { font-family:var(--font-sans); font-weight:400; font-size:13px; color:var(--c-black); }
 
       .tp-quote { justify-content:center; }
-      .big-quote { font-family:var(--font-display); font-variation-settings:'opsz' 96,'SOFT' 30; font-weight:400;
+      .big-quote { font-family:var(--font-display); font-variation-settings: var(--font-display-axes); font-weight: var(--font-display-weight);
                    font-size:30px; line-height:1.2; letter-spacing:-.8px; color:var(--c-black);
                    border-left:4px solid var(--acc); padding-left:20px; margin:14px 0; }
       .attr { color:var(--fg2); margin-left:24px; }
