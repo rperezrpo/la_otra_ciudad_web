@@ -149,7 +149,33 @@ export interface ProjectDetailData {
   partners: string[]
   year: number
   status: string
-  gallery: string[]
+  gallery: GalleryImage[]
+}
+
+export interface GalleryImage {
+  /** Grid-sized rendition. */
+  src: string
+  /** Large rendition for the lightbox. */
+  full: string
+  /** Pixel size of `full`, so the layout and lightbox know the aspect ratio. */
+  width: number
+  height: number
+}
+
+/** Large rendition + its real dimensions (respecting any crop set in Studio). */
+function galleryImage(g: any): GalleryImage | null {
+  const dims = g?.dims
+  if (!g?.asset || !dims?.width || !dims?.height) return null
+  const c = g.crop ?? {}
+  const w = dims.width * (1 - (c.left ?? 0) - (c.right ?? 0))
+  const h = dims.height * (1 - (c.top ?? 0) - (c.bottom ?? 0))
+  const fullW = Math.round(Math.min(w, 2400))
+  return {
+    src: img(g, 900),
+    full: img(g, fullW),
+    width: fullW,
+    height: Math.round((fullW * h) / w),
+  }
 }
 
 /** Handles both legacy plain-text descriptions and new Portable Text arrays. */
@@ -188,7 +214,7 @@ export async function getProject(slug: string, locale: Lang = 'es'): Promise<Pro
       partners,
       year,
       status,
-      gallery
+      "gallery": gallery[]{ ..., "dims": asset->metadata.dimensions{width, height} }
     }`,
     { slug }
   )
@@ -205,7 +231,7 @@ export async function getProject(slug: string, locale: Lang = 'es'): Promise<Pro
     partners: p.partners ?? [],
     year: p.year,
     status: p.status,
-    gallery: (p.gallery ?? []).map((g: SanityImageSource) => img(g, 1000)).filter(Boolean),
+    gallery: (p.gallery ?? []).map(galleryImage).filter((g: GalleryImage | null): g is GalleryImage => g !== null),
   }
 }
 
