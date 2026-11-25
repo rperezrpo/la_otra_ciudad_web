@@ -7,15 +7,17 @@ import { useTranslations, localizePath, type Lang } from '../../i18n/ui';
 import { homeContent } from '../../i18n/content/home';
 import { Image, getImage } from 'astro:assets';
 import sanRafael2 from '../../../public/images/projects/fotos_intervenciones/san_rafael_2.jpg';
-// Hero slideshow — PROTOTYPE: hard-coded picks; later these can come from Sanity.
-import slide1 from '../../../public/images/projects/alto_flores/alto_flores1.jpg';
-import slide2 from '../../../public/images/projects/Fotos Talleres/241005_Integracion-111.jpg';
-import slide3 from '../../../public/images/projects/Fotos Generales/20221126_VisitaRioNorte-04.jpg';
-import slide4 from '../../../public/images/projects/Fotos Talleres/241003_TallerComunicaciones-13.jpg';
-import slide5 from '../../../public/images/projects/Fotos Generales/20220316_Expedición Bello Oriente (37).jpg';
-import slide6 from '../../../public/images/projects/Fotos Generales/20221126_VisitaRioNorte-12.jpg';
+// Hero slideshow, in this order. Later these can come from Sanity.
+import slide1 from '../../../public/images/banners/paisajes_regenerativos.jpg';
+import slide2 from '../../../public/images/projects/san_rafael/san_rafael (4).jpg';
+import slide3 from '../../../public/images/banners/quienes-somos.jpg';
+import slide4 from '../../../public/images/banners/acompanamiento_comunitario.jpg';
+import slide5 from '../../../public/images/banners/IMG_3208.jpg';
+import slide6 from '../../../public/images/projects/alto_flores/alto_flores1.2.JPG';
+import slide7 from '../../../public/images/projects/san_rafael/san_rafael (3).jpg';
+import slide8 from '../../../public/images/projects/alto_flores/alto_flores9.JPG';
 
-const heroSlides = [slide1, slide2, slide3, slide4, slide5, slide6];
+const heroSlides = [slide1, slide2, slide3, slide4, slide5, slide6, slide7, slide8];
 
 // Pinned projects section: shape of each tile, cycled. Tiles alternate
 // flush left / flush right.
@@ -444,7 +446,7 @@ const orgSchema = {
     if (slides.length < 2) return;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    const INTERVAL = reduced ? 9000 : 6000;
+    const INTERVAL = reduced ? 4000 : 2500;
     let current = 0;
     let timer: number | undefined;
     let visible = true;

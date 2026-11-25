@@ -727,10 +727,10 @@
     opacity: 1;
     visibility: visible;
     z-index: 2;
-    animation: hero-wipe 1400ms cubic-bezier(0.77, 0, 0.18, 1) both;
+    animation: hero-wipe 1000ms cubic-bezier(0.77, 0, 0.18, 1) both;
   }
   .hero-slide.is-active .hero-slide-img {
-    animation: hero-kenburns 8000ms ease-out both;
+    animation: hero-kenburns 3500ms ease-out both;
   }
   /* Outgoing slide stays underneath until the wipe has covered it. */
   .hero-slide.is-leaving {
@@ -789,7 +789,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .hero-slide.is-active { animation: hero-fade 1600ms ease both; }
+    .hero-slide.is-active { animation: hero-fade 1000ms ease both; }
     .hero-slide.is-first { animation: none; }
     .hero-slide.is-active .hero-slide-img { animation: none; }
     .hero--full .hero-scroll-btn { animation: none; }
@@ -1064,6 +1064,9 @@
   }
 
   .nav-brand {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;          /* never squeeze the logo */
     font-size: 15px;
     font-weight: 600;
     letter-spacing: -0.3px;
@@ -1094,6 +1097,7 @@
     transition: background 120ms;
     text-decoration: none;
     display: inline-block;
+    white-space: nowrap;
   }
 
   .nav-link:hover { background: var(--c-glass-dark); }
@@ -1168,8 +1172,13 @@
   .stat-item { padding: 28px 32px; }
 }
 
-@media (max-width: 560px) {
+/* The full link row needs ~975px; below that it would wrap, so switch to
+   the hamburger menu (see SiteNav.astro). */
+@media (max-width: 1000px) {
   .nav-links { display: none; }
+}
+
+@media (max-width: 560px) {
   .team-grid { grid-template-columns: 1fr 1fr; }
   .stats-strip { flex-direction: column; }
   .stat-item { border-right: none; }
