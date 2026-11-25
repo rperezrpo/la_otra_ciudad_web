@@ -1,0 +1,256 @@
+---
+// /sostenibilidad — layout propio: sin PageHero (ni banner, ni eyebrow, ni
+// subtítulo). Hero monocolor en el color de página, párrafo legal y galería
+// de informes (Sanity "informe") que se abren en un visor de PDF.
+import BaseLayout from '../layout/BaseLayout.astro';
+import { type Lang } from '../../i18n/ui';
+import { sostenibilidadContent } from '../../i18n/content/sostenibilidad';
+import { getInformes } from '../../lib/sanity';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const c = sostenibilidadContent[lang];
+const informes = await getInformes();
+---
+
+<BaseLayout
+  title={c.metaTitle}
+  description={c.metaDescription}
+  pageColor="aguamarina"
+>
+
+  <!-- Toda la página es el hero: degradado tonal del color de página
+       (--page-accent-gradient) con un velo oscuro para que el texto blanco se lea. -->
+  <div class="sost-page">
+    <div class="sost-inner">
+      <h1 class="page-hero-title sost-title">{c.title}</h1>
+      <div class="sost-intro">
+        {c.intro.map((p) => <p>{p}</p>)}
+      </div>
+
+    {informes.length > 0 ? (
+      <div class="card-grid-3">
+        {informes.map((r) => (
+          <button
+            type="button"
+            class="card sost-card"
+            data-pdf={r.fileUrl}
+            data-download={r.downloadUrl}
+            data-title={c.cardTitle(r.year)}
+          >
+            {r.cover ? (
+              <img src={r.cover} alt="" loading="lazy" class="sost-cover" />
+            ) : (
+              <div class="img-placeholder sost-cover"><span>{r.year}</span></div>
+            )}
+            <div class="card-body">
+              <div class="card-tag">{c.cardTag}</div>
+              <div class="card-title">{c.cardTitle(r.year)}</div>
+              <div class="sost-card-action">{c.cardAction} →</div>
+            </div>
+          </button>
+        ))}
+      </div>
+    ) : (
+      <p class="sost-empty">{c.empty}</p>
+    )}
+    </div>
+  </div>
+
+  <!-- Visor de PDF: usa el visor nativo del navegador dentro de un <dialog>. -->
+  <dialog id="pdf-viewer" class="sost-viewer" aria-labelledby="pdf-viewer-title">
+    <div class="sost-viewer-bar">
+      <span id="pdf-viewer-title" class="sost-viewer-title"></span>
+      <div class="sost-viewer-actions">
+        <a id="pdf-viewer-open" class="btn btn-outline sost-viewer-btn" target="_blank" rel="noopener">{c.viewerOpen}</a>
+        <a id="pdf-viewer-download" class="btn btn-black sost-viewer-btn">{c.viewerDownload}</a>
+        <button type="button" class="sost-viewer-close" data-close aria-label={c.viewerClose}>×</button>
+      </div>
+    </div>
+    <object id="pdf-viewer-frame" type="application/pdf" class="sost-viewer-frame">
+      <p class="sost-viewer-fallback">{c.viewerFallback}</p>
+    </object>
+  </dialog>
+
+</BaseLayout>
+
+<script>
+  const dialog = document.getElementById('pdf-viewer') as HTMLDialogElement | null;
+  const frame = document.getElementById('pdf-viewer-frame') as HTMLObjectElement | null;
+  const title = document.getElementById('pdf-viewer-title');
+  const openLink = document.getElementById('pdf-viewer-open') as HTMLAnchorElement | null;
+  const downloadLink = document.getElementById('pdf-viewer-download') as HTMLAnchorElement | null;
+
+  // Phones (Android Chrome in particular) can't render PDFs inline: open the
+  // file directly instead of showing an empty viewer.
+  const canInline = (navigator as any).pdfViewerEnabled !== false && !window.matchMedia('(max-width: 768px)').matches;
+
+  document.querySelectorAll<HTMLButtonElement>('.sost-card').forEach((card) => {
+    card.addEventListener('click', () => {
+      const { pdf = '', download = '', title: t = '' } = card.dataset;
+      if (!dialog || !frame || !canInline) {
+        window.open(pdf, '_blank', 'noopener');
+        return;
+      }
+      // <object> only loads its data when (re)inserted, so swap a fresh clone.
+      const fresh = frame.cloneNode(true) as HTMLObjectElement;
+      fresh.data = pdf;
+      frame.replaceWith(fresh);
+      if (title) title.textContent = t;
+      if (openLink) openLink.href = pdf;
+      if (downloadLink) downloadLink.href = download;
+      dialog.showModal();
+    });
+  });
+
+  dialog?.addEventListener('click', (e) => {
+    // Close on the × button or on a click on the backdrop.
+    if ((e.target as HTMLElement).closest('[data-close]') || e.target === dialog) dialog.close();
+  });
+</script>
+
+<style>
+  .sost-page {
+    /* Same veil PullQuote puts over the page gradient, so white text passes contrast. */
+    background-image: linear-gradient(rgba(26, 20, 16, 0.35), rgba(26, 20, 16, 0.35)), var(--page-accent-gradient);
+    min-height: 100vh;
+  }
+
+  .sost-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 96px 48px 120px;
+  }
+
+  .sost-title {
+    color: #fff;
+    margin-bottom: 32px;
+  }
+
+  .sost-intro {
+    max-width: 680px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 72px;
+  }
+
+  .sost-intro p,
+  .sost-empty {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.88);
+  }
+
+  .sost-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .sost-card:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: 3px;
+  }
+
+  .sost-cover {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    object-position: top;
+    display: block;
+  }
+
+  .sost-card-action {
+    margin-top: 6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--c-aguamarina-dark);
+  }
+
+  .sost-viewer {
+    width: min(1100px, calc(100vw - 32px));
+    height: calc(100vh - 48px);
+    max-width: none;
+    max-height: none;
+    margin: auto; /* the global reset zeroes the UA margin that centers <dialog> */
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--c-white-pure);
+  }
+
+  .sost-viewer[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sost-viewer::backdrop {
+    background: rgba(26, 20, 16, 0.75);
+  }
+
+  .sost-viewer-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(26, 20, 16, 0.1);
+  }
+
+  .sost-viewer-title {
+    font-weight: 600;
+    color: var(--c-black);
+  }
+
+  .sost-viewer-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sost-viewer-btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  .sost-viewer-close {
+    width: 36px;
+    height: 36px;
+    border: 0;
+    background: transparent;
+    font-size: 28px;
+    line-height: 1;
+    color: var(--c-black);
+    cursor: pointer;
+  }
+
+  .sost-viewer-frame {
+    flex: 1;
+    width: 100%;
+    border: 0;
+  }
+
+  .sost-viewer-fallback {
+    padding: 24px;
+  }
+
+  @media (max-width: 768px) {
+    .sost-inner { padding: 64px 24px 80px; }
+    .sost-intro { margin-bottom: 48px; }
+    .sost-intro p, .sost-empty { font-size: 16px; }
+  }
+</style>

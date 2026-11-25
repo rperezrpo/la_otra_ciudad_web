@@ -43,6 +43,7 @@ export const ui = {
 
     'footer.organizacion': 'Organización',
     'footer.involucrate': 'Involúcrate',
+    'footer.sostenibilidad': 'Informes de Sostenibilidad',
     'footer.tagline': 'Co-creando ciudades más sostenibles, justas y saludables para Colombia y el mundo',
     'footer.copyright': '© 2026 Corporación La Otra Ciudad · Medellín, Colombia',
 
@@ -81,6 +82,7 @@ export const ui = {
 
     'footer.organizacion': 'Organisation',
     'footer.involucrate': 'Get involved',
+    'footer.sostenibilidad': 'Sustainability Reports',
     'footer.tagline': 'Co-creating more sustainable, fair and healthy cities for Colombia and the world',
     'footer.copyright': '© 2026 Corporación La Otra Ciudad · Medellín, Colombia',
 
