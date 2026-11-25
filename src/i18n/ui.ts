@@ -35,7 +35,7 @@ export const ui = {
     'nav.metodologia': 'Metodología',
     'nav.servicios': 'Servicios',
     'nav.contacto': 'Contacto',
-    'nav.donar': 'Donar ↗',
+    'nav.donar': 'Donar',
     'nav.donarAria': 'Donar',
     'nav.abrirMenu': 'Abrir menú',
     'nav.cerrarMenu': 'Cerrar menú',
@@ -43,7 +43,7 @@ export const ui = {
 
     'footer.organizacion': 'Organización',
     'footer.involucrate': 'Involúcrate',
-    'footer.tagline': 'Co-creando ciudades más justas, sostenibles y saludables en Colombia.',
+    'footer.tagline': 'Co-creando ciudades más sostenibles, justas y saludables para Colombia y el mundo',
     'footer.copyright': '© 2026 Corporación La Otra Ciudad · Medellín, Colombia',
 
     'project.todos': 'Todos',
@@ -73,7 +73,7 @@ export const ui = {
     'nav.metodologia': 'Methodology',
     'nav.servicios': 'Services',
     'nav.contacto': 'Contact',
-    'nav.donar': 'Donate ↗',
+    'nav.donar': 'Donate',
     'nav.donarAria': 'Donate',
     'nav.abrirMenu': 'Open menu',
     'nav.cerrarMenu': 'Close menu',
@@ -81,7 +81,7 @@ export const ui = {
 
     'footer.organizacion': 'Organisation',
     'footer.involucrate': 'Get involved',
-    'footer.tagline': 'Co-creating fairer, more sustainable and healthier cities in Colombia.',
+    'footer.tagline': 'Co-creating more sustainable, fair and healthy cities for Colombia and the world',
     'footer.copyright': '© 2026 Corporación La Otra Ciudad · Medellín, Colombia',
 
     'project.todos': 'All',
