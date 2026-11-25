@@ -519,3 +519,30 @@ export async function getPerson(slug: string, locale: Lang = 'es'): Promise<Pers
     relatedProjects,
   }
 }
+
+// ─── Informes de sostenibilidad (/sostenibilidad) ────────────────────────────
+
+export interface InformeData {
+  year: number
+  cover: string
+  /** Sanity CDN URL of the PDF (opens in the viewer). */
+  fileUrl: string
+  /** Same file with ?dl= so the browser downloads it instead of opening it. */
+  downloadUrl: string
+}
+
+export async function getInformes(): Promise<InformeData[]> {
+  const data = await sanityClient.fetch(
+    `*[_type == "informe" && defined(file.asset)] | order(year desc){
+      year, cover, "fileUrl": file.asset->url
+    }`
+  )
+  return data
+    .filter((r: any) => r.fileUrl)
+    .map((r: any) => ({
+      year: r.year,
+      cover: img(r.cover, 700),
+      fileUrl: r.fileUrl,
+      downloadUrl: `${r.fileUrl}?dl=${encodeURIComponent(`la-otra-ciudad-informe-sostenibilidad-${r.year ?? ''}.pdf`)}`,
+    }))
+}

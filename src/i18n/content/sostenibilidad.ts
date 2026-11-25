@@ -1,0 +1,36 @@
+export const sostenibilidadContent = {
+  es: {
+    metaTitle: 'Informes de sostenibilidad',
+    metaDescription: 'Informes anuales de sostenibilidad y rendimiento de la Corporación La Otra Ciudad, en cumplimiento del Régimen Tributario Especial.',
+    title: 'Informes de sostenibilidad',
+    intro: [
+      'La Corporación La Otra Ciudad es una entidad sin ánimo de lucro identificada con el NIT 901.889.218. La organización se encuentra registrada debidamente ante la Cámara de Comercio de Medellín, la Gobernación de Antioquia y la DIAN.',
+      'Dando cumplimiento a las obligaciones del Régimen Tributario Especial, nos permitimos dar cuenta de los informes anuales de sostenibilidad y rendimiento.',
+    ],
+    cardTag: 'Informe anual',
+    cardTitle: (year: number) => `Informe ${year}`,
+    cardAction: 'Ver PDF',
+    empty: 'En este momento no hay ningún reporte de sostenibilidad disponible. Pronto publicaremos el reporte 2026.',
+    viewerDownload: 'Descargar',
+    viewerOpen: 'Abrir en pestaña nueva',
+    viewerClose: 'Cerrar',
+    viewerFallback: 'Tu navegador no puede mostrar el PDF aquí.',
+  },
+  en: {
+    metaTitle: 'Sustainability reports',
+    metaDescription: 'Annual sustainability and performance reports from Corporación La Otra Ciudad, in compliance with Colombia’s Special Tax Regime.',
+    title: 'Sustainability reports',
+    intro: [
+      'Corporación La Otra Ciudad is a non-profit organisation identified with tax ID (NIT) 901.889.218. The organisation is duly registered with the Medellín Chamber of Commerce, the Government of Antioquia and the DIAN (Colombian tax authority).',
+      'In compliance with the obligations of the Special Tax Regime (Régimen Tributario Especial), we hereby present our annual sustainability and performance reports.',
+    ],
+    cardTag: 'Annual report',
+    cardTitle: (year: number) => `Report ${year}`,
+    cardAction: 'View PDF',
+    empty: 'There are no sustainability reports available at the moment. We will publish the 2026 report soon.',
+    viewerDownload: 'Download',
+    viewerOpen: 'Open in new tab',
+    viewerClose: 'Close',
+    viewerFallback: 'Your browser can’t display the PDF here.',
+  },
+} as const;
