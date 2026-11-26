@@ -344,7 +344,10 @@ const orgSchema = {
       letter-spacing: -2px;
       color: var(--c-black);
       text-align: center;
-      max-width: 11ch;
+      /* As wide as its longest word, so a long word like "Transformaciones"
+         can't overflow the box and push the line off centre. */
+      width: min-content;
+      max-width: 100%;
       margin: 0 auto;
     }
     /* Phones: the cards scroll right over the title, so soften it. */
