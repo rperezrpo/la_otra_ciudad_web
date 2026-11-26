@@ -49,7 +49,7 @@ function isActive(href: string) {
   <a href={l('/')} class="nav-brand">
     {overlay && (
       <img
-        src="/images/logo/logo_completo_horizontal_color_letraBlanca.svg"
+        src="/images/logo/logo_sinBordes_horizontal_color_letraBlanca.svg"
         alt="La Otra Ciudad"
         class="nav-logo-light"
       />
@@ -164,17 +164,18 @@ function isActive(href: string) {
      while the mobile menu is open. */
   .site-nav--overlay {
     margin-bottom: -64px;
-    transition: background-color 250ms ease, border-color 250ms ease, transform 250ms ease;
+    transition: background-color 250ms ease, border-color 250ms ease;
   }
-  /* Over the hero the bar floats a little lower, clear of the window edge.
-     (A transform, not padding, so the page layout doesn't shift on switch.) */
+  /* Same geometry as the solid bar: only colours change on the switch, so
+     nothing appears to move. */
   .site-nav--overlay.is-transparent {
     background: transparent;
     border-bottom-color: transparent;
-    transform: translateY(16px);
   }
 
-  .nav-logo-light { display: none; height: 40px; width: auto; }  /* its artwork has extra margin, hence taller */
+  /* White twin of the dark logo (same file family and proportions), same
+     height, so the two swap in place. */
+  .nav-logo-light { display: none; height: 28px; width: auto; }
   .is-transparent .nav-logo-light { display: block; }
   .is-transparent .nav-logo-dark  { display: none; }
 
