@@ -353,7 +353,9 @@ const orgSchema = {
     }
 
     /* Layer 2: the cards. They start one screen (+ a short pause) below the
-       section top, so the title shows alone first; the same after the last. */
+       section top, so the title shows alone first. At the bottom there is
+       only room for the button: the section (and its sticky layers) ends just
+       as the button settles below the last card. */
     .pinned-cards {
       position: relative;
       z-index: 1;
@@ -362,7 +364,7 @@ const orgSchema = {
       padding:
         calc(var(--pinned-h) + var(--pinned-pause))
         48px
-        calc(var(--pinned-h) + var(--pinned-pause));
+        calc(40px + 46px + 40px);   /* button inset + button + gap */
       display: flex;
       flex-direction: column;
       gap: 4svh;
