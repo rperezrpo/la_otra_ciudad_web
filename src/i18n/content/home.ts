@@ -36,7 +36,7 @@ export const homeContent = {
 
     featuredTitle: 'Transformaciones recientes',
     featuredVerTodos: 'Todos los proyectos',
-    donarTitle: 'Tu donación construye ciudad',
+    donarTitle: 'Mejoremos juntos nuestra ciudad',
     donarText: 'Cada aporte, por pequeño que sea, llega directamente a nuestros programas comunitarios.',
   },
   en: {
@@ -67,7 +67,7 @@ export const homeContent = {
 
     featuredTitle: 'Recent transformations',
     featuredVerTodos: 'All projects',
-    donarTitle: 'Your donation builds the city',
+    donarTitle: 'Join us in building better cities',
     donarText: 'Every contribution, however small, goes directly to our community programmes.',
   },
 } as const;
