@@ -122,7 +122,10 @@ const columns = [
   /* Phones: columns stack, so a tighter gap between them, and taller tap
      targets on the links (same look, more padding, less list gap). */
   @media (max-width: 560px) {
-    .footer-top { gap: 40px; }
+    /* Either all four fit on one row (above) or everything stacks in one
+       column: never a half-wrapped 2 + 1 layout. */
+    .footer-top { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; }
+    .footer-top > * { min-width: 0 !important; }
     .footer-links { gap: 0; }
     .footer-link {
       display: inline-block;
