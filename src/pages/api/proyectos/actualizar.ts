@@ -125,14 +125,38 @@ export const POST: APIRoute = async ({ request }) => {
       set.heroImage = { _type: 'image', asset: uploaded.asset };
     }
 
-    // 6. Gallery: keep the existing images the editor didn't remove, then
-    //    append any newly uploaded ones.
-    const keepKeys = new Set(form.getAll('keepGallery').filter((k): k is string => typeof k === 'string'));
-    const kept = (existing.gallery ?? []).filter((g) => keepKeys.has(g._key));
+    // 6. Gallery. The editor sends the final order as `galleryOrder` tokens:
+    //    `k:<key>` for an existing image, `n:<i>` for the i-th new file. An
+    //    image left out of the list was removed. `galleryOrdered` marks the
+    //    request as using this scheme, so an empty list empties the gallery.
     const newFiles = form.getAll('galleryNew').filter((f): f is File => f instanceof File && f.size > 0);
-    const added = [];
-    for (const file of newFiles) added.push(await uploadImage(file));
-    set.gallery = [...kept, ...added];
+    const uploaded = [];
+    for (const file of newFiles) uploaded.push(await uploadImage(file));
+
+    if (form.get('galleryOrdered') === '1') {
+      const byKey = new Map((existing.gallery ?? []).map((g) => [g._key, g]));
+      const used = new Set<string>();
+      const gallery = [];
+      for (const token of form.getAll('galleryOrder')) {
+        if (typeof token !== 'string') continue;
+        const item = token.startsWith('k:')
+          ? byKey.get(token.slice(2))
+          : token.startsWith('n:')
+            ? uploaded[Number(token.slice(2))]
+            : undefined;
+        if (item && !used.has(item._key)) {
+          used.add(item._key);
+          gallery.push(item);
+        }
+      }
+      set.gallery = gallery;
+    } else {
+      // Older editor page (still open in someone's browser): keep the images
+      // that weren't unticked, then append the new ones.
+      const keepKeys = new Set(form.getAll('keepGallery').filter((k): k is string => typeof k === 'string'));
+      const kept = (existing.gallery ?? []).filter((g) => keepKeys.has(g._key));
+      set.gallery = [...kept, ...uploaded];
+    }
   } catch (err) {
     if (err instanceof Response) return json({ error: await err.text() }, err.status);
     console.error('Image upload failed:', err);

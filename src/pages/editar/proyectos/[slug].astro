@@ -12,6 +12,9 @@ if (!email) return Astro.redirect('/editar');
 
 const isEditor = await isProjectEditor(email);
 const project = isEditor && slug ? await getProjectForEdit(slug) : null;
+// After a successful save the page reloads with ?guardado=1, so the gallery
+// shows what is really stored (new photos with their real keys).
+const justSaved = Astro.url.searchParams.has('guardado');
 ---
 
 <BaseLayout title="Editar proyecto" description="Edición de proyecto." pageColor="cobalto">
@@ -151,29 +154,30 @@ const project = isEditor && slug ? await getProjectForEdit(slug) : null;
 
           <div class="form-group">
             <label class="form-label">Galería</label>
-            {project.gallery.length > 0 ? (
-              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; margin-bottom: 12px;">
-                {project.gallery.map((g) => (
-                  <label style="position: relative; cursor: pointer; display: block;">
-                    <img src={g.url} alt="" style="width: 100%; height: 90px; object-fit: cover; border-radius: 6px; display: block;" />
-                    <span style="display: flex; align-items: center; gap: 6px; font-size: 12px; margin-top: 4px;">
-                      <input type="checkbox" name="keepGallery" value={g.key} checked /> Mantener
-                    </span>
-                  </label>
-                ))}
-              </div>
-            ) : (
-              <p style="font-size: 14px; color: var(--fg3); margin-bottom: 10px;">No hay imágenes en la galería.</p>
-            )}
-            <input class="form-input" type="file" name="galleryNew" accept="image/jpeg,image/png,image/webp" multiple />
+            <div id="gallery-grid" class="gallery-edit">
+              {project.gallery.map((g) => (
+                <div class="gallery-edit-item" data-token={`k:${g.key}`}>
+                  <img src={g.url} alt="" draggable="false" />
+                  <button type="button" class="gallery-edit-remove" aria-label="Quitar imagen" title="Quitar">×</button>
+                </div>
+              ))}
+            </div>
+            <p id="gallery-empty" hidden={project.gallery.length > 0} style="font-size: 14px; color: var(--fg3); margin-bottom: 10px;">
+              No hay imágenes en la galería.
+            </p>
+            <input type="hidden" name="galleryOrdered" value="1" />
+            <input class="form-input" type="file" id="gallery-picker" accept="image/jpeg,image/png,image/webp" multiple />
             <p style="font-size: 13px; color: var(--fg3); margin-top: 6px;">
-              Desmarca "Mantener" para quitar una imagen. Selecciona archivos para agregar nuevas.
-              Cada guardado admite hasta 4 MB en total: si subes varias fotos, hazlo en tandas.
+              Arrastra las imágenes para ordenarlas: la primera es la primera en la web. Las nuevas
+              se añaden al final (ordenadas por nombre de archivo) y puedes moverlas antes de guardar.
+              Usa × para quitar una. Cada guardado admite hasta 4 MB de fotos nuevas: si son muchas, súbelas en tandas.
             </p>
           </div>
 
           <button type="submit" class="btn-accent" id="project-submit" style="padding: 14px 28px;">Guardar cambios</button>
-          <p id="project-status" role="status" aria-live="polite" style="display: none; margin-top: 16px; font-size: 15px; line-height: 1.5;"></p>
+          <p id="project-status" role="status" aria-live="polite" style={`display: ${justSaved ? 'block' : 'none'}; margin-top: 16px; font-size: 15px; line-height: 1.5; color: var(--fg2);`}>
+            {justSaved && '¡Listo! Los cambios se guardaron. Aparecerán en la web en el próximo despliegue.'}
+          </p>
         </form>
       </div>
     )}
@@ -181,6 +185,56 @@ const project = isEditor && slug ? await getProjectForEdit(slug) : null;
 </BaseLayout>
 
 <style>
+  .gallery-edit {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .gallery-edit-item {
+    position: relative;
+    cursor: grab;
+    border-radius: 6px;
+    touch-action: none; /* let SortableJS handle touch drags */
+  }
+  .gallery-edit-item img {
+    width: 100%;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 6px;
+    display: block;
+    user-select: none;
+  }
+  .gallery-edit-item.is-new img { outline: 2px dashed var(--page-accent, var(--c-cobalto)); outline-offset: 2px; }
+  .gallery-edit-item.is-new::after {
+    content: 'Nueva';
+    position: absolute;
+    left: 6px;
+    bottom: 6px;
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 999px;
+    background: var(--page-accent, var(--c-cobalto));
+    color: #fff;
+  }
+  .gallery-edit-item.is-ghost { opacity: 0.35; }
+  .gallery-edit-item.is-chosen { cursor: grabbing; }
+  .gallery-edit-remove {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 24px;
+    height: 24px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(26, 20, 16, 0.75);
+    color: #fff;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .gallery-edit-remove:hover { background: #b3261e; }
+
   .link-button {
     background: none; border: none; padding: 0; font: inherit;
     color: var(--page-accent, var(--c-cobalto)); text-decoration: underline; cursor: pointer;
@@ -188,7 +242,95 @@ const project = isEditor && slug ? await getProjectForEdit(slug) : null;
 </style>
 
 <script>
+  import Sortable from 'sortablejs';
   import { checkUploadSize } from '../../../lib/uploadLimits';
+
+  // ── Gallery: drag to reorder, × to remove, new photos previewed in place ──
+  // Each tile carries a token: `k:<key>` for a stored image, `n:<id>` for a
+  // file picked in this session. On submit the tiles' order becomes the
+  // gallery's order (see /api/proyectos/actualizar).
+  const grid = document.getElementById('gallery-grid');
+  const picker = document.getElementById('gallery-picker') as HTMLInputElement | null;
+  const empty = document.getElementById('gallery-empty');
+  const pendingFiles = new Map<string, File>();
+  let nextId = 0;
+
+  const updateEmpty = () => {
+    if (grid && empty) empty.hidden = grid.children.length > 0;
+  };
+
+  if (grid && picker) {
+    Sortable.create(grid, {
+      animation: 150,
+      ghostClass: 'is-ghost',
+      chosenClass: 'is-chosen',
+      filter: '.gallery-edit-remove', // the × button clicks, it doesn't drag
+      preventOnFilter: false,
+    });
+
+    grid.addEventListener('click', (e) => {
+      const btn = (e.target as Element).closest('.gallery-edit-remove');
+      const item = btn?.closest<HTMLElement>('.gallery-edit-item');
+      if (!item) return;
+      const token = item.dataset.token ?? '';
+      if (token.startsWith('n:')) {
+        pendingFiles.delete(token.slice(2));
+        const img = item.querySelector('img');
+        if (img) URL.revokeObjectURL(img.src);
+      }
+      item.remove();
+      updateEmpty();
+    });
+
+    picker.addEventListener('change', () => {
+      // The OS file dialog returns files in no reliable order, so sort them
+      // by name ("foto 2" before "foto 10"); the editor can drag from there.
+      const files = [...(picker.files ?? [])].sort((a, b) =>
+        a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' })
+      );
+      for (const file of files) {
+        const id = String(nextId++);
+        pendingFiles.set(id, file);
+        const item = document.createElement('div');
+        item.className = 'gallery-edit-item is-new';
+        item.dataset.token = `n:${id}`;
+        item.title = file.name;
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(file);
+        img.alt = '';
+        img.draggable = false;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'gallery-edit-remove';
+        btn.setAttribute('aria-label', 'Quitar imagen');
+        btn.title = 'Quitar';
+        btn.textContent = '×';
+        item.append(img, btn);
+        grid.append(item);
+      }
+      picker.value = ''; // so the same files can be picked again
+      updateEmpty();
+    });
+  }
+
+  /** Appends the gallery, in on-screen order, to the outgoing form data. */
+  function appendGallery(payload: FormData): File[] {
+    const files: File[] = [];
+    if (!grid) return files;
+    for (const item of grid.querySelectorAll<HTMLElement>('.gallery-edit-item')) {
+      const token = item.dataset.token ?? '';
+      if (token.startsWith('k:')) {
+        payload.append('galleryOrder', token);
+      } else if (token.startsWith('n:')) {
+        const file = pendingFiles.get(token.slice(2));
+        if (!file) continue;
+        payload.append('galleryOrder', `n:${files.length}`);
+        payload.append('galleryNew', file);
+        files.push(file);
+      }
+    }
+    return files;
+  }
 
   const form = document.getElementById('project-form') as HTMLFormElement | null;
   const status = document.getElementById('project-status') as HTMLParagraphElement | null;
@@ -207,10 +349,8 @@ const project = isEditor && slug ? await getProjectForEdit(slug) : null;
       // Vercel rejects oversized requests before they reach the API, so the
       // only way to explain the problem is to catch it here.
       const payload = new FormData(form);
-      const tooLarge = checkUploadSize([
-        payload.get('heroImage') as File | null,
-        ...(payload.getAll('galleryNew') as File[]),
-      ]);
+      const newGalleryFiles = appendGallery(payload);
+      const tooLarge = checkUploadSize([payload.get('heroImage') as File | null, ...newGalleryFiles]);
       if (tooLarge) {
         show(tooLarge, false);
         return;
@@ -225,8 +365,10 @@ const project = isEditor && slug ? await getProjectForEdit(slug) : null;
         const res = await fetch('/api/proyectos/actualizar', { method: 'POST', body: payload });
         const data = await res.json().catch(() => ({}));
         if (res.ok) {
-          show('¡Listo! Los cambios se guardaron. Aparecerán en la web en el próximo despliegue.', true);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          // Reload so the gallery shows what was stored (the new photos get
+          // real keys); the page shows the confirmation from ?guardado=1.
+          window.location.replace(`${window.location.pathname}?guardado=1#project-status`);
+          return;
         } else {
           show(data.error ?? 'No pudimos guardar los cambios. Intenta de nuevo.', false);
         }
