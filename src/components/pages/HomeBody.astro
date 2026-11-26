@@ -5,7 +5,7 @@ import FlowerDiagram from '../FlowerDiagram.astro';
 import { getFeaturedProjects } from '../../lib/sanity';
 import { useTranslations, localizePath, type Lang } from '../../i18n/ui';
 import { homeContent } from '../../i18n/content/home';
-import { Image, getImage } from 'astro:assets';
+import { Image } from 'astro:assets';
 import sanRafael2 from '../../../public/images/projects/fotos_intervenciones/san_rafael_2.jpg';
 // Hero slideshow, in this order. Later these can come from Sanity.
 import slide1 from '../../../public/images/banners/paisajes_regenerativos.jpg';
@@ -22,10 +22,6 @@ const heroSlides = [slide1, slide2, slide3, slide4, slide5, slide6, slide7, slid
 // Pinned projects section: shape of each tile, cycled. Tiles alternate
 // flush left / flush right.
 const tileShapes: TileShape[] = ['landscape', 'square', 'wide', 'square', 'landscape'];
-
-// Frosted backdrop of the pinned projects section — blurred, so a small file is enough.
-import pinnedBgSrc from '../../../public/images/projects/alto_flores/alto_flores4.jpg';
-const pinnedBg = await getImage({ src: pinnedBgSrc, width: 960, format: 'webp' });
 
 interface Props {
   lang: Lang;
@@ -276,7 +272,7 @@ const orgSchema = {
                             so the button stays above the cards
        (A sticky element is its own stacking context, so the button can't live
        in a lower layer and still sit above the cards.) -->
-  <section class="pinned" aria-labelledby="featured-title" style={`--pinned-img: url('${pinnedBg.src}');`}>
+  <section class="pinned" aria-labelledby="featured-title">
     <div class="pinned-bg">
       <h2 id="featured-title" class="pinned-title">{c.featuredTitle}</h2>
     </div>
@@ -312,11 +308,23 @@ const orgSchema = {
       /* Title-only scroll before the first card / after the last one. */
       --pinned-pause: 6svh;
       position: relative;
-      background: var(--c-white);
+      /* Textured backdrop painted on the section itself, not on the sticky
+         layer: a one-screen sticky layer left bare strips on phones whenever
+         the browser bar resized the viewport. Film grain over soft washes of
+         the brand colours, repeating down the section as it scrolls. */
+      background-color: var(--c-white);
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.10 0 0 0 0 0.08 0 0 0 0 0.06 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+        /* Each wash fades out fully inside its 120svh tile (centre ± 30%),
+           so the repeat leaves no seams. */
+        radial-gradient(ellipse 75% 30% at 12% 32%, rgba(96, 157, 146, 0.30), transparent 100%),
+        radial-gradient(ellipse 65% 26% at 90% 52%, rgba(230, 34, 79, 0.14), transparent 100%),
+        radial-gradient(ellipse 70% 30% at 22% 69%, rgba(139, 92, 246, 0.16), transparent 100%);
+      background-size: 220px 220px, 100% 120svh, 100% 120svh, 100% 120svh;
+      background-repeat: repeat;
     }
 
-    /* Layer 1: frosted backdrop with the title centred, one screen tall,
-       stuck under the nav. */
+    /* Layer 1: the title centred in one screen, stuck under the nav. */
     .pinned-bg {
       position: sticky;
       top: 64px;
@@ -325,27 +333,6 @@ const orgSchema = {
       align-items: center;
       justify-content: center;
       padding: 0 24px;
-      overflow: hidden;
-      isolation: isolate;
-    }
-    /* Frosted glass: the photo, blurred and washed out... */
-    .pinned-bg::before {
-      content: '';
-      position: absolute;
-      inset: -40px;               /* hide the blur's soft edges */
-      z-index: -2;
-      background: var(--pinned-img) center / cover no-repeat;
-      filter: blur(18px) saturate(1.15);
-    }
-    /* ...under a translucent milky pane with a faint highlight. */
-    .pinned-bg::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      background:
-        linear-gradient(160deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 45%),
-        rgba(250, 247, 242, 0.62);
     }
 
     .pinned-title {
@@ -359,6 +346,10 @@ const orgSchema = {
       text-align: center;
       max-width: 11ch;
       margin: 0 auto;
+    }
+    /* Phones: the cards scroll right over the title, so soften it. */
+    @media (max-width: 560px) {
+      .pinned-title { opacity: 0.8; }
     }
 
     /* Layer 2: the cards. They start one screen (+ a short pause) below the
@@ -424,7 +415,7 @@ const orgSchema = {
   </style>
 
   <!-- ─── DONATE CTA ────────────────────────────────────────────────── -->
-  <div class="section-full" style="padding: 96px 48px; text-align: center;">
+  <div class="section-full" style="padding: 96px var(--gutter); text-align: center;">
     <h2 style="font-family: var(--font-display); font-variation-settings: var(--font-display-axes); font-size: clamp(36px, 5vw, 60px); font-weight: var(--font-display-weight); line-height: 1.1; letter-spacing: -1.2px; color: var(--c-black); margin: 0 auto 20px;">
       {c.donarTitle}
     </h2>

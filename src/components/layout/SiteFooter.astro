@@ -27,11 +27,11 @@ const columns = [
 ];
 ---
 
-<footer style="background: #1a1410; color: #fff; padding: 64px 48px 40px; font-family: var(--font-sans);">
+<footer style="background: #1a1410; color: #fff; padding: 64px var(--gutter) 40px; font-family: var(--font-sans);">
   <div style="max-width: 1100px; margin: 0 auto;">
 
     <!-- Top row: brand + columns -->
-    <div style="display: flex; gap: 64px; margin-bottom: 64px; flex-wrap: wrap;">
+    <div class="footer-top" style="margin-bottom: 64px;">
 
       <!-- Brand column -->
       <div style="flex: 1.5; min-width: 240px;">
@@ -71,14 +71,15 @@ const columns = [
               {col.lead.label}
             </a>
           )}
-          <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.54px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 16px;">
+          <div style="font-family: var(--font-mono); font-size: var(--fs-11); letter-spacing: 0.54px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 16px;">
             {col.heading}
           </div>
-          <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px;">
+          <ul class="footer-links" style="list-style: none; display: flex; flex-direction: column;">
             {col.links.map((link) => (
               <li>
                 <a
                   href={link.href}
+                  class="footer-link"
                   style="font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.65); letter-spacing: -0.1px; text-decoration: none; transition: color 150ms;"
                   onmouseover="this.style.color='#fff'"
                   onmouseout="this.style.color='rgba(255,255,255,0.65)'"
@@ -97,10 +98,30 @@ const columns = [
       <span style="font-size: 13px; color: rgba(255,255,255,0.3);">
         {t('footer.copyright')}
       </span>
-      <span style="font-family: var(--font-mono); font-size: 11px; color: rgba(255,255,255,0.25); letter-spacing: 0.4px;">
+      <span style="font-family: var(--font-mono); font-size: var(--fs-11); color: rgba(255,255,255,0.25); letter-spacing: 0.4px;">
         NIT 901.889.218
       </span>
     </div>
 
   </div>
 </footer>
+
+<style>
+  .footer-top {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 64px;
+  }
+  .footer-links { gap: 10px; }
+
+  /* Phones: columns stack, so a tighter gap between them, and taller tap
+     targets on the links (same look, more padding, less list gap). */
+  @media (max-width: 560px) {
+    .footer-top { gap: 40px; }
+    .footer-links { gap: 0; }
+    .footer-link {
+      display: inline-block;
+      padding: 7px 0;
+    }
+  }
+</style>

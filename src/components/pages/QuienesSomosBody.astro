@@ -60,7 +60,7 @@ const VALUE_COLORS = ['var(--c-aguamarina)', 'var(--c-rosado)', 'var(--c-violeta
           <a href="#nuestro-equipo" class="btn-outline">
             {c.historiaBtnEquipo}
           </a>
-          <a href={localizePath(lang, '/sustainability-reports')} class="btn-outline">
+          <a href={localizePath(lang, '/sostenibilidad')} class="btn-outline">
             {c.historiaBtnInforme}
           </a>
         </div>
@@ -69,7 +69,7 @@ const VALUE_COLORS = ['var(--c-aguamarina)', 'var(--c-rosado)', 'var(--c-violeta
   </div>
 
   <!-- ─── VALUES ────────────────────────────────────────────────────── -->
-  <div id="valores" class="section-full" style="background: linear-gradient(135deg, #e2611d 0%, #3b6bdc 100%); padding: 80px 48px;">
+  <div id="valores" class="section-full" style="background: linear-gradient(135deg, #e2611d 0%, #3b6bdc 100%); padding: 80px var(--gutter);">
     <div style="max-width: 1200px; margin: 0 auto;">
       <span class="eyebrow-light">{c.misionEyebrow}</span>
       <p style="font-family: var(--font-display); font-variation-settings: var(--font-display-axes); font-size: clamp(28px, 3.6vw, 46px); font-weight: var(--font-display-weight); line-height: 1.15; letter-spacing: -1px; color: #fff; max-width: 900px; margin: 0 0 64px;">
@@ -122,7 +122,7 @@ const VALUE_COLORS = ['var(--c-aguamarina)', 'var(--c-rosado)', 'var(--c-violeta
   </div>
 
   <!-- ─── ALLIES ────────────────────────────────────────────────────── -->
-  <div class="section-full allies-section" style="background: linear-gradient(135deg, #e2611d 0%, #3b6bdc 100%); padding: 64px 48px;">
+  <div class="section-full allies-section" style="background: linear-gradient(135deg, #e2611d 0%, #3b6bdc 100%); padding: 64px var(--gutter);">
     <div style="max-width: 1200px; margin: 0 auto;">
       <span class="eyebrow-light">{c.aliadosEyebrow}</span>
       <!-- EDIT: the list lives in src/data/aliados.ts -->

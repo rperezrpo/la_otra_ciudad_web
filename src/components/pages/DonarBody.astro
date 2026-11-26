@@ -75,8 +75,8 @@ const donationConfig = {
 
   <!-- ─── HERO ──────────────────────────────────────────────────────── -->
   <!-- Note: donar uses its own aguamarina hero, not PageHero — keeping it distinct intentionally -->
-  <div style="background: var(--c-aguamarina); padding: 80px 48px; text-align: center;">
-    <span style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: rgba(255,255,255,0.7); display: block; margin-bottom: 24px;">{c.heroEyebrow}</span>
+  <div style="background: var(--c-aguamarina); padding: 80px var(--gutter); text-align: center;">
+    <span style="font-family: var(--font-mono); font-size: var(--fs-11); letter-spacing: 0.6px; text-transform: uppercase; color: rgba(255,255,255,0.7); display: block; margin-bottom: 24px;">{c.heroEyebrow}</span>
     <h1 style="font-family: var(--font-display); font-variation-settings: var(--font-display-axes); font-size: clamp(40px, 6vw, 72px); font-weight: var(--font-display-weight); line-height: 1.0; letter-spacing: -1.5px; color: #fff; max-width: 640px; margin: 0 auto 20px;">
       {c.heroTitle}
     </h1>
@@ -97,7 +97,7 @@ const donationConfig = {
             style="width: 100%; max-width: 280px; border-radius: 8px; display: block;"
           />
         </div>
-        <p style="font-size: 11px; color: var(--fg3); text-align: center; font-family: var(--font-mono); letter-spacing: 0.6px; text-transform: uppercase; margin: 0;">
+        <p style="font-size: var(--fs-11); color: var(--fg3); text-align: center; font-family: var(--font-mono); letter-spacing: 0.6px; text-transform: uppercase; margin: 0;">
           {c.qrCaption}
         </p>
       </div>
@@ -112,7 +112,7 @@ const donationConfig = {
 
         <div style="background: var(--c-white-pure); border-radius: 14px; box-shadow: var(--shadow-sm); overflow: hidden;">
           {c.infoRows.map((row, i) => (
-            <div style={`display: flex; gap: 20px; padding: 20px 24px; ${i < c.infoRows.length - 1 ? 'border-bottom: 1px solid rgba(26,20,16,0.06);' : ''} align-items: flex-start;`}>
+            <div class="donar-info-row" style={`padding: 20px 24px; ${i < c.infoRows.length - 1 ? 'border-bottom: 1px solid rgba(26,20,16,0.06);' : ''} align-items: flex-start;`}>
               <div style="font-family: var(--font-display); font-variation-settings: var(--font-display-axes); font-size: 28px; font-weight: var(--font-display-weight); color: var(--c-aguamarina); white-space: nowrap; flex-shrink: 0; line-height: 1.1;">{row.stat}</div>
               <div style="font-size: 14px; font-weight: 300; line-height: 1.6; color: var(--fg2); padding-top: 3px;">{row.desc}</div>
             </div>
@@ -161,7 +161,7 @@ const donationConfig = {
 
       <!-- Impact indicator -->
       <div id="impact-box" style="margin-top: 20px; background: rgba(226,97,29,0.08); border: 1px solid rgba(226,97,29,0.2); border-radius: 8px; padding: 16px 20px;">
-        <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--c-orange); margin-bottom: 6px;">{c.tuImpacto}</div>
+        <div style="font-family: var(--font-mono); font-size: var(--fs-10); letter-spacing: 0.6px; text-transform: uppercase; color: var(--c-orange); margin-bottom: 6px;">{c.tuImpacto}</div>
         <div id="impact-text" style="font-size: 15px; font-weight: 400; line-height: 1.5; color: var(--c-black);">
           {IMPACTS[1]}
         </div>
@@ -183,7 +183,7 @@ const donationConfig = {
 
       <p id="fx-note" style="display: none; font-size: 12px; color: var(--fg2); text-align: center; margin-top: 12px; line-height: 1.5;"></p>
 
-      <p style="font-size: 11px; color: var(--fg3); text-align: center; margin-top: 14px; font-family: var(--font-mono); letter-spacing: 0.5px;">
+      <p style="font-size: var(--fs-11); color: var(--fg3); text-align: center; margin-top: 14px; font-family: var(--font-mono); letter-spacing: 0.5px;">
         {c.pagoSeguro}
       </p>
     </div>
@@ -330,3 +330,18 @@ const donationConfig = {
   buildAmountGrid();
   paintAmountButtons();
 </script>
+
+<style>
+  /* Promise rows: figure beside the text; stacked on phones, where the
+     side-by-side layout left the text a narrow column. */
+  .donar-info-row {
+    display: flex;
+    gap: 20px;
+  }
+  @media (max-width: 560px) {
+    .donar-info-row {
+      flex-direction: column;
+      gap: 6px;
+    }
+  }
+</style>
