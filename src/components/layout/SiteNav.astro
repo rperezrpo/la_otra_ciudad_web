@@ -312,12 +312,18 @@ function isActive(href: string) {
     z-index: 199;
     background: var(--c-white);
     border-bottom: 1px solid rgba(26, 20, 16, 0.10);
-    transform: translateY(-110%);
-    transition: transform 260ms cubic-bezier(0.4, 0, 0.2, 1);
+    /* Closed: lifted fully above the window (its own height + the 64px it
+       starts below the top) and hidden, so no sliver peeks out from under a
+       transparent nav. visibility flips only after the slide-up finishes. */
+    transform: translateY(calc(-100% - 64px));
+    visibility: hidden;
+    transition: transform 260ms cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 260ms;
     pointer-events: none;
   }
   .nav-drawer.is-open {
     transform: translateY(0);
+    visibility: visible;
+    transition: transform 260ms cubic-bezier(0.4, 0, 0.2, 1), visibility 0s;
     pointer-events: auto;
   }
   .nav-drawer-inner {
