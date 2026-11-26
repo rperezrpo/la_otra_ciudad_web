@@ -37,6 +37,7 @@
     "react-dom": "^19.2.6",
     "resend": "^6.12.4",
     "sanity": "^5.28.0",
+    "sortablejs": "^1.15.7",
     "styled-components": "^6.4.2",
     "tailwindcss": "^4.3.0"
   },
@@ -45,6 +46,7 @@
   },
   "devDependencies": {
     "@types/react": "^19.2.15",
-    "@types/react-dom": "^19.2.3"
+    "@types/react-dom": "^19.2.3",
+    "@types/sortablejs": "^1.15.9"
   }
 }
