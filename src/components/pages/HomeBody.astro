@@ -82,7 +82,7 @@ const orgSchema = {
     <div class="hero-shade" aria-hidden="true"></div>
 
     <div class="hero-content">
-      <h1 class="hero-title">{c.heroTitle}</h1>
+      <h1 class="hero-title" data-text={c.heroTitle}>{c.heroTitle}</h1>
     </div>
 
     <button class="hero-scroll-btn" onclick="document.getElementById('hero-next').scrollIntoView({behavior:'smooth'})" aria-label={c.heroScrollAria}>
