@@ -80,7 +80,7 @@ const clientes = [
 
   <!-- ─── CARDS DE SERVICIOS ────────────────────────────────────────────── -->
   <div class="section-full section-warm" style="padding: 64px 0 80px;">
-    <div style="max-width: 1200px; margin: 0 auto; padding: 0 48px;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 var(--gutter);">
       <div class="services-grid">
         {services.map((s) => (
           <a href={s.href} class="card service-card" style={`--svc-color: ${s.color};`}>
@@ -133,8 +133,8 @@ const clientes = [
   </div>
 
   <!-- ─── CTA CONTACTO ──────────────────────────────────────────────────── -->
-  <div class="section-full" style="background: var(--page-accent); padding: 72px 48px; text-align: center;">
-    <span style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: rgba(255,255,255,0.6);">
+  <div class="section-full" style="background: var(--page-accent); padding: 72px var(--gutter); text-align: center;">
+    <span style="font-family: var(--font-mono); font-size: var(--fs-11); letter-spacing: 0.6px; text-transform: uppercase; color: rgba(255,255,255,0.6);">
       {c.ctaEyebrow}
     </span>
     <h2 style="font-family: var(--font-display); font-variation-settings: var(--font-display-axes); font-size: clamp(32px, 4.5vw, 52px); font-weight: var(--font-display-weight); letter-spacing: -1px; line-height: 1.1; color: #fff; max-width: 640px; margin: 16px auto 24px;">
@@ -209,7 +209,7 @@ const clientes = [
 
   .service-card__label {
     font-family: var(--font-mono);
-    font-size: 10px;
+    font-size: var(--fs-10);
     letter-spacing: 0.55px;
     text-transform: uppercase;
     color: var(--svc-color);
@@ -279,7 +279,7 @@ const clientes = [
 
   .client-name {
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: var(--fs-11);
     letter-spacing: 0.3px;
     text-align: center;
     color: rgba(26, 20, 16, 0.55);

@@ -101,7 +101,7 @@ const ENFOQUE_COLORS = ['var(--c-rosado)', 'var(--c-orange)', 'var(--c-aguamarin
   </div>
 
   <!-- ─── TRANSVERSAL APPROACHES ────────────────────────────────────── -->
-  <div class="section-full section-dark-warm" style="padding: 80px 48px;">
+  <div class="section-full section-dark-warm" style="padding: 80px var(--gutter);">
     <div style="max-width: 1100px; margin: 0 auto;">
       <span class="eyebrow-light">{c.enfoquesEyebrow}</span>
       <h2 class="section-title-light" style="margin-top: 16px;">{c.enfoquesTitle}</h2>
@@ -337,8 +337,14 @@ const ENFOQUE_COLORS = ['var(--c-rosado)', 'var(--c-orange)', 'var(--c-aguamarin
       font-size: 15px;
     }
 
+    /* Accordion: the script moves the panel right under the tapped step,
+       and it stays hidden until a step is open. */
     .steps-panel {
-      margin-top: 20px;
+      margin: 0 0 16px;
+      min-height: 0;
+    }
+    .steps-panel:not(.has-step) {
+      display: none;
     }
   }
 </style>
@@ -349,8 +355,22 @@ const ENFOQUE_COLORS = ['var(--c-rosado)', 'var(--c-orange)', 'var(--c-aguamarin
   const panelInner = document.getElementById('steps-panel-inner') as HTMLElement;
   const placeholderText = panel.dataset.placeholder ?? '';
 
+  const timeline = document.querySelector('.steps-timeline') as HTMLElement;
+  // Phones (stacked steps): the panel opens under the tapped step, accordion
+  // style. Elsewhere it sits under the whole timeline.
+  const stacked = window.matchMedia('(max-width: 799px)');
+
   let activeNode: HTMLElement | null = null;
   let fadeTimeout: ReturnType<typeof setTimeout> | null = null;
+
+  function placePanel() {
+    if (stacked.matches && activeNode) activeNode.after(panel);
+    else if (panel.previousElementSibling !== timeline) timeline.after(panel);
+    panel.classList.toggle('has-step', activeNode !== null);
+  }
+  stacked.addEventListener('change', placePanel);
+  // Tapping the open text (e.g. to select it) shouldn't count as "outside".
+  panel.addEventListener('click', (e) => e.stopPropagation());
 
   function fadePanel(newContent: string, color: string) {
     if (fadeTimeout) clearTimeout(fadeTimeout);
@@ -407,6 +427,7 @@ const ENFOQUE_COLORS = ['var(--c-rosado)', 'var(--c-orange)', 'var(--c-aguamarin
         activeNode = node;
         showStep(node);
       }
+      placePanel();
     });
 
     // Keyboard navigation
@@ -431,6 +452,15 @@ const ENFOQUE_COLORS = ['var(--c-rosado)', 'var(--c-orange)', 'var(--c-aguamarin
       activeNode.classList.remove('active');
       activeNode = null;
       showDefault();
+      placePanel();
     }
   });
+
+  // Keyboard users toggle a step with Enter/Space, as with a tap.
+  nodes.forEach(node => node.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      node.click();
+    }
+  }));
 </script>

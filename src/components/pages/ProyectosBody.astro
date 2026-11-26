@@ -41,7 +41,7 @@ const STAT_COLORS = ['var(--c-orange)', 'var(--c-aguamarina)', 'var(--c-cobalto)
       {c.stats.map(([n, label], i) => (
         <div>
           <div style={`font-family: var(--font-sans); font-size: 40px; font-weight: 700; letter-spacing: -1.5px; color: ${STAT_COLORS[i % STAT_COLORS.length]};`}>{n}</div>
-          <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: var(--fg2); margin-top: 4px;">{label}</div>
+          <div style="font-family: var(--font-mono); font-size: var(--fs-10); letter-spacing: 0.5px; text-transform: uppercase; color: var(--fg2); margin-top: 4px;">{label}</div>
         </div>
       ))}
     </div>
@@ -77,7 +77,7 @@ const STAT_COLORS = ['var(--c-orange)', 'var(--c-aguamarina)', 'var(--c-cobalto)
   </div>
 
   <!-- ─── DONATE CTA ────────────────────────────────────────────────── -->
-  <div class="section-full section-warm" style="padding: 80px 48px; text-align: center;">
+  <div class="section-full section-warm" style="padding: 80px var(--gutter); text-align: center;">
     <span class="eyebrow">{c.ctaEyebrow}</span>
     <h2 class="section-title" style="margin: 0 auto; text-align: center;">{c.ctaTitle}</h2>
     <p style="font-size: 17px; font-weight: 300; color: var(--fg2); max-width: 440px; margin: 16px auto 32px; line-height: 1.6;">
