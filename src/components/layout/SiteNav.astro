@@ -472,7 +472,13 @@ function isActive(href: string) {
     width: 0.95em;
     height: 0.95em;
     vertical-align: -0.12em;
+    transition: color 150ms;
   }
+  /* Hover/focus: the heart turns rosado. */
+  .nav-cta:hover .nav-heart,
+  .nav-cta:focus-visible .nav-heart,
+  .nav-donar-btn:hover .nav-heart,
+  .nav-donar-btn:focus-visible .nav-heart { color: var(--c-rosado); }
   .nav-donar-btn .nav-heart { width: 17px; height: 17px; vertical-align: 0; }
 
   /* ─── SHOW HAMBURGER BELOW 1000px ──────────────────────────────────────── */
