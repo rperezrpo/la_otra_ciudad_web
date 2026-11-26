@@ -17,11 +17,15 @@ const columns = [
   },
   {
     heading: t('footer.involucrate'),
-    // Standalone link shown above the heading, in link style (no eyebrow group).
-    lead: { label: t('footer.sostenibilidad'), href: l('/sostenibilidad') },
     links: [
       { label: t('nav.contacto'),     href: l('/contacto') },
       { label: t('nav.donarAria'),    href: l('/donar') },
+    ],
+  },
+  {
+    heading: t('footer.transparencia'),
+    links: [
+      { label: t('footer.sostenibilidad'), href: l('/sostenibilidad') },
     ],
   },
 ];
@@ -61,16 +65,6 @@ const columns = [
       <!-- Nav columns -->
       {columns.map((col) => (
         <div style="flex: 1; min-width: 160px;">
-          {col.lead && (
-            <a
-              href={col.lead.href}
-              style="display: inline-block; margin-bottom: 28px; font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.65); letter-spacing: -0.1px; text-decoration: none; transition: color 150ms;"
-              onmouseover="this.style.color='#fff'"
-              onmouseout="this.style.color='rgba(255,255,255,0.65)'"
-            >
-              {col.lead.label}
-            </a>
-          )}
           <div style="font-family: var(--font-mono); font-size: var(--fs-11); letter-spacing: 0.54px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 16px;">
             {col.heading}
           </div>
