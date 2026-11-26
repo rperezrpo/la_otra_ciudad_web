@@ -108,6 +108,17 @@ const columns = [
   }
   .footer-links { gap: 10px; }
 
+  /* Above phone width: brand + every column on one row; as the window
+     narrows the gap between them shrinks instead of a column wrapping. */
+  @media (min-width: 561px) {
+    .footer-top {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr));
+      gap: clamp(24px, 4vw, 64px);
+    }
+    .footer-top > * { min-width: 0 !important; }   /* override the inline min-widths */
+  }
+
   /* Phones: columns stack, so a tighter gap between them, and taller tap
      targets on the links (same look, more padding, less list gap). */
   @media (max-width: 560px) {
