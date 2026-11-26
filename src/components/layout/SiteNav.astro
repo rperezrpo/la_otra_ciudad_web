@@ -151,7 +151,6 @@ function isActive(href: string) {
         {lang === 'es' ? 'English version' : 'Versión en español'}
       </a>
     )}
-    <a href={l('/donar')} class="nav-cta nav-drawer-cta">{t('nav.donar')} <svg class="nav-heart" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></a>
   </div>
 </div>
 <div class="nav-overlay" id="nav-overlay"></div>
@@ -384,13 +383,6 @@ function isActive(href: string) {
     font-weight: 500;
   }
 
-  .nav-drawer-cta {
-    margin-top: 8px;
-    text-align: center;
-    border-radius: 50px !important;
-    margin-left: 0;
-  }
-
   /* ─── OVERLAY ──────────────────────────────────────────────────────────── */
   .nav-overlay {
     display: none;
@@ -428,20 +420,24 @@ function isActive(href: string) {
     color: #fff;
   }
 
+  /* Language switch in the drawer: a pill like the Donar button (same font
+     and colour) but sized to its text. The bar always shows a Donar button,
+     so the drawer has none of its own. */
   .nav-drawer-lang {
-    display: block;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    color: rgba(26, 20, 16, 0.6);
+    align-self: flex-start;
+    margin-top: 16px;
+    padding: 9px 20px;
+    border-radius: 50px;
+    background: var(--c-aguamarina);
+    color: #fff;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.1px;
     text-decoration: none;
-    padding: 12px 16px;
-    border-radius: 10px;
-    margin-top: 4px;
-    transition: background 120ms, color 120ms;
+    transition: opacity 150ms;
   }
-  .nav-drawer-lang:hover { background: var(--c-glass-dark); color: var(--c-black); }
+  .nav-drawer-lang:hover { opacity: 0.85; }
 
   @media (max-width: 560px) {
     .nav-lang { display: none; }
