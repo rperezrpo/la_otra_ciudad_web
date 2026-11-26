@@ -738,16 +738,18 @@
      outgoing slide (same animation name on .is-active and .is-leaving, so
      swapping the class doesn't restart it) while the next photo fades in
      on top. Timing must match INTERVAL in HomeBody.astro:
-       zoom = INTERVAL + fade = 2500 + 1200 ms. */
+       zoom = INTERVAL + fade = 3500 + 1500 ms.
+     It also runs with prefers-reduced-motion (a deliberate choice: the zoom
+     is slow and gentle). Desktop zooms less than phones (--hero-zoom). */
   .hero-slide.is-active {
     opacity: 1;
     visibility: visible;
     z-index: 2;
-    animation: hero-fade 1200ms ease-in-out both;
+    animation: hero-fade 1500ms ease-in-out both;
   }
   .hero-slide.is-active .hero-slide-img,
   .hero-slide.is-leaving .hero-slide-img {
-    animation: hero-kenburns 3700ms linear both;
+    animation: hero-kenburns 5000ms linear both;
   }
   /* Outgoing slide stays underneath, still zooming, while the next fades in. */
   .hero-slide.is-leaving {
@@ -758,8 +760,12 @@
   /* First paint: no fade, just the zoom. */
   .hero-slide.is-first { animation: none; }
 
+  .hero-slide-img { --hero-zoom: 1.08; }
+  @media (max-width: 768px) {
+    .hero-slide-img { --hero-zoom: 1.14; }
+  }
   @keyframes hero-kenburns {
-    from { transform: scale(1.14); }
+    from { transform: scale(var(--hero-zoom)); }
     to   { transform: scale(1); }
   }
 
@@ -814,8 +820,6 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .hero-slide.is-active .hero-slide-img,
-    .hero-slide.is-leaving .hero-slide-img { animation: none; }
     .hero--full .hero-scroll-btn { animation: none; }
   }
   @keyframes hero-fade {

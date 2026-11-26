@@ -433,17 +433,14 @@ const orgSchema = {
 
 <script>
   // Hero slideshow: advance every few seconds; pause while the hero is off
-  // screen or the tab is hidden. Reduced-motion users get a slower, plain
-  // crossfade with no zoom (see global.css, whose zoom
-  // length is INTERVAL + the 1.2 s fade).
+  // screen or the tab is hidden. Same for everyone, reduced motion included.
+  // global.css sizes the zoom to INTERVAL + the 1.5 s fade.
   (() => {
     const hero = document.getElementById('home-hero');
     if (!hero) return;
     const slides = [...hero.querySelectorAll<HTMLElement>('.hero-slide')];
     if (slides.length < 2) return;
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    const INTERVAL = reduced ? 4000 : 2500;
+    const INTERVAL = 3500;
     let current = 0;
     let timer: number | undefined;
     let visible = true;
